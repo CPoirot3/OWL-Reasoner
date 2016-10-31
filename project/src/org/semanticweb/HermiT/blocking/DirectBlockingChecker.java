@@ -25,28 +25,48 @@ import org.semanticweb.HermiT.tableau.Tableau;
 
 public interface DirectBlockingChecker {
     void initialize(Tableau tableau);
+
     void clear();
-    boolean isBlockedBy(Node blocker,Node blocked);
+
+    boolean isBlockedBy(Node blocker, Node blocked);
+
     int blockingHashCode(Node node);
+
     boolean canBeBlocker(Node node);
+
     /**
      * @param node
      * @return true if node is a tree node
      */
     boolean canBeBlocked(Node node);
+
     boolean hasBlockingInfoChanged(Node node);
+
     void clearBlockingInfoChanged(Node node);
+
     boolean hasChangedSinceValidation(Node node);
+
     void setHasChangedSinceValidation(Node node, boolean hasChanged);
+
     void nodeInitialized(Node node);
+
     void nodeDestroyed(Node node);
-    Node assertionAdded(Concept concept,Node node,boolean isCore);
-    Node assertionRemoved(Concept concept,Node node,boolean isCore);
-    Node assertionAdded(DataRange range,Node node,boolean isCore);
-    Node assertionRemoved(DataRange range,Node node,boolean isCore);
-    Node assertionAdded(AtomicRole atomicRole,Node nodeFrom,Node nodeTo,boolean isCore);
-    Node assertionRemoved(AtomicRole atomicRole,Node nodeFrom,Node nodeTo,boolean isCore);
-    Node nodesMerged(Node mergeFrom,Node mergeInto);
-    Node nodesUnmerged(Node mergeFrom,Node mergeInto);
+
+    Node assertionAdded(Concept concept, Node node, boolean isCore);
+
+    Node assertionRemoved(Concept concept, Node node, boolean isCore);
+
+    Node assertionAdded(DataRange range, Node node, boolean isCore);
+
+    Node assertionRemoved(DataRange range, Node node, boolean isCore);
+
+    Node assertionAdded(AtomicRole atomicRole, Node nodeFrom, Node nodeTo, boolean isCore);
+
+    Node assertionRemoved(AtomicRole atomicRole, Node nodeFrom, Node nodeTo, boolean isCore);
+
+    Node nodesMerged(Node mergeFrom, Node mergeInto);
+
+    Node nodesUnmerged(Node mergeFrom, Node mergeInto);
+
     BlockingSignature getBlockingSignatureFor(Node node);
 }

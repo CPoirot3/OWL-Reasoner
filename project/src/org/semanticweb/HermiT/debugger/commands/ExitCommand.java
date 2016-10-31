@@ -26,16 +26,20 @@ public class ExitCommand extends AbstractCommand {
     public ExitCommand(Debugger debugger) {
         super(debugger);
     }
+
     public String getCommandName() {
         return "exit";
     }
+
     public String[] getDescription() {
-        return new String[] { "","exits the curtrent process" };
+        return new String[]{"", "exits the curtrent process"};
     }
+
     public void printHelp(PrintWriter writer) {
         writer.println("usage: exit");
         writer.println("    Exits the current process.");
     }
+
     public void execute(String[] args) {
         System.exit(0);
     }

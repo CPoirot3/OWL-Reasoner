@@ -10,25 +10,25 @@ public class ReasonerCoreBlockingTest extends ReasonerTest {
     public ReasonerCoreBlockingTest(String name) {
         super(name);
     }
-    
+
     protected Configuration getConfiguration() {
-        Configuration c=super.getConfiguration();
-        c.blockingStrategyType=BlockingStrategyType.SIMPLE_CORE;
-        c.directBlockingType=DirectBlockingType.SINGLE;
-        c.blockingSignatureCacheType=BlockingSignatureCacheType.NOT_CACHED;
+        Configuration c = super.getConfiguration();
+        c.blockingStrategyType = BlockingStrategyType.SIMPLE_CORE;
+        c.directBlockingType = DirectBlockingType.SINGLE;
+        c.blockingSignatureCacheType = BlockingSignatureCacheType.NOT_CACHED;
         //c.tableauMonitorType=TableauMonitorType.DEBUGGER_HISTORY_ON;
         return c;
     }
-    
+
     public void testExpansion() throws Exception {
         String axioms = "SubClassOf(:B ObjectSomeValuesFrom(:r :D)) "
-          + "SubClassOf(owl:Thing ObjectMaxCardinality(1 :r :C))"
-          + "SubClassOf(:D :C)"
-          + "SubClassOf(:A ObjectSomeValuesFrom(ObjectInverseOf(:r) :B))"
-          + "ClassAssertion(:C :a)"
-          + "ClassAssertion(:A :a)";
-      loadReasonerWithAxioms(axioms);
-      assertABoxSatisfiable(true);
+                + "SubClassOf(owl:Thing ObjectMaxCardinality(1 :r :C))"
+                + "SubClassOf(:D :C)"
+                + "SubClassOf(:A ObjectSomeValuesFrom(ObjectInverseOf(:r) :B))"
+                + "ClassAssertion(:C :a)"
+                + "ClassAssertion(:A :a)";
+        loadReasonerWithAxioms(axioms);
+        assertABoxSatisfiable(true);
     }
 
 
@@ -36,9 +36,9 @@ public class ReasonerCoreBlockingTest extends ReasonerTest {
         // <r>q; 
         // <r->[r-][r][r][r]p 
         String axioms = "SubClassOf(owl:Thing ObjectSomeValuesFrom(:r :q)) "
-            + "InverseObjectProperties(:r :r-)"
-            + "SubClassOf(owl:Thing ObjectSomeValuesFrom(:r- ObjectAllValuesFrom(:r- ObjectAllValuesFrom(:r ObjectAllValuesFrom(:r ObjectAllValuesFrom(:r :p)))))) "
-            + "ClassAssertion(ObjectSomeValuesFrom(:r- ObjectComplementOf(:p)) :a)";
+                + "InverseObjectProperties(:r :r-)"
+                + "SubClassOf(owl:Thing ObjectSomeValuesFrom(:r- ObjectAllValuesFrom(:r- ObjectAllValuesFrom(:r ObjectAllValuesFrom(:r ObjectAllValuesFrom(:r :p)))))) "
+                + "ClassAssertion(ObjectSomeValuesFrom(:r- ObjectComplementOf(:p)) :a)";
         loadReasonerWithAxioms(axioms);
 //        
 //        OWLDataFactory df = OWLManager.createOWLOntologyManager().getOWLDataFactory();
@@ -49,10 +49,11 @@ public class ReasonerCoreBlockingTest extends ReasonerTest {
 //        assertSatisfiable(desc,false);
         assertABoxSatisfiable(false);
     }
-    
+
     public void testDependencyDisjunctionMergingBug() throws Exception {
         // not yet compatible with core blocking
     }
+
     public void testIanT6() throws Exception {
         StringBuffer buffer = new StringBuffer();
         buffer.append("InverseObjectProperties(:r :r-)");
@@ -63,7 +64,7 @@ public class ReasonerCoreBlockingTest extends ReasonerTest {
         buffer.append("EquivalentClasses(:d ObjectIntersectionOf(:c ObjectSomeValuesFrom(:f ObjectComplementOf(:c))))");
         buffer.append("ClassAssertion(ObjectIntersectionOf(ObjectComplementOf(:c) ObjectSomeValuesFrom(:f- :d) ObjectAllValuesFrom(:r- ObjectSomeValuesFrom(:f- :d))) :a)");
         loadReasonerWithAxioms(buffer.toString());
-        
+
 //        OWLClassExpression c = m_dataFactory.getOWLClass(IRI.create("file:/c/test.owl#c"));
 //        OWLClassExpression d = m_dataFactory.getOWLClass(IRI.create("file:/c/test.owl#d"));
 //        OWLObjectProperty invr = m_dataFactory.getOWLObjectProperty(IRI.create("file:/c/test.owl#r-"));
@@ -77,6 +78,7 @@ public class ReasonerCoreBlockingTest extends ReasonerTest {
 //        assertSatisfiable(desc,false);
         assertABoxSatisfiable(false);
     }
+
     public void testIanT9() throws Exception {
         StringBuffer buffer = new StringBuffer();
         buffer.append("InverseObjectProperties(:successor :successor-)");

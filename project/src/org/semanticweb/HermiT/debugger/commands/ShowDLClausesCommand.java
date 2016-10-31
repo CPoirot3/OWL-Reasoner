@@ -28,19 +28,23 @@ public class ShowDLClausesCommand extends AbstractCommand {
     public ShowDLClausesCommand(Debugger debugger) {
         super(debugger);
     }
+
     public String getCommandName() {
         return "showDLClauses";
     }
+
     public String[] getDescription() {
-        return new String[] { "","prints the currently used set of DL-clauses" };
+        return new String[]{"", "prints the currently used set of DL-clauses"};
     }
+
     public void printHelp(PrintWriter writer) {
         writer.println("usage: showDLClauses");
         writer.println("    Prints the currently used set of DL-clauses.");
     }
+
     public void execute(String[] args) {
-        CharArrayWriter buffer=new CharArrayWriter();
-        PrintWriter writer=new PrintWriter(buffer);
+        CharArrayWriter buffer = new CharArrayWriter();
+        PrintWriter writer = new PrintWriter(buffer);
         if (!m_debugger.getTableau().getPermanentDLOntology().getDLClauses().isEmpty()) {
             writer.println("-----------------------------------------------");
             writer.println("Permanent DL-clauses:");
@@ -48,7 +52,7 @@ public class ShowDLClausesCommand extends AbstractCommand {
             for (DLClause dlClause : m_debugger.getTableau().getPermanentDLOntology().getDLClauses())
                 writer.println(dlClause.toString(m_debugger.getPrefixes()));
         }
-        if (m_debugger.getTableau().getAdditionalDLOntology()!=null && !m_debugger.getTableau().getAdditionalDLOntology().getDLClauses().isEmpty()) {
+        if (m_debugger.getTableau().getAdditionalDLOntology() != null && !m_debugger.getTableau().getAdditionalDLOntology().getDLClauses().isEmpty()) {
             writer.println("-----------------------------------------------");
             writer.println("Additional DL-clauses:");
             writer.println("-----------------------------------------------");
@@ -56,7 +60,7 @@ public class ShowDLClausesCommand extends AbstractCommand {
                 writer.println(dlClause.toString(m_debugger.getPrefixes()));
         }
         writer.flush();
-        showTextInWindow(buffer.toString(),"DL-clauses");
+        showTextInWindow(buffer.toString(), "DL-clauses");
         selectConsoleWindow();
     }
 }

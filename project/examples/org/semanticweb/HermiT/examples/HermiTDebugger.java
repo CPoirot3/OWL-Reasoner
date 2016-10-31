@@ -31,38 +31,38 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 
 /**
- * This examples demonstrates how HermiT's debugger can be used to see models or reasons 
- * for a clash. Note that this uses mainly an internal interface for HermiT that we use 
- * occasionally for debugging purposes. It assumes some understanding of hypertablau, 
- * normalisation, and structural transformation and is not meant as a general user 
- * interface for HermiT. Nevertheless it might be useful to some users, which is why we 
- * give an example of its use. No further support can, however, be given for this 
- * HermiT interface.  
+ * This examples demonstrates how HermiT's debugger can be used to see models or reasons
+ * for a clash. Note that this uses mainly an internal interface for HermiT that we use
+ * occasionally for debugging purposes. It assumes some understanding of hypertablau,
+ * normalisation, and structural transformation and is not meant as a general user
+ * interface for HermiT. Nevertheless it might be useful to some users, which is why we
+ * give an example of its use. No further support can, however, be given for this
+ * HermiT interface.
  */
 public class HermiTDebugger {
 
-	public static void main(String[] args) throws Exception {
-    	// First, we create an OWLOntologyManager object. The manager will load and
-    	// save ontologies.
-        OWLOntologyManager manager=OWLManager.createOWLOntologyManager();
-    	// Now, we create the file from which the ontology will be loaded.
-    	// Here the ontology is stored in a file locally in the ontologies subfolder
-    	// of the examples folder.
+    public static void main(String[] args) throws Exception {
+        // First, we create an OWLOntologyManager object. The manager will load and
+        // save ontologies.
+        OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+        // Now, we create the file from which the ontology will be loaded.
+        // Here the ontology is stored in a file locally in the ontologies subfolder
+        // of the examples folder.
         File inputOntologyFile = new File("examples/ontologies/pizza.owl");
         // We use the OWL API to load the ontology.
-        OWLOntology ontology=manager.loadOntologyFromOntologyDocument(inputOntologyFile);
+        OWLOntology ontology = manager.loadOntologyFromOntologyDocument(inputOntologyFile);
         // Now we create a configuration object that we use to overwrite HermiT's default
         // settings.
-        Configuration config=new Configuration();
+        Configuration config = new Configuration();
         // Lets make HermiT open a debugger window from which we can control the 
         // further actions that HermiT performs. 
         // DEBUGGER_HISTORY_ON will cause HermiT to save the deriviation tree for 
         // each derived conclusion. 
         // DEBUGGER_NO_HISTORY will not save the derivation tree, so no causes for a 
         // clash can be given, but the memory requirement is smaller. 
-        config.tableauMonitorType=TableauMonitorType.DEBUGGER_HISTORY_ON;
+        config.tableauMonitorType = TableauMonitorType.DEBUGGER_HISTORY_ON;
         // Now we can start and create the reasoner with the above created configuration.
-        Reasoner hermit = new Reasoner(config,ontology);
+        Reasoner hermit = new Reasoner(config, ontology);
         // This will open the debugger window at runtime and it should say:
         // Good morning Dr. Chandra. This is HAL. I'm ready for my first lesson.
         // Derivation history is on.
@@ -74,35 +74,35 @@ public class HermiTDebugger {
         // > 
         // I.e., the ontlogy is consistent. Now, HermiT will work on the reasoning 
         // tasks that are specified below. 
-	    // The debugger window cannot be used to tell HermiT which tests should be performed. 
-	    // This has to be done via Java. First, we will ask HermiT to see whether the 
-	    // Siciliana pizza is satisfiable (it is).
-	    // Once HermiT is done with testing consistency, you can type 'c' again to make 
-	    // HermiT start testing the satisfiability of the Siciliana pizza.
+        // The debugger window cannot be used to tell HermiT which tests should be performed.
+        // This has to be done via Java. First, we will ask HermiT to see whether the
+        // Siciliana pizza is satisfiable (it is).
+        // Once HermiT is done with testing consistency, you can type 'c' again to make
+        // HermiT start testing the satisfiability of the Siciliana pizza.
         // HermiT will tell you that it started, but before really deriving anything,
         // HermiT waits again to see whether you want to set further breakpoints, etc, but 
         // just type 'c' again for now. 
-	    IRI sicilianaIRI=IRI.create("http://www.co-ode.org/ontologies/pizza/pizza.owl#Siciliana");
-	    OWLClass siciliana=manager.getOWLDataFactory().getOWLClass(sicilianaIRI);
-	    hermit.isSatisfiable(siciliana);
-	    // HermiT should now have said 'Reasoning task finished: true' in the debugger window. 
-	    // Now, you can type 'showModel' to see all the assertions in the ABox that HermiT generated. 
-	    // You should see several assertions of the form ':AnchoviesTopping[8]' or 
-	    // ':hasIngredient[6,7]'. This means that in the model abstractions that HermiT 
-	    // constructed there is an individual '8' that belongs to the class AnchoviesTopping and 
-	    // the individual '6' is related to the individual '7' via the property 'hasIngredient'. 
-	    // There are also assertions of the form 'all:n[m]', where 'm' is an individual in the 
-	    // model abstraction and 'all:n' with n an integer is a HermiT internal concept. Similarly 
-	    // there are internal concepts of the form nnq:n, def:n, and nom2:xxx, where xxx is a 
-	    // nominal in the ontology. 
-	    // You can also type 'showSubtree 6' to see the part of the model for the siciliana pizza. 
-	    // You have to ask for individul '6' because there are 5 nominals and we are not 
-	    // interested in the subtrees rooted in the nominals. If there are n nominals in the 
-	    // ontology, individuals 1...n will be nominal nodes as you can also see from the 
-	    // assertions of the form nom2:xxx[n]. 
-	    // The showSubtree command uses a kind of folder view to visualise the part of the 
-	    // model abstraction. The colors of the nodes have the following meaning: 
-	    // black: root node
+        IRI sicilianaIRI = IRI.create("http://www.co-ode.org/ontologies/pizza/pizza.owl#Siciliana");
+        OWLClass siciliana = manager.getOWLDataFactory().getOWLClass(sicilianaIRI);
+        hermit.isSatisfiable(siciliana);
+        // HermiT should now have said 'Reasoning task finished: true' in the debugger window.
+        // Now, you can type 'showModel' to see all the assertions in the ABox that HermiT generated.
+        // You should see several assertions of the form ':AnchoviesTopping[8]' or
+        // ':hasIngredient[6,7]'. This means that in the model abstractions that HermiT
+        // constructed there is an individual '8' that belongs to the class AnchoviesTopping and
+        // the individual '6' is related to the individual '7' via the property 'hasIngredient'.
+        // There are also assertions of the form 'all:n[m]', where 'm' is an individual in the
+        // model abstraction and 'all:n' with n an integer is a HermiT internal concept. Similarly
+        // there are internal concepts of the form nnq:n, def:n, and nom2:xxx, where xxx is a
+        // nominal in the ontology.
+        // You can also type 'showSubtree 6' to see the part of the model for the siciliana pizza.
+        // You have to ask for individul '6' because there are 5 nominals and we are not
+        // interested in the subtrees rooted in the nominals. If there are n nominals in the
+        // ontology, individuals 1...n will be nominal nodes as you can also see from the
+        // assertions of the form nom2:xxx[n].
+        // The showSubtree command uses a kind of folder view to visualise the part of the
+        // model abstraction. The colors of the nodes have the following meaning:
+        // black: root node
         // green: blockable node (not blocked)
         // light gray: inactive node
         // cyan: blocked node
@@ -110,10 +110,10 @@ public class HermiTDebugger {
         // magenta: description graph node
         // blue: concrete/data value node
 
-	    // Lets continue and see whether HermiT finds that the CheeseyVegetableTopping class is 
-	    // unsatisfiable (I know it is).
-	    IRI cheeseyVegetableToppingIRI=IRI.create("http://www.co-ode.org/ontologies/pizza/pizza.owl#CheeseyVegetableTopping");
-	    OWLClass cheeseyVegetableTopping=manager.getOWLDataFactory().getOWLClass(cheeseyVegetableToppingIRI);
+        // Lets continue and see whether HermiT finds that the CheeseyVegetableTopping class is
+        // unsatisfiable (I know it is).
+        IRI cheeseyVegetableToppingIRI = IRI.create("http://www.co-ode.org/ontologies/pizza/pizza.owl#CheeseyVegetableTopping");
+        OWLClass cheeseyVegetableTopping = manager.getOWLDataFactory().getOWLClass(cheeseyVegetableToppingIRI);
         hermit.isSatisfiable(cheeseyVegetableTopping);
         // Type 'c' twice to start the task and continue to the end. 
         // You can still type 'showModel', but what you will get is just the last state of the 
@@ -155,9 +155,9 @@ public class HermiTDebugger {
         // black: clash
         // red: existential expansion
         // magenta: base/given fact
-        
+
         // If you want more debugging adventures, try to type 'help' in the debugger window
         // to see more commands and options that can be used. Otherwise just close the window 
         // or type 'exit'. Have fun with HermiT!
-	}
+    }
 }

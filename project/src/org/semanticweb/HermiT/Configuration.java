@@ -34,8 +34,8 @@ import org.semanticweb.owlapi.reasoner.IndividualNodeSetPolicy;
 import org.semanticweb.owlapi.reasoner.OWLReasonerConfiguration;
 import org.semanticweb.owlapi.reasoner.ReasonerProgressMonitor;
 
-public class Configuration implements Serializable,Cloneable,OWLReasonerConfiguration {
-    private static final long serialVersionUID=7741510316249774519L;
+public class Configuration implements Serializable, Cloneable, OWLReasonerConfiguration {
+    private static final long serialVersionUID = 7741510316249774519L;
 
     /**
      * Tableau monitors can be used to be informed about what HermiT does and they can be useful for debugging the reasoner.
@@ -194,7 +194,7 @@ public class Configuration implements Serializable,Cloneable,OWLReasonerConfigur
     /**
      * The parameters are passed to the Tableau class instance, but currently no parameters are used.
      */
-    public Map<String,Object> parameters;
+    public Map<String, Object> parameters;
     /**
      * If set to some value, reasoning in HermiT is interrupted as soon as any individual reasoning task takes any longer than
      * individualTaskTimeout ms.
@@ -215,7 +215,7 @@ public class Configuration implements Serializable,Cloneable,OWLReasonerConfigur
     public boolean bufferChanges;
     /**
      * The default value is true and HermiT will throw an exception if it finds the ontology to be inconsistent.
-     *
+     * <p>
      * If set to false, HermiT will not throw an exception for inconsistent ontologies. The only exception is when asked for data property values for an
      * individual and a data property because any of the infinitely many data values would be an answer. Restricting answers to just the data values in the
      * signature does not make much sense. If the parameter is set to false and the ontology is inconsistent, all classes occurring in the ontology are, for
@@ -233,88 +233,98 @@ public class Configuration implements Serializable,Cloneable,OWLReasonerConfigur
     public boolean forceQuasiOrderClassification;
 
     public Configuration() {
-        warningMonitor=null;
-        reasonerProgressMonitor=null;
-        tableauMonitorType=Configuration.TableauMonitorType.NONE;
-        directBlockingType=Configuration.DirectBlockingType.OPTIMAL;
-        blockingStrategyType=Configuration.BlockingStrategyType.OPTIMAL;
-        blockingSignatureCacheType=Configuration.BlockingSignatureCacheType.CACHED;
-        existentialStrategyType=Configuration.ExistentialStrategyType.CREATION_ORDER;
-        ignoreUnsupportedDatatypes=false;
-        monitor=null;
-        parameters=new HashMap<String,Object>();
-        individualTaskTimeout=-1;
-        bufferChanges=true;
-        individualNodeSetPolicy=IndividualNodeSetPolicy.BY_NAME;
-        freshEntityPolicy=FreshEntityPolicy.ALLOW;
-        useDisjunctionLearning=true;
-        throwInconsistentOntologyException=true;
-        prepareReasonerInferences=null;
-        forceQuasiOrderClassification=false;
+        warningMonitor = null;
+        reasonerProgressMonitor = null;
+        tableauMonitorType = Configuration.TableauMonitorType.NONE;
+        directBlockingType = Configuration.DirectBlockingType.OPTIMAL;
+        blockingStrategyType = Configuration.BlockingStrategyType.OPTIMAL;
+        blockingSignatureCacheType = Configuration.BlockingSignatureCacheType.CACHED;
+        existentialStrategyType = Configuration.ExistentialStrategyType.CREATION_ORDER;
+        ignoreUnsupportedDatatypes = false;
+        monitor = null;
+        parameters = new HashMap<String, Object>();
+        individualTaskTimeout = -1;
+        bufferChanges = true;
+        individualNodeSetPolicy = IndividualNodeSetPolicy.BY_NAME;
+        freshEntityPolicy = FreshEntityPolicy.ALLOW;
+        useDisjunctionLearning = true;
+        throwInconsistentOntologyException = true;
+        prepareReasonerInferences = null;
+        forceQuasiOrderClassification = false;
     }
+
     protected void setIndividualReuseStrategyReuseAlways(Set<? extends AtomicConcept> concepts) {
-        parameters.put("IndividualReuseStrategy.reuseAlways",concepts);
+        parameters.put("IndividualReuseStrategy.reuseAlways", concepts);
     }
+
     public void loadIndividualReuseStrategyReuseAlways(File file) throws IOException {
-        Set<AtomicConcept> concepts=loadConceptsFromFile(file);
+        Set<AtomicConcept> concepts = loadConceptsFromFile(file);
         setIndividualReuseStrategyReuseAlways(concepts);
     }
+
     protected void setIndividualReuseStrategyReuseNever(Set<? extends AtomicConcept> concepts) {
-        parameters.put("IndividualReuseStrategy.reuseNever",concepts);
+        parameters.put("IndividualReuseStrategy.reuseNever", concepts);
     }
+
     public void loadIndividualReuseStrategyReuseNever(File file) throws IOException {
-        Set<AtomicConcept> concepts=loadConceptsFromFile(file);
+        Set<AtomicConcept> concepts = loadConceptsFromFile(file);
         setIndividualReuseStrategyReuseNever(concepts);
     }
+
     protected Set<AtomicConcept> loadConceptsFromFile(File file) throws IOException {
-        Set<AtomicConcept> result=new HashSet<AtomicConcept>();
-        BufferedReader reader=new BufferedReader(new FileReader(file));
+        Set<AtomicConcept> result = new HashSet<AtomicConcept>();
+        BufferedReader reader = new BufferedReader(new FileReader(file));
         try {
-            String line=reader.readLine();
-            while (line!=null) {
+            String line = reader.readLine();
+            while (line != null) {
                 result.add(AtomicConcept.create(line));
-                line=reader.readLine();
+                line = reader.readLine();
             }
             return result;
-        }
-        finally {
+        } finally {
             reader.close();
         }
     }
+
     public Configuration clone() {
         try {
-            Configuration result=(Configuration)super.clone();
-            result.parameters=new HashMap<String,Object>(parameters);
+            Configuration result = (Configuration) super.clone();
+            result.parameters = new HashMap<String, Object>(parameters);
             return result;
-        }
-        catch (CloneNotSupportedException cantHappen) {
+        } catch (CloneNotSupportedException cantHappen) {
             return null;
         }
     }
+
     public static interface WarningMonitor {
         void warning(String warning);
     }
+
     public long getTimeOut() {
         return individualTaskTimeout;
     }
-	public IndividualNodeSetPolicy getIndividualNodeSetPolicy() {
-		return individualNodeSetPolicy;
-	}
-	public ReasonerProgressMonitor getProgressMonitor() {
-		return reasonerProgressMonitor;
-	}
-	public FreshEntityPolicy getFreshEntityPolicy() {
-		return freshEntityPolicy;
-	}
-	public static class PrepareReasonerInferences {
-	    public boolean classClassificationRequired=true;
-	    public boolean objectPropertyClassificationRequired=true;
-	    public boolean dataPropertyClassificationRequired=true;
-	    public boolean objectPropertyDomainsRequired=true;
-	    public boolean objectPropertyRangesRequired=true;
-	    public boolean realisationRequired=true;
-	    public boolean objectPropertyRealisationRequired=true;
-	    public boolean dataPropertyRealisationRequired=true;
-	    public boolean sameAs=true;
-	}
+
+    public IndividualNodeSetPolicy getIndividualNodeSetPolicy() {
+        return individualNodeSetPolicy;
+    }
+
+    public ReasonerProgressMonitor getProgressMonitor() {
+        return reasonerProgressMonitor;
+    }
+
+    public FreshEntityPolicy getFreshEntityPolicy() {
+        return freshEntityPolicy;
+    }
+
+    public static class PrepareReasonerInferences {
+        public boolean classClassificationRequired = true;
+        public boolean objectPropertyClassificationRequired = true;
+        public boolean dataPropertyClassificationRequired = true;
+        public boolean objectPropertyDomainsRequired = true;
+        public boolean objectPropertyRangesRequired = true;
+        public boolean realisationRequired = true;
+        public boolean objectPropertyRealisationRequired = true;
+        public boolean dataPropertyRealisationRequired = true;
+        public boolean sameAs = true;
+    }
 }

@@ -14,73 +14,73 @@ public class GraphTest extends AbstractReasonerInternalsTest {
     public GraphTest(String name) {
         super(name);
     }
-    
+
     protected void setUp() throws Exception {
         super.setUp();
-        m_descriptionGraphs=new HashSet<DescriptionGraph>();
+        m_descriptionGraphs = new HashSet<DescriptionGraph>();
     }
-    
+
     public void testGraphMerging() throws Exception {
-        DescriptionGraph graph=G(
-            new String[] {
-                "A", // 0
-                "B", // 1
-                "C", // 2
-            },
-            new DescriptionGraph.Edge[] {
-                E("R",0,1),
-                E("R",1,2),
-            },
-            new String[] {
-                "A","B","C",
-            }
+        DescriptionGraph graph = G(
+                new String[]{
+                        "A", // 0
+                        "B", // 1
+                        "C", // 2
+                },
+                new DescriptionGraph.Edge[]{
+                        E("R", 0, 1),
+                        E("R", 1, 2),
+                },
+                new String[]{
+                        "A", "B", "C",
+                }
         );
         m_descriptionGraphs.add(graph);
         loadOntologyWithAxioms("");
-        Tableau tableau=getTableau(m_descriptionGraphs);
+        Tableau tableau = getTableau(m_descriptionGraphs);
         tableau.clear();
-        ExtensionManager extensionManager=tableau.getExtensionManager();
-        DependencySet emptySet=tableau.getDependencySetFactory().emptySet();
-        Node n1=tableau.createNewNINode(emptySet);
-        Node n2=tableau.createNewNINode(emptySet);
-        Node n3=tableau.createNewNINode(emptySet);
-        Node n4=tableau.createNewNINode(emptySet);
-        Node n5=tableau.createNewNINode(emptySet);
-        Node n6=tableau.createNewNINode(emptySet);
-        AtomicConcept r=AtomicConcept.create("R");
-        AtomicConcept s=AtomicConcept.create("S");
-        extensionManager.addTuple(new Object[] { graph,n1,n2,n3 },emptySet,false);
-        extensionManager.addTuple(new Object[] { graph,n4,n5,n6 },emptySet,false);
-        extensionManager.addConceptAssertion(r,n1,emptySet,false);
-        extensionManager.addConceptAssertion(s,n6,emptySet,false);
+        ExtensionManager extensionManager = tableau.getExtensionManager();
+        DependencySet emptySet = tableau.getDependencySetFactory().emptySet();
+        Node n1 = tableau.createNewNINode(emptySet);
+        Node n2 = tableau.createNewNINode(emptySet);
+        Node n3 = tableau.createNewNINode(emptySet);
+        Node n4 = tableau.createNewNINode(emptySet);
+        Node n5 = tableau.createNewNINode(emptySet);
+        Node n6 = tableau.createNewNINode(emptySet);
+        AtomicConcept r = AtomicConcept.create("R");
+        AtomicConcept s = AtomicConcept.create("S");
+        extensionManager.addTuple(new Object[]{graph, n1, n2, n3}, emptySet, false);
+        extensionManager.addTuple(new Object[]{graph, n4, n5, n6}, emptySet, false);
+        extensionManager.addConceptAssertion(r, n1, emptySet, false);
+        extensionManager.addConceptAssertion(s, n6, emptySet, false);
 
         // The following tuple should make the existing two tuples to merge
-        Node n7=tableau.createNewNINode(emptySet);
-        extensionManager.addTuple(new Object[] { graph,n1,n7,n6 },emptySet,false);
+        Node n7 = tableau.createNewNINode(emptySet);
+        extensionManager.addTuple(new Object[]{graph, n1, n7, n6}, emptySet, false);
 
         // No merging should occur automatically
-        assertTrue(extensionManager.containsTuple(new Object[] { graph,n1,n2,n3 }));
-        assertTrue(extensionManager.containsTuple(new Object[] { graph,n4,n5,n6 }));
-        assertTrue(extensionManager.containsTuple(new Object[] { graph,n1,n7,n6 }));
-        
+        assertTrue(extensionManager.containsTuple(new Object[]{graph, n1, n2, n3}));
+        assertTrue(extensionManager.containsTuple(new Object[]{graph, n4, n5, n6}));
+        assertTrue(extensionManager.containsTuple(new Object[]{graph, n1, n7, n6}));
+
         // Merging occurs only if we start the saturation
         assertTrue(tableau.runCalculus());
 
         // Now do the checking
-        assertSame(n1,n1.getCanonicalNode());
-        assertSame(n7,n2.getCanonicalNode());
-        assertSame(n6,n3.getCanonicalNode());
-        assertSame(n1,n4.getCanonicalNode());
-        assertSame(n7,n5.getCanonicalNode());
-        assertSame(n6,n6.getCanonicalNode());
-        assertSame(n7,n7.getCanonicalNode());
-        assertLabel(tableau,n1,r);
-        assertLabel(tableau,n5);
-        assertLabel(tableau,n6,s);
+        assertSame(n1, n1.getCanonicalNode());
+        assertSame(n7, n2.getCanonicalNode());
+        assertSame(n6, n3.getCanonicalNode());
+        assertSame(n1, n4.getCanonicalNode());
+        assertSame(n7, n5.getCanonicalNode());
+        assertSame(n6, n6.getCanonicalNode());
+        assertSame(n7, n7.getCanonicalNode());
+        assertLabel(tableau, n1, r);
+        assertLabel(tableau, n5);
+        assertLabel(tableau, n6, s);
 
-        assertTrue(extensionManager.containsTuple(new Object[] { graph,n1,n7,n6 }));
+        assertTrue(extensionManager.containsTuple(new Object[]{graph, n1, n7, n6}));
     }
-    
+
 //    public void testContradictionOnGraph() throws Exception {
 //        DescriptionGraph graph=G(
 //            new String[] {
@@ -115,25 +115,25 @@ public class GraphTest extends AbstractReasonerInternalsTest {
 //        
 //        assertFalse(tableau.isSatisfiable());
 //    }
-    
+
     public void testGraph1() throws Exception {
         m_descriptionGraphs.add(G(
-            new String[] {
-                "A", // 0
-                "B", // 1
-                "C", // 2
-                "A", // 3
-            },
-            new DescriptionGraph.Edge[] {
-                E("R",0,1),
-                E("R",3,2),
-            },
-            new String[] {
-                "A",
-            }
+                new String[]{
+                        "A", // 0
+                        "B", // 1
+                        "C", // 2
+                        "A", // 3
+                },
+                new DescriptionGraph.Edge[]{
+                        E("R", 0, 1),
+                        E("R", 3, 2),
+                },
+                new String[]{
+                        "A",
+                }
         ));
-        
-        String axioms="SubClassOf(:A ObjectSomeValuesFrom(:S :A))"
+
+        String axioms = "SubClassOf(:A ObjectSomeValuesFrom(:S :A))"
                 + "SubClassOf(:A ObjectSomeValuesFrom(:S :D))"
                 + "SubClassOf(:B ObjectSomeValuesFrom(:T :A))"
                 + "SubClassOf(:C ObjectSomeValuesFrom(:T :A))"
@@ -148,7 +148,7 @@ public class GraphTest extends AbstractReasonerInternalsTest {
 
         assertABoxSatisfiable(true);
     }
-    
+
 //    public void testGraph2() throws Exception {
 //        m_descriptionGraphs.add(G(
 //            new String[] {
@@ -193,19 +193,19 @@ public class GraphTest extends AbstractReasonerInternalsTest {
 //        
 //        assertSubsumedBy("A","B",true);
 //    }
-    
-    protected static DescriptionGraph G(String[] vertexAtomicConcepts,DescriptionGraph.Edge[] edges,String[] startAtomicConcepts) {
-        AtomicConcept[] atomicConceptsByVertices=new AtomicConcept[vertexAtomicConcepts.length];
-        for (int index=0;index<vertexAtomicConcepts.length;index++)
-            atomicConceptsByVertices[index]=AtomicConcept.create(vertexAtomicConcepts[index]);
-        Set<AtomicConcept> startConcepts=new HashSet<AtomicConcept>();
+
+    protected static DescriptionGraph G(String[] vertexAtomicConcepts, DescriptionGraph.Edge[] edges, String[] startAtomicConcepts) {
+        AtomicConcept[] atomicConceptsByVertices = new AtomicConcept[vertexAtomicConcepts.length];
+        for (int index = 0; index < vertexAtomicConcepts.length; index++)
+            atomicConceptsByVertices[index] = AtomicConcept.create(vertexAtomicConcepts[index]);
+        Set<AtomicConcept> startConcepts = new HashSet<AtomicConcept>();
         for (String atomicConcept : startAtomicConcepts)
             startConcepts.add(AtomicConcept.create(atomicConcept));
-        return new DescriptionGraph("G",atomicConceptsByVertices,edges,startConcepts);
+        return new DescriptionGraph("G", atomicConceptsByVertices, edges, startConcepts);
     }
-    
-    protected static DescriptionGraph.Edge E(String atomicRoleName,int from,int to) {
-        AtomicRole atomicRole=AtomicRole.create(atomicRoleName);
-        return new DescriptionGraph.Edge(atomicRole,from,to);
+
+    protected static DescriptionGraph.Edge E(String atomicRoleName, int from, int to) {
+        AtomicRole atomicRole = AtomicRole.create(atomicRoleName);
+        return new DescriptionGraph.Edge(atomicRole, from, to);
     }
 }

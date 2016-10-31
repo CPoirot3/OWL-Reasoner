@@ -38,28 +38,52 @@ import org.semanticweb.HermiT.tableau.Tableau;
  */
 public interface ExistentialExpansionStrategy {
     void initialize(Tableau tableau);
+
     void additionalDLOntologySet(DLOntology additionalDLOntology);
+
     void additionalDLOntologyCleared();
+
     void clear();
+
     boolean expandExistentials(boolean finalChance);
-    void assertionAdded(Concept concept,Node node,boolean isCore);
-    void assertionAdded(DataRange dataRange,Node node,boolean isCore);
-    void assertionCoreSet(Concept concept,Node node);
-    void assertionCoreSet(DataRange dataRange,Node node);
-    void assertionRemoved(Concept concept,Node node,boolean isCore);
-    void assertionRemoved(DataRange dataRange,Node node,boolean isCore);
-    void assertionAdded(AtomicRole atomicRole,Node nodeFrom,Node nodeTo,boolean isCore);
-    void assertionCoreSet(AtomicRole atomicRole,Node nodeFrom,Node nodeTo);
-    void assertionRemoved(AtomicRole atomicRole,Node nodeFrom,Node nodeTo,boolean isCore);
-    void nodesMerged(Node mergeFrom,Node mergeInto);
-    void nodesUnmerged(Node mergeFrom,Node mergeInto);
+
+    void assertionAdded(Concept concept, Node node, boolean isCore);
+
+    void assertionAdded(DataRange dataRange, Node node, boolean isCore);
+
+    void assertionCoreSet(Concept concept, Node node);
+
+    void assertionCoreSet(DataRange dataRange, Node node);
+
+    void assertionRemoved(Concept concept, Node node, boolean isCore);
+
+    void assertionRemoved(DataRange dataRange, Node node, boolean isCore);
+
+    void assertionAdded(AtomicRole atomicRole, Node nodeFrom, Node nodeTo, boolean isCore);
+
+    void assertionCoreSet(AtomicRole atomicRole, Node nodeFrom, Node nodeTo);
+
+    void assertionRemoved(AtomicRole atomicRole, Node nodeFrom, Node nodeTo, boolean isCore);
+
+    void nodesMerged(Node mergeFrom, Node mergeInto);
+
+    void nodesUnmerged(Node mergeFrom, Node mergeInto);
+
     void nodeStatusChanged(Node node);
+
     void nodeInitialized(Node node);
+
     void nodeDestroyed(Node node);
+
     void branchingPointPushed();
+
     void backtrack();
+
     void modelFound();
+
     boolean isDeterministic();
+
     boolean isExact();
-    void dlClauseBodyCompiled(List<DLClauseEvaluator.Worker> workers,DLClause dlClause,List<Variable> variables,Object[] valuesBuffer,boolean[] coreVariables);
+
+    void dlClauseBodyCompiled(List<DLClauseEvaluator.Worker> workers, DLClause dlClause, List<Variable> variables, Object[] valuesBuffer, boolean[] coreVariables);
 }

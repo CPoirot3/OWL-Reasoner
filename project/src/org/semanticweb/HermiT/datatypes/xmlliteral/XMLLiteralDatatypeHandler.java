@@ -29,49 +29,55 @@ import org.semanticweb.HermiT.datatypes.ValueSpaceSubset;
 import org.semanticweb.HermiT.model.DatatypeRestriction;
 
 public class XMLLiteralDatatypeHandler implements DatatypeHandler {
-    protected static final String RDF_XML_LITERAL=Prefixes.s_semanticWebPrefixes.get("rdf:")+"XMLLiteral";
-    protected static final ValueSpaceSubset XML_LITERAL_ALL=new XMLLiteralAll();
-    protected static final ValueSpaceSubset EMPTY=new XMLLiteralNone();
-    protected final static Set<String> s_managedDatatypeURIs=Collections.singleton(RDF_XML_LITERAL);
+    protected static final String RDF_XML_LITERAL = Prefixes.s_semanticWebPrefixes.get("rdf:") + "XMLLiteral";
+    protected static final ValueSpaceSubset XML_LITERAL_ALL = new XMLLiteralAll();
+    protected static final ValueSpaceSubset EMPTY = new XMLLiteralNone();
+    protected final static Set<String> s_managedDatatypeURIs = Collections.singleton(RDF_XML_LITERAL);
 
     public Set<String> getManagedDatatypeURIs() {
         return s_managedDatatypeURIs;
     }
-    public Object parseLiteral(String lexicalForm,String datatypeURI) throws MalformedLiteralException {
+
+    public Object parseLiteral(String lexicalForm, String datatypeURI) throws MalformedLiteralException {
         assert RDF_XML_LITERAL.equals(datatypeURI);
         try {
             return XMLLiteral.parse(lexicalForm);
-        }
-        catch (Exception e) {
-            throw new MalformedLiteralException(lexicalForm,datatypeURI);
+        } catch (Exception e) {
+            throw new MalformedLiteralException(lexicalForm, datatypeURI);
         }
     }
+
     public void validateDatatypeRestriction(DatatypeRestriction datatypeRestriction) throws UnsupportedFacetException {
         assert RDF_XML_LITERAL.equals(datatypeRestriction.getDatatypeURI());
-        if (datatypeRestriction.getNumberOfFacetRestrictions()>0)
-            throw new UnsupportedFacetException("The rdf:XMLLiteral datatype does not provide any facets, but the ontology contains a restriction on boolean with facets: "+this.toString());
+        if (datatypeRestriction.getNumberOfFacetRestrictions() > 0)
+            throw new UnsupportedFacetException("The rdf:XMLLiteral datatype does not provide any facets, but the ontology contains a restriction on boolean with facets: " + this.toString());
     }
+
     public ValueSpaceSubset createValueSpaceSubset(DatatypeRestriction datatypeRestriction) {
         assert RDF_XML_LITERAL.equals(datatypeRestriction.getDatatypeURI());
-        assert datatypeRestriction.getNumberOfFacetRestrictions()==0;
+        assert datatypeRestriction.getNumberOfFacetRestrictions() == 0;
         return XML_LITERAL_ALL;
     }
-    public ValueSpaceSubset conjoinWithDR(ValueSpaceSubset valueSpaceSubset,DatatypeRestriction datatypeRestriction) {
+
+    public ValueSpaceSubset conjoinWithDR(ValueSpaceSubset valueSpaceSubset, DatatypeRestriction datatypeRestriction) {
         assert RDF_XML_LITERAL.equals(datatypeRestriction.getDatatypeURI());
-        assert datatypeRestriction.getNumberOfFacetRestrictions()==0;
+        assert datatypeRestriction.getNumberOfFacetRestrictions() == 0;
         return XML_LITERAL_ALL;
     }
-    public ValueSpaceSubset conjoinWithDRNegation(ValueSpaceSubset valueSpaceSubset,DatatypeRestriction datatypeRestriction) {
+
+    public ValueSpaceSubset conjoinWithDRNegation(ValueSpaceSubset valueSpaceSubset, DatatypeRestriction datatypeRestriction) {
         assert RDF_XML_LITERAL.equals(datatypeRestriction.getDatatypeURI());
-        assert datatypeRestriction.getNumberOfFacetRestrictions()==0;
+        assert datatypeRestriction.getNumberOfFacetRestrictions() == 0;
         return EMPTY;
     }
-    public boolean isSubsetOf(String subsetDatatypeURI,String supersetDatatypeURI) {
+
+    public boolean isSubsetOf(String subsetDatatypeURI, String supersetDatatypeURI) {
         assert RDF_XML_LITERAL.equals(subsetDatatypeURI);
         assert RDF_XML_LITERAL.equals(supersetDatatypeURI);
         return true;
     }
-    public boolean isDisjointWith(String datatypeURI1,String datatypeURI2) {
+
+    public boolean isDisjointWith(String datatypeURI1, String datatypeURI2) {
         assert RDF_XML_LITERAL.equals(datatypeURI1);
         assert RDF_XML_LITERAL.equals(datatypeURI2);
         return false;
@@ -82,9 +88,11 @@ public class XMLLiteralDatatypeHandler implements DatatypeHandler {
         public boolean hasCardinalityAtLeast(int number) {
             return true;
         }
+
         public boolean containsDataValue(Object dataValue) {
             return dataValue instanceof XMLLiteral;
         }
+
         public void enumerateDataValues(Collection<Object> dataValues) {
             throw new IllegalStateException("Internal errir: the value space is infinite!");
         }
@@ -93,11 +101,13 @@ public class XMLLiteralDatatypeHandler implements DatatypeHandler {
     protected static class XMLLiteralNone implements ValueSpaceSubset {
 
         public boolean hasCardinalityAtLeast(int number) {
-            return number<=0;
+            return number <= 0;
         }
+
         public boolean containsDataValue(Object dataValue) {
             return false;
         }
+
         public void enumerateDataValues(Collection<Object> dataValues) {
         }
     }

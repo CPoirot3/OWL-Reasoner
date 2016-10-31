@@ -23,42 +23,51 @@ import org.semanticweb.HermiT.Prefixes;
  * Represents an internal datatype. Such objects are used in DL-clauses (e.g., in structural transformation of complex data ranges), but are ignored by the datatype manager.
  */
 public class InternalDatatype extends AtomicDataRange implements DLPredicate {
-    private static final long serialVersionUID=-1078274072706143620L;
+    private static final long serialVersionUID = -1078274072706143620L;
 
     protected final String m_iri;
 
     protected InternalDatatype(String iri) {
-        m_iri=iri;
+        m_iri = iri;
     }
+
     public String getIRI() {
         return m_iri;
     }
+
     public int getArity() {
         return 1;
     }
+
     public LiteralDataRange getNegation() {
         return AtomicNegationDataRange.create(this);
     }
+
     public boolean isAlwaysTrue() {
-        return this==RDFS_LITERAL;
+        return this == RDFS_LITERAL;
     }
+
     public boolean isAlwaysFalse() {
         return false;
     }
+
     public boolean isInternalDatatype() {
         return true;
     }
+
     public String toString(Prefixes prefixes) {
         return prefixes.abbreviateIRI(m_iri);
     }
+
     protected Object readResolve() {
         return s_interningManager.intern(this);
     }
 
-    protected static InterningManager<InternalDatatype> s_interningManager=new InterningManager<InternalDatatype>() {
-        protected boolean equal(InternalDatatype object1,InternalDatatype object2) {
+    protected static InterningManager<InternalDatatype> s_interningManager = new InterningManager<InternalDatatype>() {
+        protected boolean equal(InternalDatatype object1, InternalDatatype object2) {
             return object1.m_iri.equals(object2.m_iri);
         }
+
         protected int getHashCode(InternalDatatype object) {
             return object.m_iri.hashCode();
         }
@@ -68,5 +77,5 @@ public class InternalDatatype extends AtomicDataRange implements DLPredicate {
         return s_interningManager.intern(new InternalDatatype(uri));
     }
 
-    public static final InternalDatatype RDFS_LITERAL=create("http://www.w3.org/2000/01/rdf-schema#Literal");
+    public static final InternalDatatype RDFS_LITERAL = create("http://www.w3.org/2000/01/rdf-schema#Literal");
 }

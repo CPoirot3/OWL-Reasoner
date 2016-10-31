@@ -32,58 +32,61 @@ public class NodesForCommand extends AbstractCommand {
     public NodesForCommand(Debugger debugger) {
         super(debugger);
     }
+
     public String getCommandName() {
         return "nodesFor";
     }
+
     public String[] getDescription() {
-        return new String[] { "conceptName","prints nodes that have been created by (atleast n r.conceptName)" };
+        return new String[]{"conceptName", "prints nodes that have been created by (atleast n r.conceptName)"};
     }
+
     public void printHelp(PrintWriter writer) {
         writer.println("usage: nodesFor conceptName");
         writer.println("    Prints all nodes that have been created by a concept (atleast n r.conceptName)");
         writer.println("    together with the information whether the nodes are active or not.");
     }
+
     public void execute(String[] args) {
-        if (args.length<2) {
+        if (args.length < 2) {
             m_debugger.getOutput().println("Concept name is missing.");
             return;
         }
-        String conceptName=args[1];
-        CharArrayWriter buffer=new CharArrayWriter();
-        PrintWriter writer=new PrintWriter(buffer);
-        AtomicConcept atomicConcept=null;
+        String conceptName = args[1];
+        CharArrayWriter buffer = new CharArrayWriter();
+        PrintWriter writer = new PrintWriter(buffer);
+        AtomicConcept atomicConcept = null;
         try {
-            atomicConcept=AtomicConcept.create(m_debugger.getPrefixes().expandAbbreviatedIRI(conceptName));
-            writer.println("Nodes for '"+conceptName+"'");
+            atomicConcept = AtomicConcept.create(m_debugger.getPrefixes().expandAbbreviatedIRI(conceptName));
+            writer.println("Nodes for '" + conceptName + "'");
             writer.println("====================================================================");
-            int index=0;
-            Node node=m_debugger.getTableau().getFirstTableauNode();
-            while (node!=null) {
-                Debugger.NodeCreationInfo nodeCreationInfo=m_debugger.getNodeCreationInfo(node);
-                ExistentialConcept existentialConcept=nodeCreationInfo.m_createdByExistential;
+            int index = 0;
+            Node node = m_debugger.getTableau().getFirstTableauNode();
+            while (node != null) {
+                Debugger.NodeCreationInfo nodeCreationInfo = m_debugger.getNodeCreationInfo(node);
+                ExistentialConcept existentialConcept = nodeCreationInfo.m_createdByExistential;
                 if (existentialConcept instanceof AtLeastConcept) {
-                    if (((AtLeastConcept)existentialConcept).getToConcept().equals(atomicConcept)) {
-                        if (index!=0) {
+                    if (((AtLeastConcept) existentialConcept).getToConcept().equals(atomicConcept)) {
+                        if (index != 0) {
                             writer.print(",");
-                            if (index%5==0)
+                            if (index % 5 == 0)
                                 writer.println();
                             else
                                 writer.print("  ");
                         }
-                        Printing.printPadded(writer,node.getNodeID()+(node.isActive() ? "" : "*"),8);
+                        Printing.printPadded(writer, node.getNodeID() + (node.isActive() ? "" : "*"), 8);
                         index++;
                     }
                 }
-                node=node.getNextTableauNode();
+                node = node.getNextTableauNode();
             }
             writer.println();
             writer.println("====================================================================");
-        }
-        catch (IllegalArgumentException e) {
-            writer.println(conceptName+" is invalid: "+e.getMessage());
+        } catch (IllegalArgumentException e) {
+            writer.println(conceptName + " is invalid: " + e.getMessage());
         }
         writer.flush();
-        showTextInWindow(buffer.toString(),"Nodes for '"+conceptName+"'");
+        showTextInWindow(buffer.toString(), "Nodes for '" + conceptName + "'");
         selectConsoleWindow();
     }
 }

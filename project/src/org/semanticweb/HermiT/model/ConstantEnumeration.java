@@ -23,62 +23,71 @@ import org.semanticweb.HermiT.Prefixes;
  * A data range that consists of a given set of constants.
  */
 public class ConstantEnumeration extends AtomicDataRange {
-    private static final long serialVersionUID=4663162424764302912L;
+    private static final long serialVersionUID = 4663162424764302912L;
 
     protected final Constant[] m_constants;
 
     protected ConstantEnumeration(Constant[] constants) {
-        m_constants=constants;
+        m_constants = constants;
     }
+
     public int getNumberOfConstants() {
         return m_constants.length;
     }
+
     public Constant getConstant(int index) {
         return m_constants[index];
     }
+
     public LiteralDataRange getNegation() {
         return AtomicNegationDataRange.create(this);
     }
+
     public boolean isAlwaysTrue() {
         return false;
     }
+
     public boolean isAlwaysFalse() {
-        return m_constants.length==0;
+        return m_constants.length == 0;
     }
+
     public String toString(Prefixes prefixes) {
-        StringBuffer buffer=new StringBuffer();
+        StringBuffer buffer = new StringBuffer();
         buffer.append("{ ");
-        for (int index=0;index<m_constants.length;index++) {
-            if (index>0)
+        for (int index = 0; index < m_constants.length; index++) {
+            if (index > 0)
                 buffer.append(' ');
             buffer.append(m_constants[index].toString(prefixes));
         }
         buffer.append(" }");
         return buffer.toString();
     }
+
     protected Object readResolve() {
         return s_interningManager.intern(this);
     }
 
-    protected static InterningManager<ConstantEnumeration> s_interningManager=new InterningManager<ConstantEnumeration>() {
-        protected boolean equal(ConstantEnumeration object1,ConstantEnumeration object2) {
-            if (object1.m_constants.length!=object2.m_constants.length)
+    protected static InterningManager<ConstantEnumeration> s_interningManager = new InterningManager<ConstantEnumeration>() {
+        protected boolean equal(ConstantEnumeration object1, ConstantEnumeration object2) {
+            if (object1.m_constants.length != object2.m_constants.length)
                 return false;
-            for (int index=object1.m_constants.length-1;index>=0;--index)
-                if (!contains(object1.m_constants[index],object2.m_constants))
+            for (int index = object1.m_constants.length - 1; index >= 0; --index)
+                if (!contains(object1.m_constants[index], object2.m_constants))
                     return false;
             return true;
         }
-        protected boolean contains(Constant constant,Constant[] constants) {
-            for (int i=constants.length-1;i>=0;--i)
+
+        protected boolean contains(Constant constant, Constant[] constants) {
+            for (int i = constants.length - 1; i >= 0; --i)
                 if (constants[i].equals(constant))
                     return true;
             return false;
         }
+
         protected int getHashCode(ConstantEnumeration object) {
-            int hashCode=0;
-            for (int index=object.m_constants.length-1;index>=0;--index)
-                hashCode+=object.m_constants[index].hashCode();
+            int hashCode = 0;
+            for (int index = object.m_constants.length - 1; index >= 0; --index)
+                hashCode += object.m_constants[index].hashCode();
             return hashCode;
         }
     };

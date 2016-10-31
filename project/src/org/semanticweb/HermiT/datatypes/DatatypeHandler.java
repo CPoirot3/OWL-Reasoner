@@ -26,11 +26,18 @@ import org.semanticweb.HermiT.model.DatatypeRestriction;
  */
 public interface DatatypeHandler {
     Set<String> getManagedDatatypeURIs();
-    Object parseLiteral(String lexicalForm,String datatypeURI) throws MalformedLiteralException;
+
+    Object parseLiteral(String lexicalForm, String datatypeURI) throws MalformedLiteralException;
+
     void validateDatatypeRestriction(DatatypeRestriction datatypeRestriction) throws UnsupportedFacetException;
+
     ValueSpaceSubset createValueSpaceSubset(DatatypeRestriction datatypeRestriction);
-    ValueSpaceSubset conjoinWithDR(ValueSpaceSubset valueSpaceSubset,DatatypeRestriction datatypeRestriction);
-    ValueSpaceSubset conjoinWithDRNegation(ValueSpaceSubset valueSpaceSubset,DatatypeRestriction datatypeRestriction);
-    boolean isSubsetOf(String subsetDatatypeURI,String supersetDatatypeURI);
-    boolean isDisjointWith(String datatypeURI1,String datatypeURI2);
+
+    ValueSpaceSubset conjoinWithDR(ValueSpaceSubset valueSpaceSubset, DatatypeRestriction datatypeRestriction);
+
+    ValueSpaceSubset conjoinWithDRNegation(ValueSpaceSubset valueSpaceSubset, DatatypeRestriction datatypeRestriction);
+
+    boolean isSubsetOf(String subsetDatatypeURI, String supersetDatatypeURI);
+
+    boolean isDisjointWith(String datatypeURI1, String datatypeURI2);
 }

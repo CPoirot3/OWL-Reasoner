@@ -30,16 +30,18 @@ import org.semanticweb.HermiT.tableau.Node;
  * which could result in slight non-breadth-first behavior.)
  */
 public class CreationOrderStrategy extends AbstractExpansionStrategy implements Serializable {
-    private static final long serialVersionUID=-64673639237063636L;
-    
+    private static final long serialVersionUID = -64673639237063636L;
+
     public CreationOrderStrategy(BlockingStrategy strategy) {
-        super(strategy,true);
+        super(strategy, true);
     }
+
     public boolean isDeterministic() {
         return true;
     }
-    protected void expandExistential(AtLeast atLeast,Node forNode) {
-        m_existentialExpansionManager.expand(atLeast,forNode);
-        m_existentialExpansionManager.markExistentialProcessed(atLeast,forNode);
+
+    protected void expandExistential(AtLeast atLeast, Node forNode) {
+        m_existentialExpansionManager.expand(atLeast, forNode);
+        m_existentialExpansionManager.markExistentialProcessed(atLeast, forNode);
     }
 }

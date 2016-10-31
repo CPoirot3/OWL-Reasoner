@@ -26,29 +26,33 @@ public class EntailmentTest extends AbstractTest {
     protected final boolean m_positive;
     protected OWLOntology m_conclusionOntology;
 
-    public EntailmentTest(WGTestDescriptor wgTestDescriptor,boolean positive,File dumpTestDataDirectory,boolean useDisjunctionLearning) {
-        super(wgTestDescriptor.identifier+(positive ? "-entailment" : "-nonentailment"),wgTestDescriptor,dumpTestDataDirectory,useDisjunctionLearning);
-        m_positive=positive;
+    public EntailmentTest(WGTestDescriptor wgTestDescriptor, boolean positive, File dumpTestDataDirectory, boolean useDisjunctionLearning) {
+        super(wgTestDescriptor.identifier + (positive ? "-entailment" : "-nonentailment"), wgTestDescriptor, dumpTestDataDirectory, useDisjunctionLearning);
+        m_positive = positive;
     }
+
     protected void setUp() throws Exception {
         super.setUp();
-        m_conclusionOntology=m_wgTestDescriptor.getConclusionOntology(m_ontologyManager,m_positive);
+        m_conclusionOntology = m_wgTestDescriptor.getConclusionOntology(m_ontologyManager, m_positive);
     }
+
     protected void tearDown() {
         super.tearDown();
-        m_conclusionOntology=null;
+        m_conclusionOntology = null;
     }
+
     protected void doTest() throws Exception {
-        EntailmentChecker checker=new EntailmentChecker(m_reasoner,m_ontologyManager.getOWLDataFactory());
-        boolean isEntailed=checker.entails(m_conclusionOntology.getLogicalAxioms());
+        EntailmentChecker checker = new EntailmentChecker(m_reasoner, m_ontologyManager.getOWLDataFactory());
+        boolean isEntailed = checker.entails(m_conclusionOntology.getLogicalAxioms());
         if (m_positive)
-            assertTrue("Axioms should be entailed.",isEntailed);
+            assertTrue("Axioms should be entailed.", isEntailed);
         else
-            assertTrue("At least one axiom should not be entailed by the premise ontology.",!isEntailed);
+            assertTrue("At least one axiom should not be entailed by the premise ontology.", !isEntailed);
     }
+
     protected void dumpTestData() throws Exception {
         super.dumpTestData();
-        if (m_dumpTestDataDirectory!=null)
-            saveOntology(m_ontologyManager,m_conclusionOntology,new File(m_dumpTestDataDirectory,m_positive ? "conclusion.owl" : "nonconclusion.owl"));
+        if (m_dumpTestDataDirectory != null)
+            saveOntology(m_ontologyManager, m_conclusionOntology, new File(m_dumpTestDataDirectory, m_positive ? "conclusion.owl" : "nonconclusion.owl"));
     }
 }

@@ -21,6 +21,8 @@ import java.util.Collection;
 
 public interface ValueSpaceSubset {
     boolean hasCardinalityAtLeast(int number);
+
     boolean containsDataValue(Object dataValue);
+
     void enumerateDataValues(Collection<Object> dataValues);
 }

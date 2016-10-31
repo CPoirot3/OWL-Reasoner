@@ -29,15 +29,18 @@ public class DerivationTreeCommand extends AbstractCommand {
     public DerivationTreeCommand(Debugger debugger) {
         super(debugger);
     }
+
     public String getCommandName() {
         return "dertree";
     }
+
     public String[] getDescription() {
-        return new String[] {
-            "clash","shows the derivation tree for the clash",
-            "predicate [nodeID]+","shows the derivation tree for the given atom",
+        return new String[]{
+                "clash", "shows the derivation tree for the clash",
+                "predicate [nodeID]+", "shows the derivation tree for the given atom",
         };
     }
+
     public void printHelp(PrintWriter writer) {
         writer.println("usage: dertree clash");
         writer.println("    Shows the derivation tree for the clash.");
@@ -51,50 +54,48 @@ public class DerivationTreeCommand extends AbstractCommand {
         writer.println("    red: existential expansion");
         writer.println("    magenta: base/given fact");
     }
+
     public void execute(String[] args) {
-        if (args.length<2) {
+        if (args.length < 2) {
             m_debugger.getOutput().println("The specification of the predicate is missing.");
             return;
         }
         Object[] tuple;
-        String predicate=args[1];
+        String predicate = args[1];
         if ("clash".equals(predicate.toLowerCase()))
-            tuple=new Object[0];
+            tuple = new Object[0];
         else {
-            tuple=new Object[args.length-1];
+            tuple = new Object[args.length - 1];
             try {
-                tuple[0]=getDLPredicate(predicate);
+                tuple[0] = getDLPredicate(predicate);
+            } catch (Exception e) {
+                m_debugger.getOutput().println("Invalid predicate '" + predicate + "':" + e.getMessage());
             }
-            catch (Exception e) {
-                m_debugger.getOutput().println("Invalid predicate '"+predicate+"':"+e.getMessage());
-            }
-            if (tuple[0]==null) {
-                m_debugger.getOutput().println("Invalid predicate '"+predicate+"'.");
+            if (tuple[0] == null) {
+                m_debugger.getOutput().println("Invalid predicate '" + predicate + "'.");
                 return;
             }
         }
-        for (int index=1;index<tuple.length;index++) {
+        for (int index = 1; index < tuple.length; index++) {
             int nodeID;
             try {
-                nodeID=Integer.parseInt(args[index+1]);
-            }
-            catch (NumberFormatException e) {
-                m_debugger.getOutput().println("Invalid ID of the node at argument "+index+".");
+                nodeID = Integer.parseInt(args[index + 1]);
+            } catch (NumberFormatException e) {
+                m_debugger.getOutput().println("Invalid ID of the node at argument " + index + ".");
                 return;
             }
-            Node node=m_debugger.getTableau().getNode(nodeID);
-            if (node==null) {
-                m_debugger.getOutput().println("Node with ID '"+nodeID+"' not found.");
+            Node node = m_debugger.getTableau().getNode(nodeID);
+            if (node == null) {
+                m_debugger.getOutput().println("Node with ID '" + nodeID + "' not found.");
                 return;
             }
-            tuple[index]=node;
+            tuple[index] = node;
         }
-        DerivationHistory.Atom atom=m_debugger.getDerivationHistory().getAtom(tuple);
-        if (atom!=null) {
-            new DerivationViewer(m_debugger.getPrefixes(),atom);
+        DerivationHistory.Atom atom = m_debugger.getDerivationHistory().getAtom(tuple);
+        if (atom != null) {
+            new DerivationViewer(m_debugger.getPrefixes(), atom);
             selectConsoleWindow();
-        }
-        else
+        } else
             m_debugger.getOutput().println("Atom not found.");
     }
 }

@@ -24,38 +24,39 @@ import org.semanticweb.HermiT.model.Equality;
 import org.semanticweb.HermiT.model.Inequality;
 
 public final class DisjunctionBranchingPoint extends BranchingPoint {
-    private static final long serialVersionUID=-8855083430836162354L;
+    private static final long serialVersionUID = -8855083430836162354L;
 
     protected final GroundDisjunction m_groundDisjunction;
     protected final int[] m_sortedDisjunctIndexes;
     protected int m_currentIndex;
 
-    public DisjunctionBranchingPoint(Tableau tableau,GroundDisjunction groundDisjunction,int[] sortedDisjunctIndexes) {
+    public DisjunctionBranchingPoint(Tableau tableau, GroundDisjunction groundDisjunction, int[] sortedDisjunctIndexes) {
         super(tableau);
-        m_groundDisjunction=groundDisjunction;
-        m_sortedDisjunctIndexes=sortedDisjunctIndexes;
+        m_groundDisjunction = groundDisjunction;
+        m_sortedDisjunctIndexes = sortedDisjunctIndexes;
     }
-    public void startNextChoice(Tableau tableau,DependencySet clashDependencySet) {
+
+    public void startNextChoice(Tableau tableau, DependencySet clashDependencySet) {
         if (tableau.m_useDisjunctionLearning)
             m_groundDisjunction.getGroundDisjunctionHeader().increaseNumberOfBacktrackings(m_sortedDisjunctIndexes[m_currentIndex]);
         m_currentIndex++;
-        assert m_currentIndex<m_groundDisjunction.getNumberOfDisjuncts();
-        int currentDisjunctIndex=m_sortedDisjunctIndexes[m_currentIndex];
-        if (tableau.m_tableauMonitor!=null)
-            tableau.m_tableauMonitor.disjunctProcessingStarted(m_groundDisjunction,currentDisjunctIndex);
-        PermanentDependencySet dependencySet=tableau.getDependencySetFactory().getPermanent(clashDependencySet);
-        if (m_currentIndex+1==m_groundDisjunction.getNumberOfDisjuncts())
-            dependencySet=tableau.getDependencySetFactory().removeBranchingPoint(dependencySet,m_level);
-        for (int previousIndex=0;previousIndex<m_currentIndex;previousIndex++) {
-            int previousDisjunctIndex=m_sortedDisjunctIndexes[previousIndex];
-            DLPredicate dlPredicate=m_groundDisjunction.getDLPredicate(previousDisjunctIndex);
+        assert m_currentIndex < m_groundDisjunction.getNumberOfDisjuncts();
+        int currentDisjunctIndex = m_sortedDisjunctIndexes[m_currentIndex];
+        if (tableau.m_tableauMonitor != null)
+            tableau.m_tableauMonitor.disjunctProcessingStarted(m_groundDisjunction, currentDisjunctIndex);
+        PermanentDependencySet dependencySet = tableau.getDependencySetFactory().getPermanent(clashDependencySet);
+        if (m_currentIndex + 1 == m_groundDisjunction.getNumberOfDisjuncts())
+            dependencySet = tableau.getDependencySetFactory().removeBranchingPoint(dependencySet, m_level);
+        for (int previousIndex = 0; previousIndex < m_currentIndex; previousIndex++) {
+            int previousDisjunctIndex = m_sortedDisjunctIndexes[previousIndex];
+            DLPredicate dlPredicate = m_groundDisjunction.getDLPredicate(previousDisjunctIndex);
             if (Equality.INSTANCE.equals(dlPredicate) || (dlPredicate instanceof AnnotatedEquality))
-                tableau.m_extensionManager.addAssertion(Inequality.INSTANCE,m_groundDisjunction.getArgument(previousDisjunctIndex,0),m_groundDisjunction.getArgument(previousDisjunctIndex,1),dependencySet,false);
+                tableau.m_extensionManager.addAssertion(Inequality.INSTANCE, m_groundDisjunction.getArgument(previousDisjunctIndex, 0), m_groundDisjunction.getArgument(previousDisjunctIndex, 1), dependencySet, false);
             else if (dlPredicate instanceof AtomicConcept)
-                tableau.m_extensionManager.addConceptAssertion(((AtomicConcept)dlPredicate).getNegation(),m_groundDisjunction.getArgument(previousDisjunctIndex,0),dependencySet,false);
+                tableau.m_extensionManager.addConceptAssertion(((AtomicConcept) dlPredicate).getNegation(), m_groundDisjunction.getArgument(previousDisjunctIndex, 0), dependencySet, false);
         }
-        m_groundDisjunction.addDisjunctToTableau(tableau,currentDisjunctIndex,dependencySet);
-        if (tableau.m_tableauMonitor!=null)
-            tableau.m_tableauMonitor.disjunctProcessingFinished(m_groundDisjunction,currentDisjunctIndex);
+        m_groundDisjunction.addDisjunctToTableau(tableau, currentDisjunctIndex, dependencySet);
+        if (tableau.m_tableauMonitor != null)
+            tableau.m_tableauMonitor.disjunctProcessingFinished(m_groundDisjunction, currentDisjunctIndex);
     }
 }

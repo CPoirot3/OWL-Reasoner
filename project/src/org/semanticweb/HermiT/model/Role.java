@@ -25,11 +25,14 @@ import org.semanticweb.HermiT.Prefixes;
  * Represents a role.
  */
 public abstract class Role implements Serializable {
-    private static final long serialVersionUID=-6487260817445541931L;
+    private static final long serialVersionUID = -6487260817445541931L;
 
     public abstract Role getInverse();
-    public abstract Atom getRoleAssertion(Term term0,Term term1);
+
+    public abstract Atom getRoleAssertion(Term term0, Term term1);
+
     public abstract String toString(Prefixes prefixes);
+
     public String toString() {
         return toString(Prefixes.STANDARD_PREFIXES);
     }

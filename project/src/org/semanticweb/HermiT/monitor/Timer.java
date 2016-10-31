@@ -24,104 +24,116 @@ import org.semanticweb.HermiT.tableau.BranchingPoint;
 import org.semanticweb.HermiT.tableau.ReasoningTaskDescription;
 
 public class Timer extends TableauMonitorAdapter {
-    private static final long serialVersionUID=-8144444618897251350L;
+    private static final long serialVersionUID = -8144444618897251350L;
 
     protected transient PrintWriter m_output;
     protected long m_problemStartTime;
     protected long m_lastStatusTime;
     protected int m_numberOfBacktrackings;
-    protected int m_testNumber=0;
+    protected int m_testNumber = 0;
 
     public Timer() {
-        m_output=new PrintWriter(System.out);
+        m_output = new PrintWriter(System.out);
     }
+
     public Timer(PrintWriter inOutput) {
-        m_output=inOutput;
+        m_output = inOutput;
     }
+
     protected Object readResolve() {
-        m_output=new PrintWriter(System.out);
+        m_output = new PrintWriter(System.out);
         return this;
     }
+
     protected void start() {
-        m_numberOfBacktrackings=0;
-        m_problemStartTime=System.currentTimeMillis();
-        m_lastStatusTime=m_problemStartTime;
+        m_numberOfBacktrackings = 0;
+        m_problemStartTime = System.currentTimeMillis();
+        m_lastStatusTime = m_problemStartTime;
     }
+
     public void isSatisfiableStarted(ReasoningTaskDescription reasoningTaskDescription) {
-        m_output.print(reasoningTaskDescription.getTaskDescription(Prefixes.STANDARD_PREFIXES)+" ...");
+        m_output.print(reasoningTaskDescription.getTaskDescription(Prefixes.STANDARD_PREFIXES) + " ...");
         m_output.flush();
         start();
     }
-    public void isSatisfiableFinished(ReasoningTaskDescription reasoningTaskDescription,boolean result) {
+
+    public void isSatisfiableFinished(ReasoningTaskDescription reasoningTaskDescription, boolean result) {
         if (reasoningTaskDescription.flipSatisfiabilityResult())
-            result=!result;
+            result = !result;
         m_output.println(result ? "YES" : "NO");
         doStatistics();
     }
+
     public void iterationStarted() {
-        if (System.currentTimeMillis()-m_lastStatusTime>30000) {
-            if (m_lastStatusTime==m_problemStartTime)
+        if (System.currentTimeMillis() - m_lastStatusTime > 30000) {
+            if (m_lastStatusTime == m_problemStartTime)
                 m_output.println();
             doStatistics();
-            m_lastStatusTime=System.currentTimeMillis();
+            m_lastStatusTime = System.currentTimeMillis();
         }
     }
+
     public void saturateStarted() {
         m_testNumber++;
     }
+
     public void backtrackToFinished(BranchingPoint newCurrentBrancingPoint) {
         m_numberOfBacktrackings++;
     }
+
     protected void doStatistics() {
-        long duartionSoFar=System.currentTimeMillis()-m_problemStartTime;
+        long duartionSoFar = System.currentTimeMillis() - m_problemStartTime;
         m_output.print("    Test:   ");
-        printPadded(m_testNumber,7);
+        printPadded(m_testNumber, 7);
         m_output.print("  Duration:  ");
-        printPaddedMS(duartionSoFar,7);
+        printPaddedMS(duartionSoFar, 7);
         m_output.print("   Current branching point: ");
-        printPadded(m_tableau.getCurrentBranchingPointLevel(),7);
-        if (m_numberOfBacktrackings>0) {
+        printPadded(m_tableau.getCurrentBranchingPointLevel(), 7);
+        if (m_numberOfBacktrackings > 0) {
             m_output.print("    Backtrackings: ");
             m_output.print(m_numberOfBacktrackings);
         }
         m_output.println();
         m_output.print("    Nodes:  allocated:    ");
-        printPadded(m_tableau.getNumberOfAllocatedNodes(),7);
+        printPadded(m_tableau.getNumberOfAllocatedNodes(), 7);
         m_output.print("    used: ");
-        printPadded(m_tableau.getNumberOfNodeCreations(),7);
+        printPadded(m_tableau.getNumberOfNodeCreations(), 7);
         m_output.print("    in tableau: ");
-        printPadded(m_tableau.getNumberOfNodesInTableau(),7);
-        if (m_tableau.getNumberOfMergedOrPrunedNodes()>0) {
+        printPadded(m_tableau.getNumberOfNodesInTableau(), 7);
+        if (m_tableau.getNumberOfMergedOrPrunedNodes() > 0) {
             m_output.print("    merged/pruned: ");
             m_output.print(m_tableau.getNumberOfMergedOrPrunedNodes());
         }
         m_output.println();
         m_output.print("    Sizes:  binary table: ");
-        printPaddedKB(m_tableau.getExtensionManager().getBinaryExtensionTable().sizeInMemory()/1000,7);
+        printPaddedKB(m_tableau.getExtensionManager().getBinaryExtensionTable().sizeInMemory() / 1000, 7);
         m_output.print("    ternary table: ");
-        printPaddedKB(m_tableau.getExtensionManager().getTernaryExtensionTable().sizeInMemory()/1000,7);
+        printPaddedKB(m_tableau.getExtensionManager().getTernaryExtensionTable().sizeInMemory() / 1000, 7);
         m_output.print("    dependency set factory: ");
-        printPaddedKB(m_tableau.getDependencySetFactory().sizeInMemory()/1000,7);
+        printPaddedKB(m_tableau.getDependencySetFactory().sizeInMemory() / 1000, 7);
         m_output.println();
         m_output.println();
         m_output.flush();
     }
-    protected void printPadded(int number,int padding) {
-        String numberString=String.valueOf(number);
+
+    protected void printPadded(int number, int padding) {
+        String numberString = String.valueOf(number);
         m_output.print(numberString);
-        for (int index=numberString.length();index<padding;index++)
+        for (int index = numberString.length(); index < padding; index++)
             m_output.print(' ');
     }
-    protected void printPaddedMS(long number,int padding) {
-        String numberString=String.valueOf(number)+" ms";
+
+    protected void printPaddedMS(long number, int padding) {
+        String numberString = String.valueOf(number) + " ms";
         m_output.print(numberString);
-        for (int index=numberString.length();index<padding;index++)
+        for (int index = numberString.length(); index < padding; index++)
             m_output.print(' ');
     }
-    protected void printPaddedKB(int number,int padding) {
-        String numberString=String.valueOf(number)+" kb";
+
+    protected void printPaddedKB(int number, int padding) {
+        String numberString = String.valueOf(number) + " kb";
         m_output.print(numberString);
-        for (int index=numberString.length();index<padding;index++)
+        for (int index = numberString.length(); index < padding; index++)
             m_output.print(' ');
     }
 }

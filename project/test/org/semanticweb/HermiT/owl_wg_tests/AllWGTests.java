@@ -22,8 +22,8 @@ import junit.framework.TestSuite;
 
 public class AllWGTests {
     public static Test suite() throws Exception {
-        WGTestRegistry wgTestRegistry=new WGTestRegistry();
-        TestSuite suite=new TestSuite("OWL WG All DL Direct Semantics Tests");
+        WGTestRegistry wgTestRegistry = new WGTestRegistry();
+        TestSuite suite = new TestSuite("OWL WG All DL Direct Semantics Tests");
         for (WGTestDescriptor wgTestDescriptor : wgTestRegistry.getTestDescriptors())
             if (wgTestDescriptor.isDLTest()) wgTestDescriptor.addTestsToSuite(suite);
         return suite;

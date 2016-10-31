@@ -31,23 +31,23 @@ public class HierarchyDumperFSS {
     protected final PrintWriter m_out;
 
     public HierarchyDumperFSS(PrintWriter out) {
-        m_out=out;
+        m_out = out;
     }
+
     public void printAtomicConceptHierarchy(Hierarchy<AtomicConcept> atomicConceptHierarchy) {
         for (HierarchyNode<AtomicConcept> node : atomicConceptHierarchy.getAllNodesSet()) {
-            SortedSet<AtomicConcept> equivs=new TreeSet<AtomicConcept>(AtomicConceptComparator.INSTANCE);
+            SortedSet<AtomicConcept> equivs = new TreeSet<AtomicConcept>(AtomicConceptComparator.INSTANCE);
             equivs.addAll(node.getEquivalentElements());
-            AtomicConcept representative=equivs.first();
-            if (equivs.size()>1) {
-                boolean first=true;
+            AtomicConcept representative = equivs.first();
+            if (equivs.size() > 1) {
+                boolean first = true;
                 for (AtomicConcept equiv : equivs) {
                     if (first) {
                         m_out.print("EquivalentClasses( <");
                         m_out.print(representative.getIRI());
                         m_out.print(">");
-                        first=false;
-                    }
-                    else {
+                        first = false;
+                    } else {
                         m_out.print(" <");
                         m_out.print(equiv.getIRI());
                         m_out.print(">");
@@ -58,7 +58,7 @@ public class HierarchyDumperFSS {
             }
             if (!representative.equals(AtomicConcept.THING)) {
                 for (HierarchyNode<AtomicConcept> sub : node.getChildNodes()) {
-                    AtomicConcept subRepresentative=sub.getRepresentative();
+                    AtomicConcept subRepresentative = sub.getRepresentative();
                     if (!subRepresentative.equals(AtomicConcept.NOTHING)) {
                         m_out.print("SubClassOf( <");
                         m_out.print(subRepresentative.getIRI());
@@ -72,20 +72,20 @@ public class HierarchyDumperFSS {
         }
         m_out.println();
     }
+
     public void printObjectPropertyHierarchy(Hierarchy<Role> objectRoleHierarchy) {
         for (HierarchyNode<Role> node : objectRoleHierarchy.getAllNodesSet()) {
-            SortedSet<Role> equivs=new TreeSet<Role>(ObjectRoleComparator.INSTANCE);
+            SortedSet<Role> equivs = new TreeSet<Role>(ObjectRoleComparator.INSTANCE);
             equivs.addAll(node.getEquivalentElements());
-            Role representative=equivs.first();
-            if (equivs.size()>1) {
-                boolean first=true;
+            Role representative = equivs.first();
+            if (equivs.size() > 1) {
+                boolean first = true;
                 for (Role equiv : equivs) {
                     if (first) {
                         m_out.print("EquivalentObjectProperties( ");
                         print(representative);
-                        first=false;
-                    }
-                    else {
+                        first = false;
+                    } else {
                         m_out.print(" ");
                         print(equiv);
                     }
@@ -95,7 +95,7 @@ public class HierarchyDumperFSS {
             }
             if (!representative.equals(AtomicRole.TOP_OBJECT_ROLE)) {
                 for (HierarchyNode<Role> sub : node.getChildNodes()) {
-                    Role subRepresentative=sub.getRepresentative();
+                    Role subRepresentative = sub.getRepresentative();
                     if (!subRepresentative.equals(AtomicRole.BOTTOM_OBJECT_ROLE)) {
                         m_out.print("SubObjectPropertyOf( ");
                         print(subRepresentative);
@@ -109,21 +109,21 @@ public class HierarchyDumperFSS {
         }
         m_out.println();
     }
+
     public void printDataPropertyHierarchy(Hierarchy<AtomicRole> dataRoleHierarchy) {
         for (HierarchyNode<AtomicRole> node : dataRoleHierarchy.getAllNodesSet()) {
-            SortedSet<AtomicRole> equivs=new TreeSet<AtomicRole>(DataRoleComparator.INSTANCE);
+            SortedSet<AtomicRole> equivs = new TreeSet<AtomicRole>(DataRoleComparator.INSTANCE);
             equivs.addAll(node.getEquivalentElements());
-            AtomicRole representative=equivs.first();
-            if (equivs.size()>1) {
-                boolean first=true;
+            AtomicRole representative = equivs.first();
+            if (equivs.size() > 1) {
+                boolean first = true;
                 for (AtomicRole equiv : equivs) {
                     if (first) {
                         m_out.print("EquivalentDataProperties( <");
                         m_out.print(representative.getIRI());
                         m_out.print(">");
-                        first=false;
-                    }
-                    else {
+                        first = false;
+                    } else {
                         m_out.print(" >");
                         m_out.print(equiv.getIRI());
                         m_out.print(">");
@@ -134,7 +134,7 @@ public class HierarchyDumperFSS {
             }
             if (!representative.equals(AtomicRole.TOP_DATA_ROLE)) {
                 for (HierarchyNode<AtomicRole> sub : node.getChildNodes()) {
-                    AtomicRole subRepresentative=sub.getRepresentative();
+                    AtomicRole subRepresentative = sub.getRepresentative();
                     if (!subRepresentative.equals(AtomicRole.BOTTOM_DATA_ROLE)) {
                         m_out.print("SubDataPropertyOf( <");
                         m_out.print(subRepresentative.getIRI());
@@ -148,15 +148,17 @@ public class HierarchyDumperFSS {
         }
         m_out.println();
     }
+
     protected void print(Role role) {
         if (role instanceof AtomicRole)
-            print((AtomicRole)role);
+            print((AtomicRole) role);
         else {
             m_out.print("ObjectInverseOf( ");
-            print(((InverseRole)role).getInverseOf());
+            print(((InverseRole) role).getInverseOf());
             m_out.print(" )");
         }
     }
+
     protected void print(AtomicRole atomicRole) {
         m_out.print("<");
         m_out.print(atomicRole.getIRI());
@@ -164,14 +166,15 @@ public class HierarchyDumperFSS {
     }
 
     protected static class AtomicConceptComparator implements Comparator<AtomicConcept> {
-        public static final AtomicConceptComparator INSTANCE=new AtomicConceptComparator();
+        public static final AtomicConceptComparator INSTANCE = new AtomicConceptComparator();
 
-        public int compare(AtomicConcept atomicConcept1,AtomicConcept atomicConcept2) {
-            int comparison=getAtomicConceptClass(atomicConcept1)-getAtomicConceptClass(atomicConcept2);
-            if (comparison!=0)
+        public int compare(AtomicConcept atomicConcept1, AtomicConcept atomicConcept2) {
+            int comparison = getAtomicConceptClass(atomicConcept1) - getAtomicConceptClass(atomicConcept2);
+            if (comparison != 0)
                 return comparison;
             return atomicConcept1.getIRI().compareTo(atomicConcept2.getIRI());
         }
+
         protected int getAtomicConceptClass(AtomicConcept atomicConcept) {
             if (AtomicConcept.NOTHING.equals(atomicConcept))
                 return 0;
@@ -183,17 +186,18 @@ public class HierarchyDumperFSS {
     }
 
     protected static class ObjectRoleComparator implements Comparator<Role> {
-        public static final ObjectRoleComparator INSTANCE=new ObjectRoleComparator();
+        public static final ObjectRoleComparator INSTANCE = new ObjectRoleComparator();
 
-        public int compare(Role role1,Role role2) {
-            int comparison=getRoleClass(role1)-getRoleClass(role2);
-            if (comparison!=0)
+        public int compare(Role role1, Role role2) {
+            int comparison = getRoleClass(role1) - getRoleClass(role2);
+            if (comparison != 0)
                 return comparison;
-            comparison=getRoleDirection(role1)-getRoleDirection(role2);
-            if (comparison!=0)
+            comparison = getRoleDirection(role1) - getRoleDirection(role2);
+            if (comparison != 0)
                 return comparison;
             return getInnerAtomicRole(role1).getIRI().compareTo(getInnerAtomicRole(role2).getIRI());
         }
+
         protected int getRoleClass(Role role) {
             if (AtomicRole.BOTTOM_OBJECT_ROLE.equals(role))
                 return 0;
@@ -202,26 +206,29 @@ public class HierarchyDumperFSS {
             else
                 return 2;
         }
+
         protected AtomicRole getInnerAtomicRole(Role role) {
             if (role instanceof AtomicRole)
-                return (AtomicRole)role;
+                return (AtomicRole) role;
             else
-                return ((InverseRole)role).getInverseOf();
+                return ((InverseRole) role).getInverseOf();
         }
+
         protected int getRoleDirection(Role role) {
             return role instanceof AtomicRole ? 0 : 1;
         }
     }
 
     protected static class DataRoleComparator implements Comparator<AtomicRole> {
-        public static final DataRoleComparator INSTANCE=new DataRoleComparator();
+        public static final DataRoleComparator INSTANCE = new DataRoleComparator();
 
-        public int compare(AtomicRole atomicRole1,AtomicRole atomicRole2) {
-            int comparison=getAtomicRoleClass(atomicRole1)-getAtomicRoleClass(atomicRole2);
-            if (comparison!=0)
+        public int compare(AtomicRole atomicRole1, AtomicRole atomicRole2) {
+            int comparison = getAtomicRoleClass(atomicRole1) - getAtomicRoleClass(atomicRole2);
+            if (comparison != 0)
                 return comparison;
             return atomicRole1.getIRI().compareTo(atomicRole2.getIRI());
         }
+
         protected int getAtomicRoleClass(AtomicRole atomicRole) {
             if (AtomicRole.BOTTOM_DATA_ROLE.equals(atomicRole))
                 return 0;

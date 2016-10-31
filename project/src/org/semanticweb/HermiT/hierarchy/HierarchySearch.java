@@ -26,47 +26,50 @@ import java.util.Queue;
 import java.util.Set;
 
 public class HierarchySearch {
-    public static <E> HierarchyNode<E> findPosition(Relation<E> hierarchyRelation,E element,HierarchyNode<E> topNode,HierarchyNode<E> bottomNode) {
-        Set<HierarchyNode<E>> parentNodes=findParents(hierarchyRelation,element,topNode);
-        Set<HierarchyNode<E>> childNodes=findChildren(hierarchyRelation,element,bottomNode,parentNodes);
+    public static <E> HierarchyNode<E> findPosition(Relation<E> hierarchyRelation, E element, HierarchyNode<E> topNode, HierarchyNode<E> bottomNode) {
+        Set<HierarchyNode<E>> parentNodes = findParents(hierarchyRelation, element, topNode);
+        Set<HierarchyNode<E>> childNodes = findChildren(hierarchyRelation, element, bottomNode, parentNodes);
         if (parentNodes.equals(childNodes)) {
-            assert parentNodes.size()==1 && childNodes.size()==1;
+            assert parentNodes.size() == 1 && childNodes.size() == 1;
             return parentNodes.iterator().next();
-        }
-        else {
-            Set<E> equivalentElements=new HashSet<E>();
+        } else {
+            Set<E> equivalentElements = new HashSet<E>();
             equivalentElements.add(element);
-            return new HierarchyNode<E>(element,equivalentElements,parentNodes,childNodes);
+            return new HierarchyNode<E>(element, equivalentElements, parentNodes, childNodes);
         }
     }
-    protected static <E> Set<HierarchyNode<E>> findParents(final Relation<E> hierarchyRelation,final E element,HierarchyNode<E> topNode) {
+
+    protected static <E> Set<HierarchyNode<E>> findParents(final Relation<E> hierarchyRelation, final E element, HierarchyNode<E> topNode) {
         return search(
-            new SearchPredicate<HierarchyNode<E>>() {
-                public Set<HierarchyNode<E>> getSuccessorElements(HierarchyNode<E> u) {
-                    return u.m_childNodes;
-                }
-                public Set<HierarchyNode<E>> getPredecessorElements(HierarchyNode<E> u) {
-                    return u.m_parentNodes;
-                }
-                public boolean trueOf(HierarchyNode<E> u) {
-                    return hierarchyRelation.doesSubsume(u.getRepresentative(),element);
-                }
-            },Collections.singleton(topNode),null);
+                new SearchPredicate<HierarchyNode<E>>() {
+                    public Set<HierarchyNode<E>> getSuccessorElements(HierarchyNode<E> u) {
+                        return u.m_childNodes;
+                    }
+
+                    public Set<HierarchyNode<E>> getPredecessorElements(HierarchyNode<E> u) {
+                        return u.m_parentNodes;
+                    }
+
+                    public boolean trueOf(HierarchyNode<E> u) {
+                        return hierarchyRelation.doesSubsume(u.getRepresentative(), element);
+                    }
+                }, Collections.singleton(topNode), null);
     }
-    protected static <E> Set<HierarchyNode<E>> findChildren(final Relation<E> hierarchyRelation,final E element,HierarchyNode<E> bottomNode,Set<HierarchyNode<E>> parentNodes) {
-        if (parentNodes.size()==1 && hierarchyRelation.doesSubsume(element,parentNodes.iterator().next().getRepresentative()))
+
+    protected static <E> Set<HierarchyNode<E>> findChildren(final Relation<E> hierarchyRelation, final E element, HierarchyNode<E> bottomNode, Set<HierarchyNode<E>> parentNodes) {
+        if (parentNodes.size() == 1 && hierarchyRelation.doesSubsume(element, parentNodes.iterator().next().getRepresentative()))
             return parentNodes;
         else {
             // We now determine the set of nodes that are descendants of each node in parentNodes
-            Iterator<HierarchyNode<E>> parentNodesIterator=parentNodes.iterator();
-            Set<HierarchyNode<E>> marked=new HashSet<HierarchyNode<E>>(parentNodesIterator.next().getDescendantNodes());
+            Iterator<HierarchyNode<E>> parentNodesIterator = parentNodes.iterator();
+            Set<HierarchyNode<E>> marked = new HashSet<HierarchyNode<E>>(parentNodesIterator.next().getDescendantNodes());
             while (parentNodesIterator.hasNext()) {
-                Set<HierarchyNode<E>> freshlyMarked=new HashSet<HierarchyNode<E>>();
-                Set<HierarchyNode<E>> visited=new HashSet<HierarchyNode<E>>();
-                Queue<HierarchyNode<E>> toProcess=new LinkedList<HierarchyNode<E>>();
+                Set<HierarchyNode<E>> freshlyMarked = new HashSet<HierarchyNode<E>>();
+                Set<HierarchyNode<E>> visited = new HashSet<HierarchyNode<E>>();
+                Queue<HierarchyNode<E>> toProcess = new LinkedList<HierarchyNode<E>>();
                 toProcess.add(parentNodesIterator.next());
                 while (!toProcess.isEmpty()) {
-                    HierarchyNode<E> currentNode=toProcess.remove();
+                    HierarchyNode<E> currentNode = toProcess.remove();
                     for (HierarchyNode<E> childNode : currentNode.m_childNodes)
                         if (marked.contains(childNode))
                             freshlyMarked.add(childNode);
@@ -75,53 +78,54 @@ public class HierarchySearch {
                 }
                 toProcess.addAll(freshlyMarked);
                 while (!toProcess.isEmpty()) {
-                    HierarchyNode<E> currentNode=toProcess.remove();
+                    HierarchyNode<E> currentNode = toProcess.remove();
                     for (HierarchyNode<E> childNode : currentNode.m_childNodes)
                         if (freshlyMarked.add(childNode))
                             toProcess.add(childNode);
                 }
-                marked=freshlyMarked;
+                marked = freshlyMarked;
             }
             // Determine the subset of marked that is directly above the bottomNode and that is below the current element.
-            Set<HierarchyNode<E>> aboveBottomNodes=new HashSet<HierarchyNode<E>>();
+            Set<HierarchyNode<E>> aboveBottomNodes = new HashSet<HierarchyNode<E>>();
             for (HierarchyNode<E> node : marked)
-                if (node.m_childNodes.contains(bottomNode) && hierarchyRelation.doesSubsume(element,node.getRepresentative()))
+                if (node.m_childNodes.contains(bottomNode) && hierarchyRelation.doesSubsume(element, node.getRepresentative()))
                     aboveBottomNodes.add(node);
             // If this set is empty, then we omit the bottom search phase.
             if (aboveBottomNodes.isEmpty()) {
-                Set<HierarchyNode<E>> childNodes=new HashSet<HierarchyNode<E>>();
+                Set<HierarchyNode<E>> childNodes = new HashSet<HierarchyNode<E>>();
                 childNodes.add(bottomNode);
                 return childNodes;
-            }
-            else {
+            } else {
                 return search(
-                    new SearchPredicate<HierarchyNode<E>>() {
-                        public Set<HierarchyNode<E>> getSuccessorElements(HierarchyNode<E> u) {
-                            return u.m_parentNodes;
-                        }
-                        public Set<HierarchyNode<E>> getPredecessorElements(HierarchyNode<E> u) {
-                            return u.m_childNodes;
-                        }
-                        public boolean trueOf(HierarchyNode<E> u) {
-                            return hierarchyRelation.doesSubsume(element,u.getRepresentative());
-                        }
-                    },aboveBottomNodes,marked);
+                        new SearchPredicate<HierarchyNode<E>>() {
+                            public Set<HierarchyNode<E>> getSuccessorElements(HierarchyNode<E> u) {
+                                return u.m_parentNodes;
+                            }
+
+                            public Set<HierarchyNode<E>> getPredecessorElements(HierarchyNode<E> u) {
+                                return u.m_childNodes;
+                            }
+
+                            public boolean trueOf(HierarchyNode<E> u) {
+                                return hierarchyRelation.doesSubsume(element, u.getRepresentative());
+                            }
+                        }, aboveBottomNodes, marked);
             }
         }
     }
 
-    public static <U> Set<U> search(SearchPredicate<U> searchPredicate,Collection<U> startSearch,Set<U> possibilities) {
-        SearchCache<U> cache=new SearchCache<U>(searchPredicate,possibilities);
-        Set<U> result=new HashSet<U>();
-        Set<U> visited=new HashSet<U>(startSearch);
-        Queue<U> toProcess=new LinkedList<U>(startSearch);
+    public static <U> Set<U> search(SearchPredicate<U> searchPredicate, Collection<U> startSearch, Set<U> possibilities) {
+        SearchCache<U> cache = new SearchCache<U>(searchPredicate, possibilities);
+        Set<U> result = new HashSet<U>();
+        Set<U> visited = new HashSet<U>(startSearch);
+        Queue<U> toProcess = new LinkedList<U>(startSearch);
         while (!toProcess.isEmpty()) {
-            U current=toProcess.remove();
-            boolean foundSubordinateElement=false;
-            Set<U> subordinateElements=searchPredicate.getSuccessorElements(current);
+            U current = toProcess.remove();
+            boolean foundSubordinateElement = false;
+            Set<U> subordinateElements = searchPredicate.getSuccessorElements(current);
             for (U subordinateElement : subordinateElements)
                 if (cache.trueOf(subordinateElement)) {
-                    foundSubordinateElement=true;
+                    foundSubordinateElement = true;
                     if (visited.add(subordinateElement))
                         toProcess.add(subordinateElement);
                 }
@@ -132,12 +136,14 @@ public class HierarchySearch {
     }
 
     public static interface Relation<U> {
-        boolean doesSubsume(U parent,U child);
+        boolean doesSubsume(U parent, U child);
     }
 
     public static interface SearchPredicate<U> {
         Set<U> getSuccessorElements(U u);
+
         Set<U> getPredecessorElements(U u);
+
         boolean trueOf(U u);
     }
 
@@ -147,16 +153,17 @@ public class HierarchySearch {
         protected final Set<U> m_positives;
         protected final Set<U> m_negatives;
 
-        public SearchCache(SearchPredicate<U> f,Set<U> possibilities) {
-            m_searchPredicate=f;
-            m_possibilities=possibilities;
-            m_positives=new HashSet<U>();
-            m_negatives=new HashSet<U>();
+        public SearchCache(SearchPredicate<U> f, Set<U> possibilities) {
+            m_searchPredicate = f;
+            m_possibilities = possibilities;
+            m_positives = new HashSet<U>();
+            m_negatives = new HashSet<U>();
         }
+
         public boolean trueOf(U element) {
             if (m_positives.contains(element))
                 return true;
-            else if (m_negatives.contains(element) || (m_possibilities!=null && !m_possibilities.contains(element)))
+            else if (m_negatives.contains(element) || (m_possibilities != null && !m_possibilities.contains(element)))
                 return false;
             else {
                 for (U superordinateElement : m_searchPredicate.getPredecessorElements(element)) {
@@ -168,8 +175,7 @@ public class HierarchySearch {
                 if (m_searchPredicate.trueOf(element)) {
                     m_positives.add(element);
                     return true;
-                }
-                else {
+                } else {
                     m_negatives.add(element);
                     return false;
                 }

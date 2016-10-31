@@ -31,127 +31,154 @@ import org.semanticweb.HermiT.tableau.DLClauseEvaluator;
 import org.semanticweb.HermiT.tableau.Node;
 import org.semanticweb.HermiT.tableau.Tableau;
 
-public class AncestorBlocking implements BlockingStrategy,Serializable {
-    private static final long serialVersionUID=1075850000309773283L;
+public class AncestorBlocking implements BlockingStrategy, Serializable {
+    private static final long serialVersionUID = 1075850000309773283L;
 
     protected final DirectBlockingChecker m_directBlockingChecker;
     protected final BlockingSignatureCache m_blockingSignatureCache;
     protected Tableau m_tableau;
     protected boolean m_useBlockingSignatureCache;
 
-    public AncestorBlocking(DirectBlockingChecker directBlockingChecker,BlockingSignatureCache blockingSignatureCache) {
-        m_directBlockingChecker=directBlockingChecker;
-        m_blockingSignatureCache=blockingSignatureCache;
+    public AncestorBlocking(DirectBlockingChecker directBlockingChecker, BlockingSignatureCache blockingSignatureCache) {
+        m_directBlockingChecker = directBlockingChecker;
+        m_blockingSignatureCache = blockingSignatureCache;
     }
+
     public void initialize(Tableau tableau) {
-        m_tableau=tableau;
+        m_tableau = tableau;
         m_directBlockingChecker.initialize(tableau);
         updateBlockingSignatureCacheUsage();
     }
+
     public void additionalDLOntologySet(DLOntology additionalDLOntology) {
         updateBlockingSignatureCacheUsage();
     }
+
     public void additionalDLOntologyCleared() {
         updateBlockingSignatureCacheUsage();
     }
+
     protected void updateBlockingSignatureCacheUsage() {
-        m_useBlockingSignatureCache=(m_tableau.getAdditionalHyperresolutionManager()==null);
+        m_useBlockingSignatureCache = (m_tableau.getAdditionalHyperresolutionManager() == null);
     }
+
     public void clear() {
         m_directBlockingChecker.clear();
     }
+
     public void computeBlocking(boolean finalChance) {
-        Node node=m_tableau.getFirstTableauNode();
-        while (node!=null) {
+        Node node = m_tableau.getFirstTableauNode();
+        while (node != null) {
             if (node.isActive()) {
-                Node parent=node.getParent();
-                if (parent==null)
-                    node.setBlocked(null,false);
+                Node parent = node.getParent();
+                if (parent == null)
+                    node.setBlocked(null, false);
                 else if (parent.isBlocked())
-                    node.setBlocked(parent,false);
-                else if (m_useBlockingSignatureCache && m_blockingSignatureCache!=null && m_blockingSignatureCache.containsSignature(node))
-                    node.setBlocked(Node.SIGNATURE_CACHE_BLOCKER,true);
+                    node.setBlocked(parent, false);
+                else if (m_useBlockingSignatureCache && m_blockingSignatureCache != null && m_blockingSignatureCache.containsSignature(node))
+                    node.setBlocked(Node.SIGNATURE_CACHE_BLOCKER, true);
                 else
                     checkParentBlocking(node);
             }
-            node=node.getNextTableauNode();
+            node = node.getNextTableauNode();
         }
     }
+
     public boolean computeIsBlocked(Node node) {
         throw new UnsupportedOperationException("Unsupported operation: Ancestor blocking cannot be used with a lazy expansion strategy. ");
     }
+
     protected final void checkParentBlocking(Node node) {
-        Node blocker=node.getParent();
-        while (blocker!=null) {
-            if (m_directBlockingChecker.isBlockedBy(blocker,node)) {
-                node.setBlocked(blocker,true);
+        Node blocker = node.getParent();
+        while (blocker != null) {
+            if (m_directBlockingChecker.isBlockedBy(blocker, node)) {
+                node.setBlocked(blocker, true);
                 break;
             }
-            blocker=blocker.getParent();
+            blocker = blocker.getParent();
         }
     }
-    public boolean isPermanentAssertion(Concept concept,Node node) {
+
+    public boolean isPermanentAssertion(Concept concept, Node node) {
         return true;
     }
-    public boolean isPermanentAssertion(DataRange range,Node node) {
+
+    public boolean isPermanentAssertion(DataRange range, Node node) {
         return true;
     }
-    public void assertionAdded(Concept concept,Node node,boolean isCore) {
-        m_directBlockingChecker.assertionAdded(concept,node,isCore);
+
+    public void assertionAdded(Concept concept, Node node, boolean isCore) {
+        m_directBlockingChecker.assertionAdded(concept, node, isCore);
     }
-    public void assertionCoreSet(Concept concept,Node node) {
+
+    public void assertionCoreSet(Concept concept, Node node) {
     }
-    public void assertionRemoved(Concept concept,Node node,boolean isCore) {
-        m_directBlockingChecker.assertionRemoved(concept,node,isCore);
+
+    public void assertionRemoved(Concept concept, Node node, boolean isCore) {
+        m_directBlockingChecker.assertionRemoved(concept, node, isCore);
     }
-    public void assertionAdded(DataRange range,Node node,boolean isCore) {
-        m_directBlockingChecker.assertionAdded(range,node,isCore);
+
+    public void assertionAdded(DataRange range, Node node, boolean isCore) {
+        m_directBlockingChecker.assertionAdded(range, node, isCore);
     }
-    public void assertionCoreSet(DataRange range,Node node) {
+
+    public void assertionCoreSet(DataRange range, Node node) {
     }
-    public void assertionRemoved(DataRange range,Node node,boolean isCore) {
-        m_directBlockingChecker.assertionRemoved(range,node,isCore);
+
+    public void assertionRemoved(DataRange range, Node node, boolean isCore) {
+        m_directBlockingChecker.assertionRemoved(range, node, isCore);
     }
-    public void assertionAdded(AtomicRole atomicRole,Node nodeFrom,Node nodeTo,boolean isCore) {
-        m_directBlockingChecker.assertionAdded(atomicRole,nodeFrom,nodeTo,isCore);
+
+    public void assertionAdded(AtomicRole atomicRole, Node nodeFrom, Node nodeTo, boolean isCore) {
+        m_directBlockingChecker.assertionAdded(atomicRole, nodeFrom, nodeTo, isCore);
     }
-    public void assertionCoreSet(AtomicRole atomicRole,Node nodeFrom,Node nodeTo) {
-        m_directBlockingChecker.assertionAdded(atomicRole,nodeFrom,nodeTo,true);
+
+    public void assertionCoreSet(AtomicRole atomicRole, Node nodeFrom, Node nodeTo) {
+        m_directBlockingChecker.assertionAdded(atomicRole, nodeFrom, nodeTo, true);
     }
-    public void assertionRemoved(AtomicRole atomicRole,Node nodeFrom,Node nodeTo,boolean isCore) {
-        m_directBlockingChecker.assertionRemoved(atomicRole,nodeFrom,nodeTo,isCore);
+
+    public void assertionRemoved(AtomicRole atomicRole, Node nodeFrom, Node nodeTo, boolean isCore) {
+        m_directBlockingChecker.assertionRemoved(atomicRole, nodeFrom, nodeTo, isCore);
     }
-    public void nodesMerged(Node mergeFrom,Node mergeInto) {
-        m_directBlockingChecker.nodesMerged(mergeFrom,mergeInto);
+
+    public void nodesMerged(Node mergeFrom, Node mergeInto) {
+        m_directBlockingChecker.nodesMerged(mergeFrom, mergeInto);
     }
-    public void nodesUnmerged(Node mergeFrom,Node mergeInto) {
-        m_directBlockingChecker.nodesUnmerged(mergeFrom,mergeInto);
+
+    public void nodesUnmerged(Node mergeFrom, Node mergeInto) {
+        m_directBlockingChecker.nodesUnmerged(mergeFrom, mergeInto);
     }
+
     public void nodeStatusChanged(Node node) {
     }
+
     public void nodeInitialized(Node node) {
         m_directBlockingChecker.nodeInitialized(node);
     }
+
     public void nodeDestroyed(Node node) {
         m_directBlockingChecker.nodeDestroyed(node);
     }
+
     public void modelFound() {
-        if (m_useBlockingSignatureCache && m_blockingSignatureCache!=null) {
+        if (m_useBlockingSignatureCache && m_blockingSignatureCache != null) {
             // Since we've found a model, we know what is blocked and what is not, so we don't need to update the blocking status.
-            Node node=m_tableau.getFirstTableauNode();
-            while (node!=null) {
+            Node node = m_tableau.getFirstTableauNode();
+            while (node != null) {
                 if (node.isActive() && !node.isBlocked() && m_directBlockingChecker.canBeBlocker(node))
                     m_blockingSignatureCache.addNode(node);
-                node=node.getNextTableauNode();
+                node = node.getNextTableauNode();
             }
         }
     }
+
     public boolean isExact() {
         return true;
     }
-    public void dlClauseBodyCompiled(List<DLClauseEvaluator.Worker> workers,DLClause dlClause,List<Variable> variables,Object[] valuesBuffer,boolean[] coreVariables) {
-        for (int i=0;i<coreVariables.length;i++) {
-            coreVariables[i]=true;
+
+    public void dlClauseBodyCompiled(List<DLClauseEvaluator.Worker> workers, DLClause dlClause, List<Variable> variables, Object[] valuesBuffer, boolean[] coreVariables) {
+        for (int i = 0; i < coreVariables.length; i++) {
+            coreVariables[i] = true;
         }
     }
 }

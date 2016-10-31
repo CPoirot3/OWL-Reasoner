@@ -66,14 +66,15 @@ public class BuiltInPropertyManager {
     protected final OWLDataProperty m_bottomDataProperty;
 
     public BuiltInPropertyManager(OWLDataFactory factory) {
-        m_factory=factory;
-        m_topObjectProperty=m_factory.getOWLObjectProperty(IRI.create(AtomicRole.TOP_OBJECT_ROLE.getIRI()));
-        m_bottomObjectProperty=m_factory.getOWLObjectProperty(IRI.create(AtomicRole.BOTTOM_OBJECT_ROLE.getIRI()));
-        m_topDataProperty=m_factory.getOWLDataProperty(IRI.create(AtomicRole.TOP_DATA_ROLE.getIRI()));
-        m_bottomDataProperty=m_factory.getOWLDataProperty(IRI.create(AtomicRole.BOTTOM_DATA_ROLE.getIRI()));
+        m_factory = factory;
+        m_topObjectProperty = m_factory.getOWLObjectProperty(IRI.create(AtomicRole.TOP_OBJECT_ROLE.getIRI()));
+        m_bottomObjectProperty = m_factory.getOWLObjectProperty(IRI.create(AtomicRole.BOTTOM_OBJECT_ROLE.getIRI()));
+        m_topDataProperty = m_factory.getOWLDataProperty(IRI.create(AtomicRole.TOP_DATA_ROLE.getIRI()));
+        m_bottomDataProperty = m_factory.getOWLDataProperty(IRI.create(AtomicRole.BOTTOM_DATA_ROLE.getIRI()));
     }
-    public void axiomatizeBuiltInPropertiesAsNeeded(OWLAxioms axioms,boolean skipTopObjectProperty,boolean skipBottomObjectProperty,boolean skipTopDataProperty,boolean skipBottomDataProperty) {
-        Checker checker=new Checker(axioms);
+
+    public void axiomatizeBuiltInPropertiesAsNeeded(OWLAxioms axioms, boolean skipTopObjectProperty, boolean skipBottomObjectProperty, boolean skipTopDataProperty, boolean skipBottomDataProperty) {
+        Checker checker = new Checker(axioms);
         if (checker.m_usesTopObjectProperty && !skipTopObjectProperty)
             axiomatizeTopObjectProperty(axioms);
         if (checker.m_usesBottomObjectProperty && !skipBottomObjectProperty)
@@ -83,32 +84,37 @@ public class BuiltInPropertyManager {
         if (checker.m_usesBottomDataProperty && !skipBottomDataProperty)
             axiomatizeBottomDataProperty(axioms);
     }
+
     public void axiomatizeBuiltInPropertiesAsNeeded(OWLAxioms axioms) {
-        axiomatizeBuiltInPropertiesAsNeeded(axioms,false,false,false,false);
+        axiomatizeBuiltInPropertiesAsNeeded(axioms, false, false, false, false);
     }
+
     protected void axiomatizeTopObjectProperty(OWLAxioms axioms) {
         // TransitiveObjectProperty( owl:topObjectProperty )
         axioms.m_complexObjectPropertyInclusions.add(new OWLAxioms.ComplexObjectPropertyInclusion(m_topObjectProperty));
         // SymmetricObjectProperty( owl:topObjectProperty )
-        axioms.m_simpleObjectPropertyInclusions.add(new OWLObjectPropertyExpression[] { m_topObjectProperty,m_topObjectProperty.getInverseProperty() });
+        axioms.m_simpleObjectPropertyInclusions.add(new OWLObjectPropertyExpression[]{m_topObjectProperty, m_topObjectProperty.getInverseProperty()});
         // SubClassOf( owl:Thing ObjectSomeValuesFrom( owl:topObjectProperty ObjectOneOf( <internal:nam#topIndividual> ) ) )
-        OWLIndividual newIndividual=m_factory.getOWLNamedIndividual(IRI.create("internal:nam#topIndividual"));
-        OWLObjectOneOf oneOfNewIndividual=m_factory.getOWLObjectOneOf(newIndividual);
-        OWLObjectSomeValuesFrom hasTopNewIndividual=m_factory.getOWLObjectSomeValuesFrom(m_topObjectProperty,oneOfNewIndividual);
-        axioms.m_conceptInclusions.add(new OWLClassExpression[] { hasTopNewIndividual });
+        OWLIndividual newIndividual = m_factory.getOWLNamedIndividual(IRI.create("internal:nam#topIndividual"));
+        OWLObjectOneOf oneOfNewIndividual = m_factory.getOWLObjectOneOf(newIndividual);
+        OWLObjectSomeValuesFrom hasTopNewIndividual = m_factory.getOWLObjectSomeValuesFrom(m_topObjectProperty, oneOfNewIndividual);
+        axioms.m_conceptInclusions.add(new OWLClassExpression[]{hasTopNewIndividual});
     }
+
     protected void axiomatizeBottomObjectProperty(OWLAxioms axioms) {
-        axioms.m_conceptInclusions.add(new OWLClassExpression[] { m_factory.getOWLObjectAllValuesFrom(m_bottomObjectProperty,m_factory.getOWLNothing()) });
+        axioms.m_conceptInclusions.add(new OWLClassExpression[]{m_factory.getOWLObjectAllValuesFrom(m_bottomObjectProperty, m_factory.getOWLNothing())});
     }
+
     protected void axiomatizeTopDataProperty(OWLAxioms axioms) {
-        OWLDatatype anonymousConstantsDatatype=m_factory.getOWLDatatype(IRI.create("internal:anonymous-constants"));
-        OWLLiteral newConstant=m_factory.getOWLLiteral("internal:constant",anonymousConstantsDatatype);
-        OWLDataOneOf oneOfNewConstant=m_factory.getOWLDataOneOf(newConstant);
-        OWLDataSomeValuesFrom hasTopNewConstant=m_factory.getOWLDataSomeValuesFrom(m_topDataProperty,oneOfNewConstant);
-        axioms.m_conceptInclusions.add(new OWLClassExpression[] { hasTopNewConstant });
+        OWLDatatype anonymousConstantsDatatype = m_factory.getOWLDatatype(IRI.create("internal:anonymous-constants"));
+        OWLLiteral newConstant = m_factory.getOWLLiteral("internal:constant", anonymousConstantsDatatype);
+        OWLDataOneOf oneOfNewConstant = m_factory.getOWLDataOneOf(newConstant);
+        OWLDataSomeValuesFrom hasTopNewConstant = m_factory.getOWLDataSomeValuesFrom(m_topDataProperty, oneOfNewConstant);
+        axioms.m_conceptInclusions.add(new OWLClassExpression[]{hasTopNewConstant});
     }
+
     protected void axiomatizeBottomDataProperty(OWLAxioms axioms) {
-        axioms.m_conceptInclusions.add(new OWLClassExpression[] { m_factory.getOWLDataAllValuesFrom(m_bottomDataProperty,m_factory.getOWLDataComplementOf(m_factory.getTopDatatype())) });
+        axioms.m_conceptInclusions.add(new OWLClassExpression[]{m_factory.getOWLDataAllValuesFrom(m_bottomDataProperty, m_factory.getOWLDataComplementOf(m_factory.getTopDatatype()))});
     }
 
     protected class Checker implements OWLClassExpressionVisitor {
@@ -131,7 +137,7 @@ public class BuiltInPropertyManager {
                 visitProperty(inclusion.m_superObjectProperty);
             }
             for (OWLObjectPropertyExpression[] disjoint : axioms.m_disjointObjectProperties)
-                for (int index=0;index<disjoint.length;index++)
+                for (int index = 0; index < disjoint.length; index++)
                     visitProperty(disjoint[index]);
             for (OWLObjectPropertyExpression property : axioms.m_reflexiveObjectProperties)
                 visitProperty(property);
@@ -144,24 +150,25 @@ public class BuiltInPropertyManager {
                 visitProperty(inclusion[1]);
             }
             for (OWLDataPropertyExpression[] disjoint : axioms.m_disjointDataProperties)
-                for (int index=0;index<disjoint.length;index++)
+                for (int index = 0; index < disjoint.length; index++)
                     visitProperty(disjoint[index]);
-            FactVisitor factVisitor=new FactVisitor();
+            FactVisitor factVisitor = new FactVisitor();
             for (OWLIndividualAxiom fact : axioms.m_facts)
                 fact.accept(factVisitor);
         }
+
         protected void visitProperty(OWLObjectPropertyExpression object) {
             if (object.getNamedProperty().equals(m_topObjectProperty))
-                m_usesTopObjectProperty=true;
+                m_usesTopObjectProperty = true;
             else if (object.getNamedProperty().equals(m_bottomObjectProperty))
-                m_usesBottomObjectProperty=true;
+                m_usesBottomObjectProperty = true;
         }
 
         protected void visitProperty(OWLDataPropertyExpression object) {
             if (object.asOWLDataProperty().equals(m_topDataProperty))
-                m_usesTopDataProperty=true;
+                m_usesTopDataProperty = true;
             else if (object.asOWLDataProperty().equals(m_bottomDataProperty))
-                m_usesBottomDataProperty=true;
+                m_usesBottomDataProperty = true;
         }
 
         public void visit(OWLClass object) {

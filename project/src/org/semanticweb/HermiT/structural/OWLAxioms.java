@@ -57,39 +57,40 @@ public class OWLAxioms {
     public final Collection<DisjunctiveRule> m_rules;
 
     public OWLAxioms() {
-        m_classes=new HashSet<OWLClass>();
-        m_objectProperties=new HashSet<OWLObjectProperty>();
-        m_objectPropertiesOccurringInOWLAxioms=new HashSet<OWLObjectProperty>();
-        m_complexObjectPropertyExpressions=new HashSet<OWLObjectPropertyExpression>();
-        m_dataProperties=new HashSet<OWLDataProperty>();
-        m_namedIndividuals=new HashSet<OWLNamedIndividual>();
-        m_conceptInclusions=new ArrayList<OWLClassExpression[]>();
-        m_dataRangeInclusions=new ArrayList<OWLDataRange[]>();
-        m_simpleObjectPropertyInclusions=new ArrayList<OWLObjectPropertyExpression[]>();
-        m_complexObjectPropertyInclusions=new ArrayList<ComplexObjectPropertyInclusion>();
-        m_disjointObjectProperties=new ArrayList<OWLObjectPropertyExpression[]>();
-        m_reflexiveObjectProperties=new HashSet<OWLObjectPropertyExpression>();
-        m_irreflexiveObjectProperties=new HashSet<OWLObjectPropertyExpression>();
-        m_asymmetricObjectProperties=new HashSet<OWLObjectPropertyExpression>();
-        m_disjointDataProperties=new ArrayList<OWLDataPropertyExpression[]>();
-        m_dataPropertyInclusions=new ArrayList<OWLDataPropertyExpression[]>();
-        m_facts=new HashSet<OWLIndividualAxiom>();
-        m_hasKeys=new HashSet<OWLHasKeyAxiom>();
-        m_definedDatatypesIRIs=new HashSet<String>();
-        m_rules=new HashSet<DisjunctiveRule>();
+        m_classes = new HashSet<OWLClass>();
+        m_objectProperties = new HashSet<OWLObjectProperty>();
+        m_objectPropertiesOccurringInOWLAxioms = new HashSet<OWLObjectProperty>();
+        m_complexObjectPropertyExpressions = new HashSet<OWLObjectPropertyExpression>();
+        m_dataProperties = new HashSet<OWLDataProperty>();
+        m_namedIndividuals = new HashSet<OWLNamedIndividual>();
+        m_conceptInclusions = new ArrayList<OWLClassExpression[]>();
+        m_dataRangeInclusions = new ArrayList<OWLDataRange[]>();
+        m_simpleObjectPropertyInclusions = new ArrayList<OWLObjectPropertyExpression[]>();
+        m_complexObjectPropertyInclusions = new ArrayList<ComplexObjectPropertyInclusion>();
+        m_disjointObjectProperties = new ArrayList<OWLObjectPropertyExpression[]>();
+        m_reflexiveObjectProperties = new HashSet<OWLObjectPropertyExpression>();
+        m_irreflexiveObjectProperties = new HashSet<OWLObjectPropertyExpression>();
+        m_asymmetricObjectProperties = new HashSet<OWLObjectPropertyExpression>();
+        m_disjointDataProperties = new ArrayList<OWLDataPropertyExpression[]>();
+        m_dataPropertyInclusions = new ArrayList<OWLDataPropertyExpression[]>();
+        m_facts = new HashSet<OWLIndividualAxiom>();
+        m_hasKeys = new HashSet<OWLHasKeyAxiom>();
+        m_definedDatatypesIRIs = new HashSet<String>();
+        m_rules = new HashSet<DisjunctiveRule>();
     }
 
     public static class ComplexObjectPropertyInclusion {
         public final OWLObjectPropertyExpression[] m_subObjectProperties;
         public final OWLObjectPropertyExpression m_superObjectProperty;
 
-        public ComplexObjectPropertyInclusion(OWLObjectPropertyExpression[] subObjectProperties,OWLObjectPropertyExpression superObjectPropery) {
-            m_subObjectProperties=subObjectProperties;
-            m_superObjectProperty=superObjectPropery;
+        public ComplexObjectPropertyInclusion(OWLObjectPropertyExpression[] subObjectProperties, OWLObjectPropertyExpression superObjectPropery) {
+            m_subObjectProperties = subObjectProperties;
+            m_superObjectProperty = superObjectPropery;
         }
+
         public ComplexObjectPropertyInclusion(OWLObjectPropertyExpression transitiveObjectProperty) {
-            m_subObjectProperties=new OWLObjectPropertyExpression[] { transitiveObjectProperty,transitiveObjectProperty };
-            m_superObjectProperty=transitiveObjectProperty;
+            m_subObjectProperties = new OWLObjectPropertyExpression[]{transitiveObjectProperty, transitiveObjectProperty};
+            m_superObjectProperty = transitiveObjectProperty;
         }
     }
 
@@ -97,25 +98,26 @@ public class OWLAxioms {
         public final SWRLAtom[] m_body;
         public final SWRLAtom[] m_head;
 
-        public DisjunctiveRule(SWRLAtom[] body,SWRLAtom[] head) {
-            m_body=body;
-            m_head=head;
+        public DisjunctiveRule(SWRLAtom[] body, SWRLAtom[] head) {
+            m_body = body;
+            m_head = head;
         }
+
         public String toString() {
-            StringBuffer buffer=new StringBuffer();
-            boolean first=true;
+            StringBuffer buffer = new StringBuffer();
+            boolean first = true;
             for (SWRLAtom atom : m_body) {
                 if (first)
-                    first=false;
+                    first = false;
                 else
                     buffer.append(" /\\ ");
                 buffer.append(atom.toString());
             }
             buffer.append(" -: ");
-            first=true;
+            first = true;
             for (SWRLAtom atom : m_head) {
                 if (first)
-                    first=false;
+                    first = false;
                 else
                     buffer.append(" \\/ ");
                 buffer.append(atom.toString());

@@ -19,8 +19,8 @@ package org.semanticweb.HermiT.tableau;
 
 import java.io.Serializable;
 
-public final class PermanentDependencySet implements DependencySet,Serializable {
-    private static final long serialVersionUID=353039301123337446L;
+public final class PermanentDependencySet implements DependencySet, Serializable {
+    private static final long serialVersionUID = 353039301123337446L;
 
     protected PermanentDependencySet m_rest;
     protected int m_branchingPoint;
@@ -28,39 +28,43 @@ public final class PermanentDependencySet implements DependencySet,Serializable 
     protected int m_usageCounter;
     protected PermanentDependencySet m_previousUnusedSet;
     protected PermanentDependencySet m_nextUnusedSet;
-    
+
     protected PermanentDependencySet() {
-        m_rest=null;
-        m_branchingPoint=-2;
-        m_nextEntry=null;
-        m_usageCounter=0;
-        m_previousUnusedSet=null;
-        m_nextUnusedSet=null;
+        m_rest = null;
+        m_branchingPoint = -2;
+        m_nextEntry = null;
+        m_usageCounter = 0;
+        m_previousUnusedSet = null;
+        m_nextUnusedSet = null;
     }
+
     public boolean containsBranchingPoint(int branchingPoint) {
-        PermanentDependencySet set=this;
-        while (set!=null) {
-            if (set.m_branchingPoint==branchingPoint)
+        PermanentDependencySet set = this;
+        while (set != null) {
+            if (set.m_branchingPoint == branchingPoint)
                 return true;
-            set=set.m_rest;
+            set = set.m_rest;
         }
         return false;
     }
+
     public boolean isEmpty() {
-        return m_branchingPoint==-1;
+        return m_branchingPoint == -1;
     }
+
     public int getMaximumBranchingPoint() {
         return m_branchingPoint;
     }
+
     public String toString() {
-        StringBuffer buffer=new StringBuffer();
+        StringBuffer buffer = new StringBuffer();
         buffer.append("{ ");
-        PermanentDependencySet dependencySet=this;
-        while (dependencySet.m_branchingPoint!=-1) {
+        PermanentDependencySet dependencySet = this;
+        while (dependencySet.m_branchingPoint != -1) {
             buffer.append(dependencySet.m_branchingPoint);
-            if (dependencySet.m_rest.m_branchingPoint!=-1)
+            if (dependencySet.m_rest.m_branchingPoint != -1)
                 buffer.append(',');
-            dependencySet=dependencySet.m_rest;
+            dependencySet = dependencySet.m_rest;
         }
         buffer.append(" }");
         return buffer.toString();

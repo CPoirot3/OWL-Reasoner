@@ -30,116 +30,168 @@ import org.semanticweb.HermiT.tableau.Node;
 import org.semanticweb.HermiT.tableau.ReasoningTaskDescription;
 import org.semanticweb.HermiT.tableau.Tableau;
 
-public class TableauMonitorAdapter implements TableauMonitor,Serializable  {
-    private static final long serialVersionUID=6336033031431260208L;
+public class TableauMonitorAdapter implements TableauMonitor, Serializable {
+    private static final long serialVersionUID = 6336033031431260208L;
 
     protected Tableau m_tableau;
 
     public TableauMonitorAdapter() {
     }
+
     public void setTableau(Tableau tableau) {
-        m_tableau=tableau;
+        m_tableau = tableau;
     }
+
     public void isSatisfiableStarted(ReasoningTaskDescription reasoningTaskDescription) {
     }
-    public void isSatisfiableFinished(ReasoningTaskDescription reasoningTaskDescription,boolean result) {
+
+    public void isSatisfiableFinished(ReasoningTaskDescription reasoningTaskDescription, boolean result) {
     }
+
     public void tableauCleared() {
     }
+
     public void saturateStarted() {
     }
+
     public void saturateFinished(boolean modelFound) {
     }
+
     public void iterationStarted() {
     }
+
     public void iterationFinished() {
     }
-    public void dlClauseMatchedStarted(DLClauseEvaluator dlClauseEvaluator,int dlClauseIndex) {
+
+    public void dlClauseMatchedStarted(DLClauseEvaluator dlClauseEvaluator, int dlClauseIndex) {
     }
-    public void dlClauseMatchedFinished(DLClauseEvaluator dlClauseEvaluator,int dlClauseIndex) {
+
+    public void dlClauseMatchedFinished(DLClauseEvaluator dlClauseEvaluator, int dlClauseIndex) {
     }
-    public void addFactStarted(Object[] tuple,boolean isCore) {
+
+    public void addFactStarted(Object[] tuple, boolean isCore) {
     }
-    public void addFactFinished(Object[] tuple,boolean isCore,boolean factAdded) {
+
+    public void addFactFinished(Object[] tuple, boolean isCore, boolean factAdded) {
     }
-    public void mergeStarted(Node mergeFrom,Node mergeInto) {
+
+    public void mergeStarted(Node mergeFrom, Node mergeInto) {
     }
+
     public void nodePruned(Node node) {
     }
-    public void mergeFactStarted(Node mergeFrom,Node mergeInto,Object[] sourceTuple,Object[] targetTuple) {
+
+    public void mergeFactStarted(Node mergeFrom, Node mergeInto, Object[] sourceTuple, Object[] targetTuple) {
     }
-    public void mergeFactFinished(Node mergeFrom,Node mergeInto,Object[] sourceTuple,Object[] targetTuple) {
+
+    public void mergeFactFinished(Node mergeFrom, Node mergeInto, Object[] sourceTuple, Object[] targetTuple) {
     }
-    public void mergeFinished(Node mergeFrom,Node mergeInto) {
+
+    public void mergeFinished(Node mergeFrom, Node mergeInto) {
     }
+
     public void clashDetectionStarted(Object[]... tuples) {
     }
+
     public void clashDetectionFinished(Object[]... tuples) {
     }
+
     public void clashDetected() {
     }
+
     public void backtrackToStarted(BranchingPoint newCurrentBrancingPoint) {
     }
+
     public void tupleRemoved(Object[] tuple) {
     }
+
     public void backtrackToFinished(BranchingPoint newCurrentBrancingPoint) {
     }
+
     public void groundDisjunctionDerived(GroundDisjunction groundDisjunction) {
     }
+
     public void processGroundDisjunctionStarted(GroundDisjunction groundDisjunction) {
     }
+
     public void groundDisjunctionSatisfied(GroundDisjunction groundDisjunction) {
     }
+
     public void processGroundDisjunctionFinished(GroundDisjunction groundDisjunction) {
     }
-    public void disjunctProcessingStarted(GroundDisjunction groundDisjunction,int disjunct) {
+
+    public void disjunctProcessingStarted(GroundDisjunction groundDisjunction, int disjunct) {
     }
-    public void disjunctProcessingFinished(GroundDisjunction groundDisjunction,int disjunct) {
+
+    public void disjunctProcessingFinished(GroundDisjunction groundDisjunction, int disjunct) {
     }
+
     public void pushBranchingPointStarted(BranchingPoint branchingPoint) {
     }
+
     public void pushBranchingPointFinished(BranchingPoint branchingPoint) {
     }
+
     public void startNextBranchingPointStarted(BranchingPoint branchingPoint) {
     }
+
     public void startNextBranchingPointFinished(BranchingPoint branchingPoint) {
     }
-    public void existentialExpansionStarted(ExistentialConcept existentialConcept,Node forNode) {
+
+    public void existentialExpansionStarted(ExistentialConcept existentialConcept, Node forNode) {
     }
-    public void existentialExpansionFinished(ExistentialConcept existentialConcept,Node forNode) {
+
+    public void existentialExpansionFinished(ExistentialConcept existentialConcept, Node forNode) {
     }
-    public void existentialSatisfied(ExistentialConcept existentialConcept,Node forNode) {
+
+    public void existentialSatisfied(ExistentialConcept existentialConcept, Node forNode) {
     }
-    public void nominalIntorductionStarted(Node rootNode,Node treeNode,AnnotatedEquality annotatedEquality,Node argument1,Node argument2) {
+
+    public void nominalIntorductionStarted(Node rootNode, Node treeNode, AnnotatedEquality annotatedEquality, Node argument1, Node argument2) {
     }
-    public void nominalIntorductionFinished(Node rootNode,Node treeNode,AnnotatedEquality annotatedEquality,Node argument1,Node argument2) {
+
+    public void nominalIntorductionFinished(Node rootNode, Node treeNode, AnnotatedEquality annotatedEquality, Node argument1, Node argument2) {
     }
-    public void descriptionGraphCheckingStarted(int graphIndex1,int tupleIndex1,int position1,int graphIndex2,int tupleIndex2,int position2) {
+
+    public void descriptionGraphCheckingStarted(int graphIndex1, int tupleIndex1, int position1, int graphIndex2, int tupleIndex2, int position2) {
     }
-    public void descriptionGraphCheckingFinished(int graphIndex1,int tupleIndex1,int position1,int graphIndex2,int tupleIndex2,int position2) {
+
+    public void descriptionGraphCheckingFinished(int graphIndex1, int tupleIndex1, int position1, int graphIndex2, int tupleIndex2, int position2) {
     }
+
     public void nodeCreated(Node node) {
     }
+
     public void nodeDestroyed(Node node) {
     }
-    public void unknownDatatypeRestrictionDetectionStarted(DataRange dataRange1,Node node1,DataRange dataRange2,Node node2) {
+
+    public void unknownDatatypeRestrictionDetectionStarted(DataRange dataRange1, Node node1, DataRange dataRange2, Node node2) {
     }
-    public void unknownDatatypeRestrictionDetectionFinished(DataRange dataRange1,Node node1, DataRange dataRange2,Node node2) {
+
+    public void unknownDatatypeRestrictionDetectionFinished(DataRange dataRange1, Node node1, DataRange dataRange2, Node node2) {
     }
+
     public void datatypeCheckingStarted() {
     }
+
     public void datatypeCheckingFinished(boolean result) {
     }
+
     public void datatypeConjunctionCheckingStarted(DatatypeManager.DConjunction conjunction) {
     }
-    public void datatypeConjunctionCheckingFinished(DatatypeManager.DConjunction conjunction,boolean result) {
+
+    public void datatypeConjunctionCheckingFinished(DatatypeManager.DConjunction conjunction, boolean result) {
     }
+
     public void blockingValidationStarted() {
     }
+
     public void blockingValidationFinished(int noInvalidlyBlocked) {
     }
+
     public void possibleInstanceIsInstance() {
     }
+
     public void possibleInstanceIsNotInstance() {
     }
 }

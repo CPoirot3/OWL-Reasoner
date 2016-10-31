@@ -25,71 +25,80 @@ import org.semanticweb.HermiT.datatypes.MalformedLiteralException;
  * Represents a constants.
  */
 public class Constant extends Term {
-    private static final long serialVersionUID=-8143911431654640690L;
+    private static final long serialVersionUID = -8143911431654640690L;
 
     protected final String m_lexicalForm;
     protected final String m_datatypeURI;
     protected final Object m_dataValue;
 
-    protected Constant(String lexicalForm,String datatypeURI,Object dataValue) {
-        m_lexicalForm=lexicalForm;
-        m_datatypeURI=datatypeURI;
-        m_dataValue=dataValue;
+    protected Constant(String lexicalForm, String datatypeURI, Object dataValue) {
+        m_lexicalForm = lexicalForm;
+        m_datatypeURI = datatypeURI;
+        m_dataValue = dataValue;
     }
+
     public String getLexicalForm() {
         return m_lexicalForm;
     }
+
     public String getDatatypeURI() {
         return m_datatypeURI;
     }
+
     public Object getDataValue() {
         return m_dataValue;
     }
+
     public boolean isAnonymous() {
         return "internal:anonymous-constants".equals(m_datatypeURI);
     }
+
     public String toString() {
         return toString(Prefixes.STANDARD_PREFIXES);
     }
+
     public String toString(Prefixes prefixes) {
-        StringBuffer buffer=new StringBuffer();
+        StringBuffer buffer = new StringBuffer();
         buffer.append('"');
-        for (int index=0;index<m_lexicalForm.length();index++) {
-            char c=m_lexicalForm.charAt(index);
+        for (int index = 0; index < m_lexicalForm.length(); index++) {
+            char c = m_lexicalForm.charAt(index);
             switch (c) {
-            case '"':
-                buffer.append("\\\"");
-                break;
-            case '\\':
-                buffer.append("\\\\");
-                break;
-            default:
-                buffer.append(c);
-                break;
+                case '"':
+                    buffer.append("\\\"");
+                    break;
+                case '\\':
+                    buffer.append("\\\\");
+                    break;
+                default:
+                    buffer.append(c);
+                    break;
             }
         }
         buffer.append("\"^^");
         buffer.append(prefixes.abbreviateIRI(m_datatypeURI));
         return buffer.toString();
     }
+
     protected Object readResolve() {
         return s_interningManager.intern(this);
     }
 
-    protected static InterningManager<Constant> s_interningManager=new InterningManager<Constant>() {
-        protected boolean equal(Constant object1,Constant object2) {
+    protected static InterningManager<Constant> s_interningManager = new InterningManager<Constant>() {
+        protected boolean equal(Constant object1, Constant object2) {
             return object1.m_lexicalForm.equals(object2.m_lexicalForm) && object1.m_datatypeURI.equals(object2.m_datatypeURI);
         }
+
         protected int getHashCode(Constant object) {
-            return object.m_lexicalForm.hashCode()+object.m_datatypeURI.hashCode();
+            return object.m_lexicalForm.hashCode() + object.m_datatypeURI.hashCode();
         }
     };
 
-    public static Constant create(String lexicalForm,String datatypeURI) throws MalformedLiteralException {
-        Object dataValue=DatatypeRegistry.parseLiteral(lexicalForm,datatypeURI);
-        return s_interningManager.intern(new Constant(lexicalForm,datatypeURI,dataValue));
+    public static Constant create(String lexicalForm, String datatypeURI) throws MalformedLiteralException {
+        Object dataValue = DatatypeRegistry.parseLiteral(lexicalForm, datatypeURI);
+        return s_interningManager.intern(new Constant(lexicalForm, datatypeURI, dataValue));
     }
+
     public static Constant createAnonymous(String id) {
-        return create(id,"internal:anonymous-constants");
+        return create(id, "internal:anonymous-constants");
     }
 }

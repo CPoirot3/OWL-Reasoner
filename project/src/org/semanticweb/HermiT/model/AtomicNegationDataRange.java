@@ -26,41 +26,49 @@ import org.semanticweb.HermiT.Prefixes;
 public class AtomicNegationDataRange extends LiteralDataRange {
 
     protected final AtomicDataRange m_negatedDataRange;
-    
+
     protected AtomicNegationDataRange(AtomicDataRange negatedDataRange) {
-        m_negatedDataRange=negatedDataRange;
+        m_negatedDataRange = negatedDataRange;
     }
+
     public AtomicDataRange getNegatedDataRange() {
         return m_negatedDataRange;
     }
+
     public LiteralDataRange getNegation() {
         return m_negatedDataRange;
     }
+
     public boolean isAlwaysTrue() {
         return m_negatedDataRange.isAlwaysFalse();
     }
+
     public boolean isAlwaysFalse() {
         return m_negatedDataRange.isAlwaysTrue();
     }
+
     public boolean isNegatedInternalDatatype() {
         return m_negatedDataRange.isInternalDatatype();
     }
+
     public String toString(Prefixes prefixes) {
-        return "not("+m_negatedDataRange.toString(prefixes)+")";
+        return "not(" + m_negatedDataRange.toString(prefixes) + ")";
     }
+
     protected Object readResolve() {
         return s_interningManager.intern(this);
     }
 
-    protected static InterningManager<AtomicNegationDataRange> s_interningManager=new InterningManager<AtomicNegationDataRange>() {
-        protected boolean equal(AtomicNegationDataRange object1,AtomicNegationDataRange object2) {
-            return object1.m_negatedDataRange==object2.m_negatedDataRange;
+    protected static InterningManager<AtomicNegationDataRange> s_interningManager = new InterningManager<AtomicNegationDataRange>() {
+        protected boolean equal(AtomicNegationDataRange object1, AtomicNegationDataRange object2) {
+            return object1.m_negatedDataRange == object2.m_negatedDataRange;
         }
+
         protected int getHashCode(AtomicNegationDataRange object) {
             return -object.m_negatedDataRange.hashCode();
         }
     };
-    
+
     public static AtomicNegationDataRange create(AtomicDataRange negatedDataRange) {
         return s_interningManager.intern(new AtomicNegationDataRange(negatedDataRange));
     }

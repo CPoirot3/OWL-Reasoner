@@ -66,7 +66,7 @@ public class OWLAxiomsExpressivity extends OWLAxiomVisitorAdapter implements OWL
             visitProperty(inclusion.m_superObjectProperty);
         }
         for (OWLObjectPropertyExpression[] disjoint : axioms.m_disjointObjectProperties)
-            for (int index=0;index<disjoint.length;index++)
+            for (int index = 0; index < disjoint.length; index++)
                 visitProperty(disjoint[index]);
         for (OWLObjectPropertyExpression property : axioms.m_reflexiveObjectProperties)
             visitProperty(property);
@@ -75,19 +75,19 @@ public class OWLAxiomsExpressivity extends OWLAxiomVisitorAdapter implements OWL
         for (OWLObjectPropertyExpression property : axioms.m_asymmetricObjectProperties)
             visitProperty(property);
         if (!axioms.m_dataProperties.isEmpty()
-        		|| !axioms.m_disjointDataProperties.isEmpty()
-        		|| !axioms.m_dataPropertyInclusions.isEmpty()
-        		|| !axioms.m_dataRangeInclusions.isEmpty()
-        		|| !axioms.m_definedDatatypesIRIs.isEmpty())
-            m_hasDatatypes=true;
+                || !axioms.m_disjointDataProperties.isEmpty()
+                || !axioms.m_dataPropertyInclusions.isEmpty()
+                || !axioms.m_dataRangeInclusions.isEmpty()
+                || !axioms.m_definedDatatypesIRIs.isEmpty())
+            m_hasDatatypes = true;
         for (OWLIndividualAxiom fact : axioms.m_facts)
             fact.accept(this);
-        m_hasSWRLRules=!axioms.m_rules.isEmpty();
+        m_hasSWRLRules = !axioms.m_rules.isEmpty();
     }
 
     protected void visitProperty(OWLObjectPropertyExpression object) {
         if (object.getSimplified().isAnonymous())
-            m_hasInverseRoles=true;
+            m_hasInverseRoles = true;
     }
 
     public void visit(OWLClass desc) {
@@ -108,7 +108,7 @@ public class OWLAxiomsExpressivity extends OWLAxiomVisitorAdapter implements OWL
     }
 
     public void visit(OWLObjectOneOf object) {
-        m_hasNominals=true;
+        m_hasNominals = true;
     }
 
     public void visit(OWLObjectSomeValuesFrom object) {
@@ -117,7 +117,7 @@ public class OWLAxiomsExpressivity extends OWLAxiomVisitorAdapter implements OWL
     }
 
     public void visit(OWLObjectHasValue object) {
-        m_hasNominals=true;
+        m_hasNominals = true;
         visitProperty(object.getProperty());
     }
 
@@ -136,42 +136,42 @@ public class OWLAxiomsExpressivity extends OWLAxiomVisitorAdapter implements OWL
     }
 
     public void visit(OWLObjectMaxCardinality object) {
-        m_hasAtMostRestrictions=true;
+        m_hasAtMostRestrictions = true;
         visitProperty(object.getProperty());
         object.getFiller().accept(this);
     }
 
     public void visit(OWLObjectExactCardinality object) {
-        m_hasAtMostRestrictions=true;
+        m_hasAtMostRestrictions = true;
         visitProperty(object.getProperty());
         object.getFiller().accept(this);
     }
 
     public void visit(OWLDataHasValue object) {
-        m_hasDatatypes=true;
+        m_hasDatatypes = true;
     }
 
     public void visit(OWLDataSomeValuesFrom object) {
-        m_hasDatatypes=true;
+        m_hasDatatypes = true;
     }
 
     public void visit(OWLDataAllValuesFrom object) {
-        m_hasDatatypes=true;
+        m_hasDatatypes = true;
     }
 
     public void visit(OWLDataMinCardinality object) {
-        m_hasDatatypes=true;
+        m_hasDatatypes = true;
     }
 
     public void visit(OWLDataMaxCardinality object) {
-        m_hasDatatypes=true;
+        m_hasDatatypes = true;
     }
 
     public void visit(OWLDataExactCardinality object) {
-        m_hasDatatypes=true;
+        m_hasDatatypes = true;
     }
 
-     public void visit(OWLClassAssertionAxiom object) {
+    public void visit(OWLClassAssertionAxiom object) {
         object.getClassExpression().accept(OWLAxiomsExpressivity.this);
     }
 
@@ -184,6 +184,6 @@ public class OWLAxiomsExpressivity extends OWLAxiomVisitorAdapter implements OWL
     }
 
     public void visit(OWLDataPropertyAssertionAxiom object) {
-        m_hasDatatypes=true;
+        m_hasDatatypes = true;
     }
 }

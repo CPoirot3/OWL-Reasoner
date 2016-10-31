@@ -11,25 +11,25 @@
     <!-- general info -->
     <property name="homepage" value="http://hermit-reasoner.com/"/>
     <property name="updatefile" value="${homepage}protege-4-1-beta-update/update.properties"/>
-	<property environment="env"/>
-	<property name = "protege.home"      location="${env.PROTEGE_HOME}"/>
-	<property file = "${protege.home}/build.properties"/>
-	<property name = "protege.plugins"   location="${protege.home}/plugins"/>
-	
+    <property environment="env"/>
+    <property name="protege.home" location="${env.PROTEGE_HOME}"/>
+    <property file="${protege.home}/build.properties"/>
+    <property name="protege.plugins" location="${protege.home}/plugins"/>
+
     <!-- structure of output files -->
     <property name="projectroot" value="."/>
     <property name="builddir" value="${projectroot}/build"/>
     <property name="classdir" value="${builddir}/class"/>
     <property name="testclassdir" value="${builddir}/testclass"/>
-	<property name="reports" location="${builddir}/testreports"/>
-	
+    <property name="reports" location="${builddir}/testreports"/>
+
     <!-- structure of the release -->
     <property name="releasedir" value="${builddir}/release"/>
     <property name="HermiTjar" value="${releasedir}/${ant.project.name}.jar"/>
     <property name="ProtegePlugInJar" value="${releasedir}/org.semanticweb.${ant.project.name}.jar"/>
     <property name="projectdir" value="${releasedir}/project"/>
     <property name="javadocdir" value="${builddir}/javadoc"/>
-    
+
     <!-- libraries -->
     <property name="libdir" value="${projectroot}/lib"/>
     <property name="owlapi" value="${libdir}/owlapi-3.4.3.jar"/>
@@ -38,10 +38,11 @@
     <property name="junit" value="${libdir}/junit-4.4.jar"/>
     <property name="protegeapp" value="${libdir}/org.protege.editor.core.application-4.2.jar"/>
     <property name="protegeowl" value="${libdir}/org.protege.editor.owl-4.2.jar"/>
-	<property name="xmlcanonicalizer" value="${libdir}/axiom-1.2.8.jar"/>
-	<property name="logging" value="${libdir}/commons-logging-1.1.1.jar"/> <!-- required by canonicalizer -->
-	<property name="jaxp" value="${libdir}/jaxp-api-1.4.2.jar"/> <!-- required by canonicalizer (javax.xml.stream.XMLStreamException) -->
-	
+    <property name="xmlcanonicalizer" value="${libdir}/axiom-1.2.8.jar"/>
+    <property name="logging" value="${libdir}/commons-logging-1.1.1.jar"/> <!-- required by canonicalizer -->
+    <property name="jaxp"
+              value="${libdir}/jaxp-api-1.4.2.jar"/> <!-- required by canonicalizer (javax.xml.stream.XMLStreamException) -->
+
     <!-- to generate a debug version, use -Ddebug=on argument when running ant -->
     <property name="debug" value="off"/>
 
@@ -49,7 +50,7 @@
     <path id="sourcepath">
         <pathelement path="${projectroot}/src"/>
         <pathelement path="${projectroot}/getopt"/>
-    	<pathelement path="${projectroot}/examples"/>
+        <pathelement path="${projectroot}/examples"/>
     </path>
     <path id="testsourcepath">
         <pathelement path="${projectroot}/test"/>
@@ -62,9 +63,9 @@
         <pathelement location="${jautomaton}"/>
         <pathelement location="${protegeapp}"/>
         <pathelement location="${protegeowl}"/>
-    	<pathelement location="${xmlcanonicalizer}"/>
-    	<pathelement location="${logging}"/>
-    	<pathelement location="${jaxp}"/>
+        <pathelement location="${xmlcanonicalizer}"/>
+        <pathelement location="${logging}"/>
+        <pathelement location="${jaxp}"/>
     </path>
     <path id="testclasspath">
         <pathelement path="${classdir}"/>
@@ -79,7 +80,8 @@
 
     <target name="compile">
         <mkdir dir="${classdir}"/>
-        <javac includeantruntime="false" destdir="${classdir}" deprecation="yes" debug="${debug}" debuglevel="lines,vars,source" target="1.5" source="1.5">
+        <javac includeantruntime="false" destdir="${classdir}" deprecation="yes" debug="${debug}"
+               debuglevel="lines,vars,source" target="1.5" source="1.5">
             <compilerarg value="-Xlint:all-path"/>
             <src refid="sourcepath"/>
             <classpath refid="classpath"/>
@@ -93,16 +95,17 @@
             </filterset>
         </copy>
     </target>
-    
+
     <target name="javadoc">
         <mkdir dir="${javadocdir}"/>
-        <javadoc sourcepathref="sourcepath" destdir="${javadocdir}" access="protected" author="false" version="true" use="true">
+        <javadoc sourcepathref="sourcepath" destdir="${javadocdir}" access="protected" author="false" version="true"
+                 use="true">
             <classpath refid="classpath"/>
             <classpath refid="testclasspath"/>
             <package name="org.semanticweb.HermiT.*"/>
         </javadoc>
     </target>
-    
+
     <target name="unpack-libraries">
         <unjar src="${automaton}" dest="${classdir}"/>
         <unjar src="${jautomaton}" dest="${classdir}"/>
@@ -110,7 +113,7 @@
         <unjar src="${logging}" dest="${classdir}"/>
         <unjar src="${jaxp}" dest="${classdir}"/>
     </target>
-    
+
     <target name="unpack-owlapi">
         <unjar src="${owlapi}" dest="${classdir}"/>
     </target>
@@ -119,24 +122,24 @@
         <exec executable="svnversion" outputproperty="revision.number"/>
         <echo message="Current version number: ${version}.${revision.number}"/>
     </target>
-	
-	<target name="install.ProtegePlugIn" depends="HermiT-protege-plugin">
-	    <copy file="${ProtegePlugInJar}" todir="${protege.plugins}"/>
-	</target>
-	
+
+    <target name="install.ProtegePlugIn" depends="HermiT-protege-plugin">
+        <copy file="${ProtegePlugInJar}" todir="${protege.plugins}"/>
+    </target>
+
     <target name="HermiT-protege-plugin" depends="clean,setRevisionNumberProperty,compile,unpack-libraries">
-    	<mkdir dir="${releasedir}"/>
+        <mkdir dir="${releasedir}"/>
         <copy file="${projectroot}/update.properties" tofile="${builddir}/update.properties">
             <filterset>
                 <filter token="VERSION" value="${version}"/>
                 <filter token="HOMEPAGE" value="${homepage}"/>
             </filterset>
         </copy>
-    	<copy todir="${builddir}/Licenses">
-			<fileset dir="${libdir}" includes="*.COPYING,*.README,*.LICENSE"/>
-    	</copy>
-    	<copy file="gpl.txt" tofile="${builddir}/Licenses/HermiT-GPL.LICENSE"/>
-    	<copy file="lgpl-3.0.txt" tofile="${builddir}/Licenses/HermiT-LGPL.LICENSE"/>
+        <copy todir="${builddir}/Licenses">
+            <fileset dir="${libdir}" includes="*.COPYING,*.README,*.LICENSE"/>
+        </copy>
+        <copy file="gpl.txt" tofile="${builddir}/Licenses/HermiT-GPL.LICENSE"/>
+        <copy file="lgpl-3.0.txt" tofile="${builddir}/Licenses/HermiT-LGPL.LICENSE"/>
         <jar jarfile="${ProtegePlugInJar}">
             <manifest>
                 <attribute name="Implementation-Title" value="HermiT"/>
@@ -154,15 +157,16 @@
                 <attribute name="Bundle-Version" value="${version}"/>
                 <attribute name="Bundle-Activator" value="org.protege.editor.core.plugin.DefaultPluginActivator"/>
                 <attribute name="Bundle-ClassPath" value=".,org.semanticweb.${ant.project.name}.jar"/>
-                <attribute name="Require-Bundle" value="org.eclipse.equinox.registry,org.eclipse.equinox.common,org.protege.editor.core.application;bundle-version=4.1,org.protege.editor.owl;bundle-version=4.1,org.semanticweb.owl.owlapi;bundle-version=3.2"/>
+                <attribute name="Require-Bundle"
+                           value="org.eclipse.equinox.registry,org.eclipse.equinox.common,org.protege.editor.core.application;bundle-version=4.1,org.protege.editor.owl;bundle-version=4.1,org.semanticweb.owl.owlapi;bundle-version=3.2"/>
                 <attribute name="Update-Url" value="${updatefile}"/>
             </manifest>
-            <fileset dir="${classdir}"/>        	
+            <fileset dir="${classdir}"/>
             <fileset file="readme.txt"/>
-            <zipfileset dir="${builddir}/Licenses"  prefix="Licenses"/>
+            <zipfileset dir="${builddir}/Licenses" prefix="Licenses"/>
         </jar>
     </target>
-	
+
     <target name="HermiT-standalone-no-libraries" depends="clean,setRevisionNumberProperty,compile,javadoc">
         <mkdir dir="${releasedir}"/>
         <copy file="${projectroot}/readme.txt" tofile="${releasedir}/readme.txt">
@@ -187,7 +191,8 @@
                 <attribute name="Bundle-Version" value="${version}"/>
                 <attribute name="Bundle-Activator" value="org.protege.editor.core.plugin.DefaultPluginActivator"/>
                 <attribute name="Bundle-ClassPath" value=".,org.semanticweb.${ant.project.name}.jar"/>
-                <attribute name="Require-Bundle" value="org.eclipse.equinox.registry,org.eclipse.equinox.common,org.protege.editor.core.application;bundle-version=4.1,org.protege.editor.owl;bundle-version=4.1,org.semanticweb.owl.owlapi;bundle-version=3.2"/>
+                <attribute name="Require-Bundle"
+                           value="org.eclipse.equinox.registry,org.eclipse.equinox.common,org.protege.editor.core.application;bundle-version=4.1,org.protege.editor.owl;bundle-version=4.1,org.semanticweb.owl.owlapi;bundle-version=3.2"/>
                 <attribute name="Update-Url" value="${updatefile}"/>
             </manifest>
             <fileset dir="${classdir}"/>
@@ -199,8 +204,9 @@
             <fileset file="lgpl-3.0.txt"/>
         </jar>
     </target>
-    
-    <target name="HermiT-standalone" depends="clean,setRevisionNumberProperty,compile,unpack-libraries,unpack-owlapi,javadoc">
+
+    <target name="HermiT-standalone"
+            depends="clean,setRevisionNumberProperty,compile,unpack-libraries,unpack-owlapi,javadoc">
         <mkdir dir="${releasedir}"/>
         <copy file="${projectroot}/readme.txt" tofile="${releasedir}/readme.txt">
             <filterset>
@@ -224,7 +230,8 @@
                 <attribute name="Bundle-Version" value="${version}"/>
                 <attribute name="Bundle-Activator" value="org.protege.editor.core.plugin.DefaultPluginActivator"/>
                 <attribute name="Bundle-ClassPath" value=".,org.semanticweb.${ant.project.name}.jar"/>
-                <attribute name="Require-Bundle" value="org.eclipse.equinox.registry,org.eclipse.equinox.common,org.protege.editor.core.application;bundle-version=4.1,org.protege.editor.owl;bundle-version=4.1,org.semanticweb.owl.owlapi;bundle-version=3.1"/>
+                <attribute name="Require-Bundle"
+                           value="org.eclipse.equinox.registry,org.eclipse.equinox.common,org.protege.editor.core.application;bundle-version=4.1,org.protege.editor.owl;bundle-version=4.1,org.semanticweb.owl.owlapi;bundle-version=3.1"/>
                 <attribute name="Update-Url" value="${updatefile}"/>
             </manifest>
             <fileset dir="${classdir}"/>
@@ -236,13 +243,14 @@
             <fileset file="lgpl-3.0.txt"/>
         </jar>
     </target>
-    
+
     <target name="HermiT-project">
         <mkdir dir="${projectdir}"/>
         <copy todir="${projectdir}">
             <fileset dir="${projectroot}" includes="src/**/*"/>
             <fileset dir="${projectroot}" includes="getopt/**/*"/>
-        	<fileset dir="${projectroot}" includes="examples/**/*" excludes="examples/ontologies/pizza-inferred.owl,examples/ontologies/pizza-prettyPrint.owl,examples/ontologies/catalog.xml"/>
+            <fileset dir="${projectroot}" includes="examples/**/*"
+                     excludes="examples/ontologies/pizza-inferred.owl,examples/ontologies/pizza-prettyPrint.owl,examples/ontologies/catalog.xml"/>
             <fileset dir="${projectroot}" includes="test/**/*"/>
             <fileset dir="${projectroot}" includes="lib/**/*"/>
         </copy>
@@ -255,9 +263,10 @@
         <copy file=".project" todir="${projectdir}"/>
         <zip destfile="${builddir}/${ant.project.name}-${version}.zip" basedir="${releasedir}"/>
     </target>
-    
-    <target name="combined" depends="clean,compile,javadoc,unpack-libraries,HermiT-protege-plugin,HermiT-standalone,HermiT-project"/>
-    
+
+    <target name="combined"
+            depends="clean,compile,javadoc,unpack-libraries,HermiT-protege-plugin,HermiT-standalone,HermiT-project"/>
+
     <!-- TEST TARGETS -->
 
     <target name="compiletest" depends="compile">
@@ -268,7 +277,7 @@
             <classpath refid="classpath"/>
             <classpath refid="testclasspath"/>
         </javac>
-        <copy todir="${testclassdir}" >
+        <copy todir="${testclassdir}">
             <fileset dir="${projectroot}/test" excludes="**/*.java,**/*.html"/>
         </copy>
     </target>
@@ -286,50 +295,63 @@
     </target>
 
     <target name="test-hard" depends="compiletest">
-    	 <mkdir dir="${reports}"/>
-    	 <mkdir dir="${reports}/raw"/>
-    	 <mkdir dir="${reports}/html"/>
-    	 <junit fork="yes" printsummary="yes" haltonerror="false" haltonfailure="false" maxmemory="700m" filtertrace="true">
-    	 	<assertions>
-    	 	  <enable/>
-    	 	</assertions>
-    	 	<formatter type="xml"/>
-    	 	<formatter type="brief"/>
+        <mkdir dir="${reports}"/>
+        <mkdir dir="${reports}/raw"/>
+        <mkdir dir="${reports}/html"/>
+        <junit fork="yes" printsummary="yes" haltonerror="false" haltonfailure="false" maxmemory="700m"
+               filtertrace="true">
+            <assertions>
+                <enable/>
+            </assertions>
+            <formatter type="xml"/>
+            <formatter type="brief"/>
             <classpath>
                 <pathelement location="${testclassdir}"/>
             </classpath>
             <classpath refid="classpath"/>
             <classpath refid="testclasspath"/>
-    	 	<test name="org.semanticweb.HermiT.AllTests" todir="${reports}/raw" outfile="AllTests"/>
-    	  </junit>
+            <test name="org.semanticweb.HermiT.AllTests" todir="${reports}/raw" outfile="AllTests"/>
+        </junit>
 
-    	  <junitreport todir="${reports}/raw">
-    	    <fileset dir="${reports}/raw">
-    	    	<include name="AllTests.xml" />
-    	    </fileset>
-    	    <report format="noframes" todir="${reports}/html">
-    	    	<param name="TITLE" expression="HermiT JUnit Test Results"/>
-    	    </report>
-    	  </junitreport>
+        <junitreport todir="${reports}/raw">
+            <fileset dir="${reports}/raw">
+                <include name="AllTests.xml"/>
+            </fileset>
+            <report format="noframes" todir="${reports}/html">
+                <param name="TITLE" expression="HermiT JUnit Test Results"/>
+            </report>
+        </junitreport>
     </target>
-            	
+
     <!-- AUXILIARY TARGETS -->
 
     <target name="publish" depends="combined">
         <echo message="Publishing a new version of HermiT"/>
         <input message="Enter a user name for linux:" addproperty="username" defaultvalue="${user.name}"/>
         <input message="Enter ${username}'s password on linux: " addproperty="password"/>
-        <sshexec host="linux.cs.ox.ac.uk" username="${username}" password="${password}" command="mkdir /fs/website/research/themes/isg/tools/HermiT/download/${version}/" trust="yes"/>
-        <scp file="${builddir}/${ant.project.name}-${version}.zip" localTofile="${ant.project.name}.zip" todir="${username}:${password}@linux.cs.ox.ac.uk:/fs/website/research/themes/isg/tools/HermiT/download/${version}/" trust="yes"/>
-    	<scp file="${releasedir}/org.semanticweb.${ant.project.name}.jar" todir="${username}:${password}@linux.cs.ox.ac.uk:/fs/website/research/themes/isg/tools/HermiT/download/${version}/" trust="yes"/>
-    	<scp file="${releasedir}/readme.txt" todir="${username}:${password}@linux.cs.ox.ac.uk:/fs/website/research/themes/isg/tools/HermiT/download/${version}/" trust="yes"/>
-        <scp file="${builddir}/update.properties" todir="${username}:${password}@linux.cs.ox.ac.uk:/fs/website/research/themes/isg/tools/HermiT/protege-4-1-beta-update/" trust="yes"/>
-        <sshexec host="linux.cs.ox.ac.uk" username="${username}" password="${password}" command="rm /fs/website/research/themes/isg/tools/HermiT/download/current/HermiT.zip" trust="yes"/>
-        <sshexec host="linux.cs.ox.ac.uk" username="${username}" password="${password}" command="ln -s  /fs/website/research/themes/isg/tools/HermiT/download/${version}/HermiT.zip /fs/website/research/themes/isg/tools/HermiT/download/current/HermiT.zip" trust="yes"/>
+        <sshexec host="linux.cs.ox.ac.uk" username="${username}" password="${password}"
+                 command="mkdir /fs/website/research/themes/isg/tools/HermiT/download/${version}/" trust="yes"/>
+        <scp file="${builddir}/${ant.project.name}-${version}.zip" localTofile="${ant.project.name}.zip"
+             todir="${username}:${password}@linux.cs.ox.ac.uk:/fs/website/research/themes/isg/tools/HermiT/download/${version}/"
+             trust="yes"/>
+        <scp file="${releasedir}/org.semanticweb.${ant.project.name}.jar"
+             todir="${username}:${password}@linux.cs.ox.ac.uk:/fs/website/research/themes/isg/tools/HermiT/download/${version}/"
+             trust="yes"/>
+        <scp file="${releasedir}/readme.txt"
+             todir="${username}:${password}@linux.cs.ox.ac.uk:/fs/website/research/themes/isg/tools/HermiT/download/${version}/"
+             trust="yes"/>
+        <scp file="${builddir}/update.properties"
+             todir="${username}:${password}@linux.cs.ox.ac.uk:/fs/website/research/themes/isg/tools/HermiT/protege-4-1-beta-update/"
+             trust="yes"/>
+        <sshexec host="linux.cs.ox.ac.uk" username="${username}" password="${password}"
+                 command="rm /fs/website/research/themes/isg/tools/HermiT/download/current/HermiT.zip" trust="yes"/>
+        <sshexec host="linux.cs.ox.ac.uk" username="${username}" password="${password}"
+                 command="ln -s  /fs/website/research/themes/isg/tools/HermiT/download/${version}/HermiT.zip /fs/website/research/themes/isg/tools/HermiT/download/current/HermiT.zip"
+                 trust="yes"/>
     </target>
 
-	<!-- additionally -->
-	<!-- tag the SVN with the current build version -->
-	<!-- update Protege binaries SVN with the Protege plugin and readme -->
-	<!-- update index.html for the HermiT web page -->
+    <!-- additionally -->
+    <!-- tag the SVN with the current build version -->
+    <!-- update Protege binaries SVN with the Protege plugin and readme -->
+    <!-- update index.html for the HermiT web page -->
 </project>

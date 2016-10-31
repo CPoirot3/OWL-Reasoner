@@ -20,12 +20,13 @@ public class GraphTest extends AbstractReasonerTest {
     public GraphTest(String name) {
         super(name);
     }
+
     protected void setUp() throws Exception {
         super.setUp();
         m_descriptionGraphs = new HashSet<DescriptionGraph>();
     }
 
-//    public void testTransClosure() throws Exception {
+    //    public void testTransClosure() throws Exception {
 //        Graph<Integer> g = new Graph<Integer>();
 //        add(g, 0, 1);
 //        add(g, 1, 2);
@@ -95,117 +96,119 @@ public class GraphTest extends AbstractReasonerTest {
 //    }
 //
     public void testContradictionOnGraph() throws Exception {
-        DescriptionGraph graph=G(
-            new String[] {
-                GraphTest.NS+"A", // 0
-                GraphTest.NS+"B", // 1
-            },
-            new DescriptionGraph.Edge[] {
-                E(GraphTest.NS+"R",0,1),
-            },
-            new String[] {
-                    GraphTest.NS+"A",GraphTest.NS+"B",
-            }
+        DescriptionGraph graph = G(
+                new String[]{
+                        GraphTest.NS + "A", // 0
+                        GraphTest.NS + "B", // 1
+                },
+                new DescriptionGraph.Edge[]{
+                        E(GraphTest.NS + "R", 0, 1),
+                },
+                new String[]{
+                        GraphTest.NS + "A", GraphTest.NS + "B",
+                }
         );
         m_descriptionGraphs.add(graph);
         String axioms = "ClassAssertion(:A :a) ClassAssertion(:B :b) DisjointClasses(:A :B) ObjectPropertyAssertion(:r :a :b)"
-            // R(x, y) -> SameIndividual(x, y)
-            + "DLSafeRule(Body(ObjectPropertyAtom(:R Variable(:x) Variable(:y))) Head(SameIndividualAtom(Variable(:x) Variable(:y))))";
+                // R(x, y) -> SameIndividual(x, y)
+                + "DLSafeRule(Body(ObjectPropertyAtom(:R Variable(:x) Variable(:y))) Head(SameIndividualAtom(Variable(:x) Variable(:y))))";
         loadOntologyWithAxioms(axioms);
 
-        Tableau tableau=getTableau(m_descriptionGraphs);
-        Individual i1=Individual.create("i1");
-        Individual i2=Individual.create("i2");
-        AtomicRole r=AtomicRole.create(GraphTest.NS + "R");
-        Set<Atom> positiveFacts=new HashSet<Atom>();
-        positiveFacts.add(Atom.create(graph,i1,i2));
-        positiveFacts.add(Atom.create(r,i1,i2));
-        assertFalse(tableau.isSatisfiable(false,false,positiveFacts,null,null,null,null,ReasoningTaskDescription.isABoxSatisfiable()));
+        Tableau tableau = getTableau(m_descriptionGraphs);
+        Individual i1 = Individual.create("i1");
+        Individual i2 = Individual.create("i2");
+        AtomicRole r = AtomicRole.create(GraphTest.NS + "R");
+        Set<Atom> positiveFacts = new HashSet<Atom>();
+        positiveFacts.add(Atom.create(graph, i1, i2));
+        positiveFacts.add(Atom.create(r, i1, i2));
+        assertFalse(tableau.isSatisfiable(false, false, positiveFacts, null, null, null, null, ReasoningTaskDescription.isABoxSatisfiable()));
     }
 
     public void testGraph1() throws Exception {
         m_descriptionGraphs.add(G(
-            new String[] {
-                GraphTest.NS+"A", // 0
-                GraphTest.NS+"B", // 1
-                GraphTest.NS+"C", // 2
-                GraphTest.NS+"A", // 3
-            },
-            new DescriptionGraph.Edge[] {
-                E(GraphTest.NS+"R",0,1),
-                E(GraphTest.NS+"R",3,2),
-            },
-            new String[] {
-                GraphTest.NS+"A",
-            }
+                new String[]{
+                        GraphTest.NS + "A", // 0
+                        GraphTest.NS + "B", // 1
+                        GraphTest.NS + "C", // 2
+                        GraphTest.NS + "A", // 3
+                },
+                new DescriptionGraph.Edge[]{
+                        E(GraphTest.NS + "R", 0, 1),
+                        E(GraphTest.NS + "R", 3, 2),
+                },
+                new String[]{
+                        GraphTest.NS + "A",
+                }
         ));
 
-        String axioms="SubClassOf(:A ObjectSomeValuesFrom(:S :A))"
-            + "SubClassOf(:A ObjectSomeValuesFrom(:S :D))"
-            + "SubClassOf(:B ObjectSomeValuesFrom(:T :A))"
-            + "SubClassOf(:C ObjectSomeValuesFrom(:T :A))"
-            + "FunctionalObjectProperty(:S)"
-            + "ClassAssertion(:A :i)";
+        String axioms = "SubClassOf(:A ObjectSomeValuesFrom(:S :A))"
+                + "SubClassOf(:A ObjectSomeValuesFrom(:S :D))"
+                + "SubClassOf(:B ObjectSomeValuesFrom(:T :A))"
+                + "SubClassOf(:C ObjectSomeValuesFrom(:T :A))"
+                + "FunctionalObjectProperty(:S)"
+                + "ClassAssertion(:A :i)";
         loadOntologyWithAxioms(axioms);
-        Tableau tableau=getTableau(m_descriptionGraphs);
-        assertTrue(tableau.isSatisfiable(true,true,null,null,null,null,null,ReasoningTaskDescription.isABoxSatisfiable()));
+        Tableau tableau = getTableau(m_descriptionGraphs);
+        assertTrue(tableau.isSatisfiable(true, true, null, null, null, null, null, ReasoningTaskDescription.isABoxSatisfiable()));
     }
 
     public void testGraph2() throws Exception {
         m_descriptionGraphs.add(G(
-            new String[] {
-                GraphTest.NS+"LP", // 0
-                GraphTest.NS+"RP", // 1
-                GraphTest.NS+"P",  // 2
-                GraphTest.NS+"P",  // 3
-            },
-            new DescriptionGraph.Edge[] {
-                E(GraphTest.NS+"S",0,1),
-                E(GraphTest.NS+"R",0,2),
-                E(GraphTest.NS+"R",1,3),
-            },
-            new String[] {
-                GraphTest.NS+"P",
-            }
+                new String[]{
+                        GraphTest.NS + "LP", // 0
+                        GraphTest.NS + "RP", // 1
+                        GraphTest.NS + "P",  // 2
+                        GraphTest.NS + "P",  // 3
+                },
+                new DescriptionGraph.Edge[]{
+                        E(GraphTest.NS + "S", 0, 1),
+                        E(GraphTest.NS + "R", 0, 2),
+                        E(GraphTest.NS + "R", 1, 3),
+                },
+                new String[]{
+                        GraphTest.NS + "P",
+                }
         ));
 
-        String axioms="SubClassOf(:A ObjectSomeValuesFrom(:T :P))"
-            + "SubClassOf(ObjectSomeValuesFrom(:T :D) :B)"
-            //P(v), R(x,v), LP(x), S(x,y), RP(y), R(y,w), P(w) -> conn(v,w)
-            + "DLSafeRule(Body("
-                    + "ClassAtom(:P Variable(:v)) "
-            		+ "ObjectPropertyAtom(:R Variable(:x) Variable(:v))"
-            		+ "ClassAtom(:LP Variable(:x)) "
-            		+ "ObjectPropertyAtom(:S Variable(:x) Variable(:y))"
-            		+ "ClassAtom(:RP Variable(:y)) "
-            		+ "ObjectPropertyAtom(:R Variable(:y) Variable(:w))"
-            		+ "ClassAtom(:P Variable(:w)) "
-            		+ ") Head(ObjectPropertyAtom(:conn Variable(:v) Variable(:w))))"
-             // conn(x,y) -> D(x)
-             + "DLSafeRule(Body(ObjectPropertyAtom(:conn Variable(:x) Variable(:y))) Head(ClassAtom(:D Variable(:x))))"
-             // conn(x,y) -> D(y)
-             + "DLSafeRule(Body(ObjectPropertyAtom(:conn Variable(:x) Variable(:y))) Head(ClassAtom(:D Variable(:y))))";
+        String axioms = "SubClassOf(:A ObjectSomeValuesFrom(:T :P))"
+                + "SubClassOf(ObjectSomeValuesFrom(:T :D) :B)"
+                //P(v), R(x,v), LP(x), S(x,y), RP(y), R(y,w), P(w) -> conn(v,w)
+                + "DLSafeRule(Body("
+                + "ClassAtom(:P Variable(:v)) "
+                + "ObjectPropertyAtom(:R Variable(:x) Variable(:v))"
+                + "ClassAtom(:LP Variable(:x)) "
+                + "ObjectPropertyAtom(:S Variable(:x) Variable(:y))"
+                + "ClassAtom(:RP Variable(:y)) "
+                + "ObjectPropertyAtom(:R Variable(:y) Variable(:w))"
+                + "ClassAtom(:P Variable(:w)) "
+                + ") Head(ObjectPropertyAtom(:conn Variable(:v) Variable(:w))))"
+                // conn(x,y) -> D(x)
+                + "DLSafeRule(Body(ObjectPropertyAtom(:conn Variable(:x) Variable(:y))) Head(ClassAtom(:D Variable(:x))))"
+                // conn(x,y) -> D(y)
+                + "DLSafeRule(Body(ObjectPropertyAtom(:conn Variable(:x) Variable(:y))) Head(ClassAtom(:D Variable(:y))))";
         loadOntologyWithAxioms(axioms);
-        Tableau t=getTableau(m_descriptionGraphs);
-        Individual freshNode=Individual.create("ind");
-        assertTrue(!t.isSatisfiable(false,Collections.singleton(Atom.create(AtomicConcept.create(GraphTest.NS+"A"),freshNode)),null,null,Collections.singleton(Atom.create(AtomicConcept.create(GraphTest.NS+"B"),freshNode)),null,ReasoningTaskDescription.isABoxSatisfiable()));
+        Tableau t = getTableau(m_descriptionGraphs);
+        Individual freshNode = Individual.create("ind");
+        assertTrue(!t.isSatisfiable(false, Collections.singleton(Atom.create(AtomicConcept.create(GraphTest.NS + "A"), freshNode)), null, null, Collections.singleton(Atom.create(AtomicConcept.create(GraphTest.NS + "B"), freshNode)), null, ReasoningTaskDescription.isABoxSatisfiable()));
     }
 
-    protected static void add(Graph<Integer> graph,int from,int... successors) {
+    protected static void add(Graph<Integer> graph, int from, int... successors) {
         for (int successor : successors)
-            graph.addEdge(from,successor);
+            graph.addEdge(from, successor);
     }
-    protected static DescriptionGraph G(String[] vertexAtomicConcepts,DescriptionGraph.Edge[] edges,String[] startAtomicConcepts) {
+
+    protected static DescriptionGraph G(String[] vertexAtomicConcepts, DescriptionGraph.Edge[] edges, String[] startAtomicConcepts) {
         AtomicConcept[] atomicConceptsByVertices = new AtomicConcept[vertexAtomicConcepts.length];
-        for (int index=0;index<vertexAtomicConcepts.length;index++)
-            atomicConceptsByVertices[index]=AtomicConcept.create(vertexAtomicConcepts[index]);
-        Set<AtomicConcept> startConcepts=new HashSet<AtomicConcept>();
+        for (int index = 0; index < vertexAtomicConcepts.length; index++)
+            atomicConceptsByVertices[index] = AtomicConcept.create(vertexAtomicConcepts[index]);
+        Set<AtomicConcept> startConcepts = new HashSet<AtomicConcept>();
         for (String atomicConcept : startAtomicConcepts)
             startConcepts.add(AtomicConcept.create(atomicConcept));
-        return new DescriptionGraph("G",atomicConceptsByVertices,edges,startConcepts);
+        return new DescriptionGraph("G", atomicConceptsByVertices, edges, startConcepts);
     }
-    protected static DescriptionGraph.Edge E(String atomicRoleName,int from,int to) {
-        AtomicRole atomicRole=AtomicRole.create(atomicRoleName);
-        return new DescriptionGraph.Edge(atomicRole,from,to);
+
+    protected static DescriptionGraph.Edge E(String atomicRoleName, int from, int to) {
+        AtomicRole atomicRole = AtomicRole.create(atomicRoleName);
+        return new DescriptionGraph.Edge(atomicRole, from, to);
     }
 }

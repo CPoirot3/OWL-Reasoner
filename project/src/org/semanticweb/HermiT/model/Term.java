@@ -25,7 +25,7 @@ import org.semanticweb.HermiT.Prefixes;
  * Represents a term in a DL clause.
  */
 public abstract class Term implements Serializable {
-    private static final long serialVersionUID=-8524194708579485033L;
+    private static final long serialVersionUID = -8524194708579485033L;
 
     public abstract String toString(Prefixes prefixes);
 }

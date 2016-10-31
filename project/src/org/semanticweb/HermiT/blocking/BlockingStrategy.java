@@ -31,27 +31,50 @@ import org.semanticweb.HermiT.tableau.Tableau;
 
 public interface BlockingStrategy {
     void initialize(Tableau tableau);
+
     void additionalDLOntologySet(DLOntology additionalDLOntology);
+
     void additionalDLOntologyCleared();
+
     void clear();
+
     void computeBlocking(boolean finalChance);
-    boolean isPermanentAssertion(Concept concept,Node node);
-    boolean isPermanentAssertion(DataRange range,Node node);
-    void assertionAdded(Concept concept,Node node,boolean isCore);
-    void assertionCoreSet(Concept concept,Node node);
-    void assertionRemoved(Concept concept,Node node,boolean isCore);
-    void assertionAdded(DataRange range,Node node,boolean isCore);
-    void assertionCoreSet(DataRange range,Node node);
-    void assertionRemoved(DataRange range,Node node,boolean isCore);
-    void assertionAdded(AtomicRole atomicRole,Node nodeFrom,Node nodeTo,boolean isCore);
-    void assertionCoreSet(AtomicRole atomicRole,Node nodeFrom,Node nodeTo);
-    void assertionRemoved(AtomicRole atomicRole,Node nodeFrom,Node nodeTo,boolean isCore);
-    void nodesMerged(Node mergeFrom,Node mergeInto);
-    void nodesUnmerged(Node mergeFrom,Node mergeInto);
+
+    boolean isPermanentAssertion(Concept concept, Node node);
+
+    boolean isPermanentAssertion(DataRange range, Node node);
+
+    void assertionAdded(Concept concept, Node node, boolean isCore);
+
+    void assertionCoreSet(Concept concept, Node node);
+
+    void assertionRemoved(Concept concept, Node node, boolean isCore);
+
+    void assertionAdded(DataRange range, Node node, boolean isCore);
+
+    void assertionCoreSet(DataRange range, Node node);
+
+    void assertionRemoved(DataRange range, Node node, boolean isCore);
+
+    void assertionAdded(AtomicRole atomicRole, Node nodeFrom, Node nodeTo, boolean isCore);
+
+    void assertionCoreSet(AtomicRole atomicRole, Node nodeFrom, Node nodeTo);
+
+    void assertionRemoved(AtomicRole atomicRole, Node nodeFrom, Node nodeTo, boolean isCore);
+
+    void nodesMerged(Node mergeFrom, Node mergeInto);
+
+    void nodesUnmerged(Node mergeFrom, Node mergeInto);
+
     void nodeStatusChanged(Node node);
+
     void nodeInitialized(Node node);
+
     void nodeDestroyed(Node node);
+
     void modelFound();
+
     boolean isExact();
-    void dlClauseBodyCompiled(List<DLClauseEvaluator.Worker> workers,DLClause dlClause,List<Variable> variables,Object[] valuesBuffer,boolean[] coreVariables);
+
+    void dlClauseBodyCompiled(List<DLClauseEvaluator.Worker> workers, DLClause dlClause, List<Variable> variables, Object[] valuesBuffer, boolean[] coreVariables);
 }

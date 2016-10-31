@@ -82,51 +82,50 @@ public class SubtreeViewer extends JFrame {
     protected final JTree m_tableauTree;
     protected final JTextField m_nodeIDField;
 
-    public SubtreeViewer(Debugger debugger,Node rootNode) {
-        super("Subtree for node "+rootNode.getNodeID());
+    public SubtreeViewer(Debugger debugger, Node rootNode) {
+        super("Subtree for node " + rootNode.getNodeID());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        m_debugger=debugger;
-        m_subtreeTreeModel=new SubtreeTreeModel(debugger,rootNode);
-        m_tableauTree=new JTree(m_subtreeTreeModel);
+        m_debugger = debugger;
+        m_subtreeTreeModel = new SubtreeTreeModel(debugger, rootNode);
+        m_tableauTree = new JTree(m_subtreeTreeModel);
         m_tableauTree.setLargeModel(true);
         m_tableauTree.setShowsRootHandles(true);
         m_tableauTree.setCellRenderer(new NodeCellRenderer(debugger));
         m_tableauTree.addTreeSelectionListener(new TreeSelectionListener() {
             public void valueChanged(TreeSelectionEvent e) {
-                TreePath selectionPath=m_tableauTree.getSelectionPath();
-                if (selectionPath==null)
+                TreePath selectionPath = m_tableauTree.getSelectionPath();
+                if (selectionPath == null)
                     showNodeLabels(null);
                 else
-                    showNodeLabels((Node)selectionPath.getLastPathComponent());
+                    showNodeLabels((Node) selectionPath.getLastPathComponent());
             }
         });
-        m_nodeInfoTextArea=new JTextArea();
+        m_nodeInfoTextArea = new JTextArea();
         m_nodeInfoTextArea.setFont(Debugger.s_monospacedFont);
-        JScrollPane modelScrollPane=new JScrollPane(m_tableauTree);
-        modelScrollPane.setPreferredSize(new Dimension(600,400));
-        JScrollPane nodeInfoScrollPane=new JScrollPane(m_nodeInfoTextArea);
-        nodeInfoScrollPane.setPreferredSize(new Dimension(400,400));
-        JSplitPane mainSplit=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,modelScrollPane,nodeInfoScrollPane);
-        JPanel commandsPanel=new JPanel(new FlowLayout(FlowLayout.LEFT,5,3));
+        JScrollPane modelScrollPane = new JScrollPane(m_tableauTree);
+        modelScrollPane.setPreferredSize(new Dimension(600, 400));
+        JScrollPane nodeInfoScrollPane = new JScrollPane(m_nodeInfoTextArea);
+        nodeInfoScrollPane.setPreferredSize(new Dimension(400, 400));
+        JSplitPane mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelScrollPane, nodeInfoScrollPane);
+        JPanel commandsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 3));
         commandsPanel.add(new JLabel("Node ID:"));
-        m_nodeIDField=new JTextField();
-        m_nodeIDField.setPreferredSize(new Dimension(200,m_nodeIDField.getPreferredSize().height));
+        m_nodeIDField = new JTextField();
+        m_nodeIDField.setPreferredSize(new Dimension(200, m_nodeIDField.getPreferredSize().height));
         commandsPanel.add(m_nodeIDField);
-        JButton button=new JButton("Search");
+        JButton button = new JButton("Search");
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int nodeID;
-                String nodeIDText=m_nodeIDField.getText();
+                String nodeIDText = m_nodeIDField.getText();
                 try {
-                    nodeID=Integer.parseInt(nodeIDText);
-                }
-                catch (NumberFormatException error) {
-                    JOptionPane.showMessageDialog(SubtreeViewer.this,"Invalid node ID '"+nodeIDText+"'.");
+                    nodeID = Integer.parseInt(nodeIDText);
+                } catch (NumberFormatException error) {
+                    JOptionPane.showMessageDialog(SubtreeViewer.this, "Invalid node ID '" + nodeIDText + "'.");
                     return;
                 }
-                Node node=m_debugger.getTableau().getNode(nodeID);
-                if (node==null) {
-                    JOptionPane.showMessageDialog(SubtreeViewer.this,"Node with ID "+nodeID+" cannot be found.");
+                Node node = m_debugger.getTableau().getNode(nodeID);
+                if (node == null) {
+                    JOptionPane.showMessageDialog(SubtreeViewer.this, "Node with ID " + nodeID + " cannot be found.");
                     return;
                 }
                 findNode(node);
@@ -134,53 +133,56 @@ public class SubtreeViewer extends JFrame {
         });
         getRootPane().setDefaultButton(button);
         commandsPanel.add(button);
-        button=new JButton("Refresh");
+        button = new JButton("Refresh");
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 refresh();
             }
         });
         commandsPanel.add(button);
-        JPanel mainPanel=new JPanel(new BorderLayout());
-        mainPanel.add(mainSplit,BorderLayout.CENTER);
-        mainPanel.add(commandsPanel,BorderLayout.SOUTH);
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(mainSplit, BorderLayout.CENTER);
+        mainPanel.add(commandsPanel, BorderLayout.SOUTH);
         setContentPane(mainPanel);
         pack();
-        setLocation(200,200);
+        setLocation(200, 200);
         setVisible(true);
         m_nodeIDField.requestFocusInWindow();
     }
+
     public void refresh() {
         m_subtreeTreeModel.refresh();
     }
+
     public void findNode(Node node) {
-        List<Node> pathToRoot=new ArrayList<Node>();
-        Node currentNode=node;
-        while (currentNode!=null && currentNode!=m_subtreeTreeModel.getRoot()) {
+        List<Node> pathToRoot = new ArrayList<Node>();
+        Node currentNode = node;
+        while (currentNode != null && currentNode != m_subtreeTreeModel.getRoot()) {
             pathToRoot.add(currentNode);
-            currentNode=m_debugger.getNodeCreationInfo(currentNode).m_createdByNode;
+            currentNode = m_debugger.getNodeCreationInfo(currentNode).m_createdByNode;
         }
-        if (currentNode==null) {
-            JOptionPane.showMessageDialog(SubtreeViewer.this,"Node with ID "+node.getNodeID()+" is not present in the shown subtree.");
+        if (currentNode == null) {
+            JOptionPane.showMessageDialog(SubtreeViewer.this, "Node with ID " + node.getNodeID() + " is not present in the shown subtree.");
             return;
         }
-        TreePath treePath=new MyTreePath(null,m_subtreeTreeModel.getRoot());
-        for (int index=pathToRoot.size()-1;index>=0;--index)
-            treePath=new MyTreePath(treePath,pathToRoot.get(index));
+        TreePath treePath = new MyTreePath(null, m_subtreeTreeModel.getRoot());
+        for (int index = pathToRoot.size() - 1; index >= 0; --index)
+            treePath = new MyTreePath(treePath, pathToRoot.get(index));
         m_tableauTree.expandPath(treePath);
         m_tableauTree.setSelectionPath(treePath);
         m_tableauTree.scrollPathToVisible(treePath);
     }
+
     public void showNodeLabels(Node node) {
-        if (node==null)
+        if (node == null)
             m_nodeInfoTextArea.setText("");
         else {
-            CharArrayWriter buffer=new CharArrayWriter();
-            PrintWriter writer=new PrintWriter(buffer);
-            Printing.printNodeData(m_debugger,node,writer);
+            CharArrayWriter buffer = new CharArrayWriter();
+            PrintWriter writer = new PrintWriter(buffer);
+            Printing.printNodeData(m_debugger, node, writer);
             writer.flush();
             m_nodeInfoTextArea.setText(buffer.toString());
-            m_nodeInfoTextArea.select(0,0);
+            m_nodeInfoTextArea.select(0, 0);
         }
     }
 
@@ -189,98 +191,106 @@ public class SubtreeViewer extends JFrame {
         protected final Debugger m_debugger;
         protected final Node m_root;
 
-        public SubtreeTreeModel(Debugger debugger,Node root) {
-            m_eventListeners=new EventListenerList();
-            m_debugger=debugger;
-            m_root=root;
+        public SubtreeTreeModel(Debugger debugger, Node root) {
+            m_eventListeners = new EventListenerList();
+            m_debugger = debugger;
+            m_root = root;
         }
+
         public void addTreeModelListener(TreeModelListener listener) {
-            m_eventListeners.add(TreeModelListener.class,listener);
+            m_eventListeners.add(TreeModelListener.class, listener);
         }
+
         public void removeTreeModelListener(TreeModelListener listener) {
-            m_eventListeners.remove(TreeModelListener.class,listener);
+            m_eventListeners.remove(TreeModelListener.class, listener);
         }
-        public Node getChild(Object parent,int index) {
+
+        public Node getChild(Object parent, int index) {
             NodeCreationInfo nodeCreationInfo = null;
             if (parent instanceof Node) {
                 nodeCreationInfo = m_debugger.getNodeCreationInfo((Node) parent);
             }
-            if (nodeCreationInfo==null)
+            if (nodeCreationInfo == null)
                 return null;
             else
                 return nodeCreationInfo.m_children.get(index);
         }
+
         public int getChildCount(Object parent) {
             NodeCreationInfo nodeCreationInfo = null;
             if (parent instanceof Node)
                 nodeCreationInfo = m_debugger.getNodeCreationInfo((Node) parent);
-            if (nodeCreationInfo==null)
+            if (nodeCreationInfo == null)
                 return 0;
             else
                 return nodeCreationInfo.m_children.size();
         }
-        public int getIndexOfChild(Object parent,Object child) {
+
+        public int getIndexOfChild(Object parent, Object child) {
             NodeCreationInfo nodeCreationInfo = null;
             if (parent instanceof Node)
                 nodeCreationInfo = m_debugger.getNodeCreationInfo((Node) parent);
-            if (nodeCreationInfo==null)
+            if (nodeCreationInfo == null)
                 return -1;
             else
                 return nodeCreationInfo.m_children.indexOf(child);
         }
+
         public Object getRoot() {
             return m_root;
         }
+
         public boolean isLeaf(Object node) {
-            return getChildCount(node)==0;
+            return getChildCount(node) == 0;
         }
-        public void valueForPathChanged(TreePath path,Object newValue) {
+
+        public void valueForPathChanged(TreePath path, Object newValue) {
         }
+
         public void refresh() {
-            Object[] listeners=m_eventListeners.getListenerList();
-            TreeModelEvent e=new TreeModelEvent(this,new Object[] { getRoot() });
+            Object[] listeners = m_eventListeners.getListenerList();
+            TreeModelEvent e = new TreeModelEvent(this, new Object[]{getRoot()});
             for (Object listener : listeners)
                 if (listener instanceof TreeModelListener)
-                    ((TreeModelListener)listener).treeStructureChanged(e);
+                    ((TreeModelListener) listener).treeStructureChanged(e);
         }
     }
 
     protected static class NodeCellRenderer extends DefaultTreeCellRenderer {
-        protected static final Icon NOT_ACTIVE_ICON=new DotIcon(Color.LIGHT_GRAY);
-        protected static final Icon BLOCKED_ICON=new DotIcon(Color.CYAN);
-        protected static final Icon WITH_EXISTENTIALS_ICON=new DotIcon(Color.RED);
-        protected static final Icon NI_NODE_ICON=new DotIcon(Color.BLACK);
-        protected static final Icon NAMED_NODE_ICON=new DotIcon(Color.DARK_GRAY);
-        protected static final Icon TREE_NODE_ICON=new DotIcon(Color.GREEN);
-        protected static final Icon GRAPH_NODE_ICON=new DotIcon(Color.MAGENTA);
-        protected static final Icon CONCRETE_NODE_ICON=new DotIcon(Color.BLUE);
+        protected static final Icon NOT_ACTIVE_ICON = new DotIcon(Color.LIGHT_GRAY);
+        protected static final Icon BLOCKED_ICON = new DotIcon(Color.CYAN);
+        protected static final Icon WITH_EXISTENTIALS_ICON = new DotIcon(Color.RED);
+        protected static final Icon NI_NODE_ICON = new DotIcon(Color.BLACK);
+        protected static final Icon NAMED_NODE_ICON = new DotIcon(Color.DARK_GRAY);
+        protected static final Icon TREE_NODE_ICON = new DotIcon(Color.GREEN);
+        protected static final Icon GRAPH_NODE_ICON = new DotIcon(Color.MAGENTA);
+        protected static final Icon CONCRETE_NODE_ICON = new DotIcon(Color.BLUE);
 
         protected final Debugger m_debugger;
 
         public NodeCellRenderer(Debugger debugger) {
-            m_debugger=debugger;
+            m_debugger = debugger;
         }
-        public Component getTreeCellRendererComponent(JTree tree,Object value,boolean selected,boolean expanded,boolean leaf,int row,boolean hasFocus) {
-            Node node=(Node)value;
-            StringBuffer buffer=new StringBuffer();
-            ExistentialConcept existentialConcept=m_debugger.getNodeCreationInfo(node).m_createdByExistential;
-            if (existentialConcept==null) {
+
+        public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+            Node node = (Node) value;
+            StringBuffer buffer = new StringBuffer();
+            ExistentialConcept existentialConcept = m_debugger.getNodeCreationInfo(node).m_createdByExistential;
+            if (existentialConcept == null) {
                 buffer.append(node.getNodeID());
                 buffer.append(":(root)");
-            }
-            else if (existentialConcept instanceof AtLeastConcept) {
-                AtLeastConcept atLeastConcept=(AtLeastConcept)existentialConcept;
+            } else if (existentialConcept instanceof AtLeastConcept) {
+                AtLeastConcept atLeastConcept = (AtLeastConcept) existentialConcept;
                 buffer.append(atLeastConcept.getOnRole().toString(m_debugger.getPrefixes()));
                 buffer.append("  -->  ");
                 buffer.append(node.getNodeID());
                 buffer.append(":[");
                 buffer.append(atLeastConcept.getToConcept().toString(m_debugger.getPrefixes()));
                 buffer.append("]");
-            }
-            else {
+            } else {
                 // Do nothing for now.
             }
-            super.getTreeCellRendererComponent(tree,buffer.toString(),selected,expanded,leaf,row,hasFocus);
+            super.getTreeCellRendererComponent(tree, buffer.toString(), selected, expanded, leaf, row, hasFocus);
             if (!node.isActive())
                 setIcon(NOT_ACTIVE_ICON);
             else if (node.isBlocked())
@@ -289,23 +299,23 @@ public class SubtreeViewer extends JFrame {
                 setIcon(WITH_EXISTENTIALS_ICON);
             else {
                 switch (node.getNodeType()) {
-                case NAMED_NODE:
-                    setIcon(NAMED_NODE_ICON);
-                    break;
-                case TREE_NODE:
-                    setIcon(TREE_NODE_ICON);
-                    break;
-                case GRAPH_NODE:
-                    setIcon(GRAPH_NODE_ICON);
-                    break;
-                case NI_NODE:
-                    setIcon(NI_NODE_ICON);
-                    break;
-                case CONCRETE_NODE:
-                case ROOT_CONSTANT_NODE:
-                default:
-                    setIcon(CONCRETE_NODE_ICON);
-                    break;
+                    case NAMED_NODE:
+                        setIcon(NAMED_NODE_ICON);
+                        break;
+                    case TREE_NODE:
+                        setIcon(TREE_NODE_ICON);
+                        break;
+                    case GRAPH_NODE:
+                        setIcon(GRAPH_NODE_ICON);
+                        break;
+                    case NI_NODE:
+                        setIcon(NI_NODE_ICON);
+                        break;
+                    case CONCRETE_NODE:
+                    case ROOT_CONSTANT_NODE:
+                    default:
+                        setIcon(CONCRETE_NODE_ICON);
+                        break;
                 }
             }
             return this;
@@ -316,18 +326,21 @@ public class SubtreeViewer extends JFrame {
         protected final Color m_color;
 
         public DotIcon(Color color) {
-            m_color=color;
+            m_color = color;
         }
+
         public int getIconHeight() {
             return 16;
         }
+
         public int getIconWidth() {
             return 16;
         }
-        public void paintIcon(Component c,Graphics g,int x,int y) {
-            Color oldColor=g.getColor();
+
+        public void paintIcon(Component c, Graphics g, int x, int y) {
+            Color oldColor = g.getColor();
             g.setColor(m_color);
-            g.fillOval(x+2,y+2,x+12,y+12);
+            g.fillOval(x + 2, y + 2, x + 12, y + 12);
             g.setColor(oldColor);
         }
     }
@@ -336,8 +349,9 @@ public class SubtreeViewer extends JFrame {
         public MyTreePath(Object object) {
             super(object);
         }
-        public MyTreePath(TreePath treePath,Object object) {
-            super(treePath,object);
+
+        public MyTreePath(TreePath treePath, Object object) {
+            super(treePath, object);
         }
     }
 }

@@ -23,37 +23,42 @@ import org.semanticweb.HermiT.Prefixes;
  * Represents at-least concept.
  */
 public class AtLeastConcept extends AtLeast {
-    private static final long serialVersionUID=4326267535193393030L;
+    private static final long serialVersionUID = 4326267535193393030L;
 
     protected final LiteralConcept m_toConcept;
-    
-    protected AtLeastConcept(int number,Role onRole,LiteralConcept toConcept) {
-        super(number,onRole);
-        m_toConcept=toConcept;
+
+    protected AtLeastConcept(int number, Role onRole, LiteralConcept toConcept) {
+        super(number, onRole);
+        m_toConcept = toConcept;
     }
+
     public LiteralConcept getToConcept() {
         return m_toConcept;
     }
+
     public boolean isAlwaysFalse() {
         return m_toConcept.isAlwaysFalse();
     }
+
     public String toString(Prefixes prefixes) {
-        return "atLeast("+m_number+' '+m_onRole.toString(prefixes)+' '+m_toConcept.toString(prefixes)+')';
+        return "atLeast(" + m_number + ' ' + m_onRole.toString(prefixes) + ' ' + m_toConcept.toString(prefixes) + ')';
     }
+
     protected Object readResolve() {
         return s_interningManager.intern(this);
     }
 
-    protected static InterningManager<AtLeastConcept> s_interningManager=new InterningManager<AtLeastConcept>() {
-        protected boolean equal(AtLeastConcept object1,AtLeastConcept object2) {
-            return object1.m_number==object2.m_number && object1.m_onRole==object2.m_onRole && object1.m_toConcept==object2.m_toConcept;
+    protected static InterningManager<AtLeastConcept> s_interningManager = new InterningManager<AtLeastConcept>() {
+        protected boolean equal(AtLeastConcept object1, AtLeastConcept object2) {
+            return object1.m_number == object2.m_number && object1.m_onRole == object2.m_onRole && object1.m_toConcept == object2.m_toConcept;
         }
+
         protected int getHashCode(AtLeastConcept object) {
-            return (object.m_number*7+object.m_onRole.hashCode())*7+object.m_toConcept.hashCode();
+            return (object.m_number * 7 + object.m_onRole.hashCode()) * 7 + object.m_toConcept.hashCode();
         }
     };
-    
-    public static AtLeastConcept create(int number,Role onRole,LiteralConcept toConcept) {
-        return s_interningManager.intern(new AtLeastConcept(number,onRole,toConcept));
+
+    public static AtLeastConcept create(int number, Role onRole, LiteralConcept toConcept) {
+        return s_interningManager.intern(new AtLeastConcept(number, onRole, toConcept));
     }
 }
