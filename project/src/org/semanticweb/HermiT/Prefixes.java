@@ -179,11 +179,12 @@ public class Prefixes implements Serializable {
     protected boolean declarePrefixRaw(String prefixName, String prefixIRI) {
         if (!prefixName.endsWith(":"))
             throw new IllegalArgumentException("Prefix name '" + prefixName + "' should end with a colon character.");
+//        System.out.println("bbb " + prefixName);
         String existingPrefixName = m_prefixNamesByPrefixIRI.get(prefixIRI);
         if (existingPrefixName != null && !prefixName.equals(existingPrefixName))
             throw new IllegalArgumentException("The prefix IRI '" + prefixIRI
                     + "' has already been associated with the prefix name '" + existingPrefixName + "'.");
-        m_prefixNamesByPrefixIRI.put(prefixIRI, prefixName);
+		m_prefixNamesByPrefixIRI.put(prefixIRI, prefixName);
         return m_prefixIRIsByPrefixName.put(prefixName, prefixIRI) == null;
     }
 

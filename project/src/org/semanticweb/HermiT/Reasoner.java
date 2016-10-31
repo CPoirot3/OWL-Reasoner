@@ -257,6 +257,7 @@ public class Reasoner implements OWLReasoner {
         
         // Load the DLOntology
         System.out.println("Load the DLOntology");
+        System.out.println();
         createPrefixes();
         m_tableau = createTableau(m_interruptFlag, m_configuration, m_dlOntology, null, m_prefixes);
         m_instanceManager = null;
@@ -274,6 +275,7 @@ public class Reasoner implements OWLReasoner {
                 addIRI(individual.getIRI(), individualIRIs);
         m_prefixes.declareInternalPrefixes(individualIRIs, anonIndividualIRIs);
         m_prefixes.declareDefaultPrefix(m_dlOntology.getOntologyIRI() + "#");
+        
         // declare prefixes as used in the ontology if possible
         OWLOntologyFormat format = m_rootOntology.getOWLOntologyManager().getOntologyFormat(m_rootOntology);
         if (format instanceof PrefixOWLOntologyFormat) {
@@ -428,14 +430,21 @@ public class Reasoner implements OWLReasoner {
             // check if we can only reload the ABox
             if (canProcessPendingChangesIncrementally()) {
                 Set<OWLOntology> rootOntologyImportsClosure = m_rootOntology.getImportsClosure();
+                System.out.println("this is in class : " + this.getClass().getName());
+                System.out.println("rootOntologyImportsClosure size : " + rootOntologyImportsClosure.size());
                 Set<Atom> positiveFacts = m_dlOntology.getPositiveFacts();
+                System.out.println("positiveFacts size : " + positiveFacts.size());
                 Set<Atom> negativeFacts = m_dlOntology.getNegativeFacts();
+                System.out.println("negativeFacts size : " + negativeFacts.size());
                 Set<Individual> allIndividuals = new HashSet<Individual>();
+                System.out.println("allIndividuals size : " + allIndividuals.size());
                 Set<AtomicConcept> allAtomicConcepts = m_dlOntology.getAllAtomicConcepts();
                 Set<AtomicRole> allAtomicObjectRoles = m_dlOntology.getAllAtomicObjectRoles();
                 Set<AtomicRole> allAtomicDataRoles = m_dlOntology.getAllAtomicDataRoles();
                 ReducedABoxOnlyClausification aboxFactClausifier = new ReducedABoxOnlyClausification(m_configuration,
                         getDataFactory(), allAtomicConcepts, allAtomicObjectRoles, allAtomicDataRoles);
+                
+                // apply all changes
                 for (OWLOntologyChange change : m_pendingChanges) {
                     if (rootOntologyImportsClosure.contains(change.getOntology())) {
                         OWLAxiom axiom = change.getAxiom();
@@ -473,6 +482,7 @@ public class Reasoner implements OWLReasoner {
 
     public boolean canProcessPendingChangesIncrementally() {
         Set<OWLOntology> rootOntologyImportsClosure = m_rootOntology.getImportsClosure();
+        System.out.println(rootOntologyImportsClosure.size());
         for (OWLOntologyChange change : m_pendingChanges) {
             if (rootOntologyImportsClosure.contains(change.getOntology())) {
                 if (m_dlOntology.hasNominals() || !m_dlOntology.getAllDescriptionGraphs().isEmpty())
