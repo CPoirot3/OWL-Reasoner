@@ -50,6 +50,7 @@ public class HermiTConfigurations {
         // We use the OWL API to load the ontology.
         OWLOntology ontology = manager.loadOntologyFromOntologyDocument(inputOntologyFile);
         
+        System.out.println("BEGIN");
         
         // Now we create a configuration object that we use to overwrite HermiT's default
         // settings.

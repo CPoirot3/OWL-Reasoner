@@ -156,7 +156,7 @@ public class OWLClausification {
             descriptionGraphs = Collections.emptySet();
         OWLAxiomsExpressivity axiomsExpressivity = new OWLAxiomsExpressivity(axioms);
         
-        System.out.println(Z);
+//        System.out.println(Z);
         DLOntology dlOntology = clausify(factory, ontologyIRI, axioms, axiomsExpressivity, descriptionGraphs);
         
         return new Object[]{objectPropertyInclusionManager, dlOntology};
@@ -264,7 +264,8 @@ public class OWLClausification {
         if (!axioms.m_rules.isEmpty())
             new NormalizedRuleClausifier(axioms.m_objectPropertiesOccurringInOWLAxioms, descriptionGraphs, dataRangeConverter, dlClauses).processRules(axioms.m_rules);
         // Create the DL ontology
-        return new DLOntology(ontologyIRI, dlClauses, positiveFacts, negativeFacts, atomicConcepts, atomicObjectRoles, complexObjectRoles, atomicDataRoles, allUnknownDatatypeRestrictions, axioms.m_definedDatatypesIRIs, individuals, axiomsExpressivity.m_hasInverseRoles, axiomsExpressivity.m_hasAtMostRestrictions, axiomsExpressivity.m_hasNominals, axiomsExpressivity.m_hasDatatypes);
+        return new DLOntology(ontologyIRI, dlClauses, positiveFacts, negativeFacts, atomicConcepts, atomicObjectRoles, 
+        		complexObjectRoles, atomicDataRoles, allUnknownDatatypeRestrictions, axioms.m_definedDatatypesIRIs, individuals, axiomsExpressivity.m_hasInverseRoles, axiomsExpressivity.m_hasAtMostRestrictions, axiomsExpressivity.m_hasNominals, axiomsExpressivity.m_hasDatatypes);
     }
 
     protected DLClause clausifyKey(OWLHasKeyAxiom object) {

@@ -229,7 +229,7 @@ public class Reasoner implements OWLReasoner {
         m_pendingChanges = new ArrayList<OWLOntologyChange>();
         m_rootOntology.getOWLOntologyManager().addOntologyChangeListener(m_ontologyChangeListener);
         if (descriptionGraphs == null) {
-        	System.out.println("descriptiong graph is null, set to empty set");
+//        	System.out.println("descriptiong graph is null, set to empty set");
             m_descriptionGraphs = Collections.emptySet();
         } else {
             m_descriptionGraphs = descriptionGraphs;
@@ -249,7 +249,7 @@ public class Reasoner implements OWLReasoner {
         System.out.println("Convert OWLOntology into DLOntology");
         
         OWLClausification clausifier = new OWLClausification(m_configuration);
-        System.out.println("m_descriptionGraphs now is : " + m_descriptionGraphs);
+//        System.out.println("m_descriptionGraphs now is : " + m_descriptionGraphs);
         
         Object[] result = clausifier.preprocessAndClausify(m_rootOntology, m_descriptionGraphs);
         m_objectPropertyInclusionManager = (ObjectPropertyInclusionManager) result[0];
