@@ -36,6 +36,7 @@ public class DatatypeRestriction extends AtomicDataRange {
         m_datatypeURI = datatypeURI;
         m_facetURIs = facetURIs;
         m_facetValues = facetValues;
+        System.out.println(toString());
     }
 
     public String getDatatypeURI() {

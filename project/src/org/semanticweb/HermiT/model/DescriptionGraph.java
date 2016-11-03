@@ -36,6 +36,7 @@ public class DescriptionGraph implements DLPredicate, Serializable {
         m_atomicConceptsByVertices = atomicConceptsByVertices;
         m_edges = edges;
         m_startConcepts = startConcepts;
+        System.out.println(toString());
     }
 
     public String getName() {

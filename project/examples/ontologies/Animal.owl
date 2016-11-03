@@ -12,7 +12,25 @@
     <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
     <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
     <Declaration>
+        <NamedIndividual IRI="http://www.co-ode.org/ontologies/ont.owl#Warn_A"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="http://www.co-ode.org/ontologies/ont.owl#CarNumberBiggerThanAlarmValue"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Car"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Warn"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Tiger"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://www.co-ode.org/ontologies/ont.owl#Alarm_A"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Alarm"/>
     </Declaration>
     <Declaration>
         <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Animal"/>
@@ -21,6 +39,10 @@
         <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Leopard"/>
     </Declaration>
     <SubClassOf>
+        <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Alarm"/>
+        <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Warn"/>
+    </SubClassOf>
+    <SubClassOf>
         <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Leopard"/>
         <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Tiger"/>
     </SubClassOf>
@@ -28,6 +50,17 @@
         <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Tiger"/>
         <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Animal"/>
     </SubClassOf>
+    <ClassAssertion>
+        <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Alarm"/>
+        <NamedIndividual IRI="http://www.co-ode.org/ontologies/ont.owl#Alarm_A"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <ObjectMinCardinality cardinality="10000">
+            <ObjectProperty IRI="http://www.co-ode.org/ontologies/ont.owl#CarNumberBiggerThanAlarmValue"/>
+            <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Car"/>
+        </ObjectMinCardinality>
+        <NamedIndividual IRI="http://www.co-ode.org/ontologies/ont.owl#Alarm_A"/>
+    </ClassAssertion>
 </Ontology>
 
 

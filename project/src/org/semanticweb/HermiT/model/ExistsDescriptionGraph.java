@@ -28,6 +28,7 @@ public class ExistsDescriptionGraph extends ExistentialConcept implements DLPred
     protected ExistsDescriptionGraph(DescriptionGraph descriptionGraph, int vertex) {
         m_descriptionGraph = descriptionGraph;
         m_vertex = vertex;
+//        System.out.println(toString());
     }
 
     public DescriptionGraph getDescriptionGraph() {

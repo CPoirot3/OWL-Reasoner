@@ -213,6 +213,10 @@ public class DoubleDatatypeHandler implements DatatypeHandler {
     }
     
     public static void main(String[] args) {
-    	
+    	System.out.println(DoubleDatatypeHandler.XSD_NS);
+    	System.out.println(DoubleDatatypeHandler.XSD_DOUBLE);
+    	System.out.println(DoubleDatatypeHandler.DOUBLE_ENTIRE);
+    	System.out.println(DoubleDatatypeHandler.EMPTY_SUBSET);
+//    	System.out.println(DoubleDatatypeHandler.s_managedDatatypeURIs);		
     }
 }

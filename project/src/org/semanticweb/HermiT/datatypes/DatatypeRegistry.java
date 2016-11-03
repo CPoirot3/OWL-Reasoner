@@ -76,8 +76,9 @@ public class DatatypeRegistry {
                             "no custom datatype definition is given; " + CRLF +
                             "therefore, HermiT cannot handle this datatype.";
             throw new UnsupportedDatatypeException(message);
-        } else
+        } else {
             return datatypeHandler;
+        }
     }
 
     protected static DatatypeHandler getDatatypeHandlerFor(DatatypeRestriction datatypeRestriction) throws UnsupportedDatatypeException {

@@ -58,7 +58,7 @@ public class MaterialiseInferences {
         // Now, we create the file from which the ontology will be loaded. 
         // Here the ontology is stored in a file locally in the ontologies subfolder
         // of the examples folder.
-        File inputOntologyFile = new File("examples/ontologies/pizza.owl");
+        File inputOntologyFile = new File("examples/ontologies/Animal.owl");
         // We use the OWL API to load the ontology. 
         OWLOntology ontology = manager.loadOntologyFromOntologyDocument(inputOntologyFile);
         // Now we can start and create the reasoner. Since materialisation of axioms is controlled 
@@ -110,7 +110,7 @@ public class MaterialiseInferences {
         // the ontology into a file. Since we cannot write to relative files, we have to resolve the 
         // relative path to an absolute one in an OS independent form. We do this by (virtually) creating a 
         // file with a relative path from which we get the absolute file.  
-        File inferredOntologyFile = new File("examples/ontologies/pizza-inferred.owl");
+        File inferredOntologyFile = new File("examples/ontologies/Animal-inferred.owl");
         if (!inferredOntologyFile.exists())
             inferredOntologyFile.createNewFile();
         inferredOntologyFile = inferredOntologyFile.getAbsoluteFile();
@@ -121,6 +121,6 @@ public class MaterialiseInferences {
         // Now that ontology that contains the inferred axioms should be in the ontologies subfolder 
         // (you Java IDE, e.g., Eclipse, might have to refresh its view of files in the file system) 
         // before the file is visible.  
-        System.out.println("The ontology in examples/ontologies/pizza-inferred.owl should now contain all inferred axioms (you might need to refresh the IDE file view). ");
+        System.out.println("The ontology in examples/ontologies/Animal-inferred.owl should now contain all inferred axioms (you might need to refresh the IDE file view). ");
     }
 }
