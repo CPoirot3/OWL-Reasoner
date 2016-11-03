@@ -35,7 +35,7 @@ public class ReasoningTaskDescription {
 
     public ReasoningTaskDescription(boolean flipSatisfiabilityResult, StandardTestType testType, Object... arguments) {
         this(flipSatisfiabilityResult, testType.messagePattern, arguments);
-        System.out.println("debug");
+//        System.out.println("debug");
     }
 
     public ReasoningTaskDescription(boolean flipSatisfiabilityResult, String message, Object... arguments) {
@@ -81,7 +81,7 @@ public class ReasoningTaskDescription {
     }
 
     public static ReasoningTaskDescription isConceptSatisfiable(Object atomicConcept) {
-    	System.out.println("debug");
+//    	System.out.println("debug");
         return new ReasoningTaskDescription(false, StandardTestType.CONCEPT_SATISFIABILITY, atomicConcept);
     }
 

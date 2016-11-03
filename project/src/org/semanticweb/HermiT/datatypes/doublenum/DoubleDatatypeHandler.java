@@ -211,4 +211,8 @@ public class DoubleDatatypeHandler implements DatatypeHandler {
         assert XSD_DOUBLE.equals(datatypeURI2);
         return false;
     }
+    
+    public static void main(String[] args) {
+    	
+    }
 }

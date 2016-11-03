@@ -246,7 +246,8 @@ public class Reasoner implements OWLReasoner {
     	System.out.println("clear state first");
         clearState();
         // Convert OWLOntology into DLOntology
-        System.out.println("Convert OWLOntology into DLOntology");
+        System.out.println("Convert OWLOntology into DLOntology :");
+        System.out.println();
         
         OWLClausification clausifier = new OWLClausification(m_configuration);
 //        System.out.println("m_descriptionGraphs now is : " + m_descriptionGraphs);
@@ -254,10 +255,8 @@ public class Reasoner implements OWLReasoner {
         Object[] result = clausifier.preprocessAndClausify(m_rootOntology, m_descriptionGraphs);
         m_objectPropertyInclusionManager = (ObjectPropertyInclusionManager) result[0];
         m_dlOntology = (DLOntology) result[1];
+        System.out.println("Convert OWLOntology done");
         
-        // Load the DLOntology
-        System.out.println("Load the DLOntology");
-        System.out.println();
         createPrefixes();
         m_tableau = createTableau(m_interruptFlag, m_configuration, m_dlOntology, null, m_prefixes);
         m_instanceManager = null;
@@ -787,9 +786,11 @@ public class Reasoner implements OWLReasoner {
 
     public boolean isConsistent() {
         flushChangesIfRequired();
-        if (m_isConsistent == null)
+        if (m_isConsistent == null) {
             m_isConsistent = getTableau().isSatisfiable(true, true, null, null, null, null, null,
                     ReasoningTaskDescription.isABoxSatisfiable());
+        } else {
+		}
         return m_isConsistent;
     }
 
@@ -801,6 +802,7 @@ public class Reasoner implements OWLReasoner {
         checkPreConditions(axiom);
         if (!isConsistent())
             return true;
+//        System.out.println("mark");
         EntailmentChecker checker = new EntailmentChecker(this, getDataFactory());
         return checker.entails(axiom);
     }
@@ -809,6 +811,7 @@ public class Reasoner implements OWLReasoner {
         checkPreConditions(axioms.toArray(new OWLObject[0]));
         if (!m_isConsistent)
             return true;
+        
         EntailmentChecker checker = new EntailmentChecker(this, getDataFactory());
         return checker.entails(axioms);
     }
@@ -876,9 +879,13 @@ public class Reasoner implements OWLReasoner {
     }
 
     public boolean isSatisfiable(OWLClassExpression classExpression) {
-        checkPreConditions(classExpression);
-        if (!isConsistent()) // reasoner 判断是否一致
+    	System.out.println("ABox consistent :");
+        checkPreConditions(classExpression); // 也调用了 isConsistent()
+        System.out.println("ABox consistent judge done\n");
+        
+        if (!isConsistent()) // reasoner 判断是否一致 ABox
             return false;
+        
         if (classExpression instanceof OWLClass && m_atomicConceptHierarchy != null) {
             AtomicConcept concept = H((OWLClass) classExpression);
             HierarchyNode<AtomicConcept> node = m_atomicConceptHierarchy.getNodeForElement(concept);
@@ -2517,23 +2524,30 @@ public class Reasoner implements OWLReasoner {
 
     protected void checkPreConditions(OWLObject... objects) {
         flushChangesIfRequired();
-        if (objects != null && objects.length > 0)
+        if (objects != null && objects.length > 0) {
+//        	System.out.println("objects length " + objects.length);
             throwFreshEntityExceptionIfNecessary(objects);
+        }
         throwInconsistentOntologyExceptionIfNecessary();
+        
     }
 
     protected void flushChangesIfRequired() {
-        if (!m_configuration.bufferChanges && !m_pendingChanges.isEmpty())
+        if (!m_configuration.bufferChanges && !m_pendingChanges.isEmpty()) {
+//        	System.out.println("mark: flush");
             flush();
+        }
     }
 
     protected void throwInconsistentOntologyExceptionIfNecessary() {
-        if (!isConsistent() && m_configuration.throwInconsistentOntologyException)
+        if (!isConsistent() && m_configuration.throwInconsistentOntologyException) {
             throw new InconsistentOntologyException();
+        }
     }
 
     protected void throwFreshEntityExceptionIfNecessary(OWLObject... objects) {
         if (m_configuration.freshEntityPolicy == FreshEntityPolicy.DISALLOW) {
+        	
             Set<OWLEntity> undeclaredEntities = new HashSet<OWLEntity>();
             for (OWLObject object : objects) {
                 if (!(object instanceof OWLEntity) || !((OWLEntity) object).isBuiltIn()) {

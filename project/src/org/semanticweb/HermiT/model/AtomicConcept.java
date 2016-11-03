@@ -29,7 +29,7 @@ public class AtomicConcept extends LiteralConcept implements DLPredicate {
 
     protected AtomicConcept(String iri) {
         m_iri = iri;
-        System.out.println(this.toString());
+//        System.out.println(this.toString());
     }
 
     public String getIRI() {

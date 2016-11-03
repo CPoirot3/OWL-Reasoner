@@ -46,7 +46,7 @@ public class HermiTConfigurations {
         // Now, we create the file from which the ontology will be loaded.
         // Here the ontology is stored in a file locally in the ontologies subfolder
         // of the examples folder.
-        File inputOntologyFile = new File("examples/ontologies/warnSchema.xml");
+        File inputOntologyFile = new File("examples/ontologies/Animal.owl");
         // We use the OWL API to load the ontology.
         OWLOntology ontology = manager.loadOntologyFromOntologyDocument(inputOntologyFile);
         
@@ -61,13 +61,18 @@ public class HermiTConfigurations {
         // Now we can start and create the reasoner with the above created configuration.
         Reasoner hermit = new Reasoner(config, ontology);
         
-        System.out.println("BEGIN");
+        System.out.println("\nBEGIN");
         
         // Lets see whether HermiT finds that the icecream class in the pizza ontology is unsatisfiable
         // (I know it is).
         // First, create an instance of the OWLClass object for the icecream class.
-        IRI icecreamIRI = IRI.create("http://www.co-ode.org/ontologies/pizza/pizza.owl#IceCream");
-        OWLClass owlClass = manager.getOWLDataFactory().getOWLClass(icecreamIRI);
+//        IRI icecreamIRI = IRI.create("http://www.co-ode.org/ontologies/pizza/pizza.owl#IceCream");
+//        OWLClass owlClass = manager.getOWLDataFactory().getOWLClass(icecreamIRI);
+        
+        IRI leopard = IRI.create("http://www.co-ode.org/ontologies/ont.owl#Leopard");
+        OWLClass owlClass = manager.getOWLDataFactory().getOWLClass(leopard);
+//        System.out.println("test");
+        
         // Since we have used the timing monitor HermiT will print some information while it
         // is doing the reasoning and then it will print the result as instructed below.
         System.out.println("Is the icecream class satisfiable? " + hermit.isSatisfiable(owlClass));

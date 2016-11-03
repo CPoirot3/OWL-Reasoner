@@ -64,7 +64,7 @@ public class AnnotatedEquality implements DLPredicate, Serializable {
     public String toString(Prefixes prefixes) {
     	// mark
     	String string = "==@atMost(" + m_cardinality + " " + m_onRole.toString(prefixes) + " " + m_toConcept.toString(prefixes) + ")";;
-    	System.out.println(string);
+//    	System.out.println(string);
     	
         return "==@atMost(" + m_cardinality + " " + m_onRole.toString(prefixes) + " " + m_toConcept.toString(prefixes) + ")";
     }

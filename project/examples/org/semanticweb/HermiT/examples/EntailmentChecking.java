@@ -28,25 +28,36 @@ public class EntailmentChecking {
         // Now, we create the file from which the ontology will be loaded. 
         // Here the ontology is stored in a file locally in the ontologies subfolder
         // of the examples folder.
-        File inputOntologyFile = new File("examples/ontologies/pizza.owl");
+//        File inputOntologyFile = new File("examples/ontologies/pizza.owl");
+        File inputOntologyFile = new File("examples/ontologies/Animal.owl");
         // We use the OWL API to load the ontology. 
         OWLOntology ontology = manager.loadOntologyFromOntologyDocument(inputOntologyFile);
 
+        
+        OWLClass leopard = manager.getOWLDataFactory().getOWLClass(IRI.create("http://www.co-ode.org/ontologies/ont.owl#Leopard"));
+        OWLClass animal = manager.getOWLDataFactory().getOWLClass(IRI.create("http://www.co-ode.org/ontologies/ont.owl#Animal"));
+        OWLAxiom owlAxiom = dataFactory.getOWLSubClassOfAxiom(leopard, animal);
+        
+        System.out.println(owlAxiom);
+        
         // First, create several OWL API objects that we will use in our queries
-        OWLClass margherita = dataFactory.getOWLClass(IRI.create("http://www.co-ode.org/ontologies/pizza/pizza.owl#Margherita"));
-        OWLObjectProperty hasTopping = dataFactory.getOWLObjectProperty(IRI.create("http://www.co-ode.org/ontologies/pizza/pizza.owl#hasTopping"));
-        OWLClass mozzarellaTopping = dataFactory.getOWLClass(IRI.create("http://www.co-ode.org/ontologies/pizza/pizza.owl#MozzarellaTopping"));
-        OWLClass goatsCheeseTopping = dataFactory.getOWLClass(IRI.create("http://www.co-ode.org/ontologies/pizza/pizza.owl#GoatsCheeseTopping"));
-        OWLClassExpression mozarellaOrGoatsCheese = dataFactory.getOWLObjectUnionOf(mozzarellaTopping, goatsCheeseTopping);
-        OWLClassExpression hasToppingMozarellaOrGoatsCheese = dataFactory.getOWLObjectSomeValuesFrom(hasTopping, mozarellaOrGoatsCheese);
-        OWLAxiom axiom = dataFactory.getOWLSubClassOfAxiom(margherita, hasToppingMozarellaOrGoatsCheese);
+//        OWLClass margherita = dataFactory.getOWLClass(IRI.create("http://www.co-ode.org/ontologies/pizza/pizza.owl#Margherita"));
+//        OWLObjectProperty hasTopping = dataFactory.getOWLObjectProperty(IRI.create("http://www.co-ode.org/ontologies/pizza/pizza.owl#hasTopping"));
+//        OWLClass mozzarellaTopping = dataFactory.getOWLClass(IRI.create("http://www.co-ode.org/ontologies/pizza/pizza.owl#MozzarellaTopping"));
+//        OWLClass goatsCheeseTopping = dataFactory.getOWLClass(IRI.create("http://www.co-ode.org/ontologies/pizza/pizza.owl#GoatsCheeseTopping"));
+//        OWLClassExpression mozarellaOrGoatsCheese = dataFactory.getOWLObjectUnionOf(mozzarellaTopping, goatsCheeseTopping);
+//        OWLClassExpression hasToppingMozarellaOrGoatsCheese = dataFactory.getOWLObjectSomeValuesFrom(hasTopping, mozarellaOrGoatsCheese);
+//        OWLAxiom axiom = dataFactory.getOWLSubClassOfAxiom(margherita, hasToppingMozarellaOrGoatsCheese);
 
+        
         // Now we can start and create the reasoner. Lets this time use HermiT's native interface.
         // For this we don't need a factory.
         // The OWLReasoner interface is very similar though, it just has fewer methods
         Reasoner reasoner = new Reasoner(ontology);
+        
         // Let us check whether the axiom is entailed:
-        System.out.println("Do margherita pizzas have a topping that is morzarella or goats cheese? " + reasoner.isEntailed(axiom));
+        System.out.println("Do leopard is animal? " + reasoner.isEntailed(owlAxiom));
+//        System.out.println("Do margherita pizzas have a topping that is morzarella or goats cheese? " + reasoner.isEntailed(axiom));
 
         // Let us now also see what other (named) subclasses the complex superclass has
         // Setting the boolean flag to false means we are not only interested in direct subclasses
@@ -58,7 +69,8 @@ public class EntailmentChecking {
         renderer.setPrefixesFromOntologyFormat(ontology, manager, true);
         ToStringRenderer.getInstance().setRenderer(renderer);
 
-        NodeSet<OWLClass> subs = reasoner.getSubClasses(hasToppingMozarellaOrGoatsCheese, false);
+        NodeSet<OWLClass> subs = reasoner.getSubClasses(animal, false);
+        System.out.println(subs.getNodes().size());
         System.out.println("Subclasses of the complex class: ");
         for (Node<OWLClass> equivalents : subs.getNodes()) {
             // The node set contains several sets of classes

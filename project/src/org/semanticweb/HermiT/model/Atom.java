@@ -44,7 +44,7 @@ public class Atom implements Serializable {
     protected Atom(DLPredicate dlPredicate, Term[] arguments) {
         m_dlPredicate = dlPredicate;
         m_arguments = arguments;
-        System.out.println(this.toString());
+//        System.out.println(this.toString());
         if (m_dlPredicate.getArity() != m_arguments.length)
             throw new IllegalArgumentException("The arity of the predicate must be equal to the number of arguments.");
     }

@@ -126,8 +126,9 @@ public class EntailmentChecker implements OWLAxiomVisitorEx<Boolean> {
      * @return true if the loaded ontology entails the axiom and false otherwise
      */
     public boolean entails(OWLAxiom axiom) {
-        if (!axiom.accept(this))
+        if (!axiom.accept(this)) {
             return false;
+        }
         return checkAnonymousIndividuals();
     }
 
@@ -135,8 +136,10 @@ public class EntailmentChecker implements OWLAxiomVisitorEx<Boolean> {
      * @return true if there are no individual axioms or if all rolled-up concepts for the anonymous individuals are entailed and false otherwise
      */
     protected boolean checkAnonymousIndividuals() {
-        if (anonymousIndividualAxioms.isEmpty())
+        if (anonymousIndividualAxioms.isEmpty()) {
+        	System.out.println("Mark : " + anonymousIndividualAxioms.size());
             return true;
+        }
         // go through the axioms and build the rolling-up concepts for them
         AnonymousIndividualForestBuilder anonIndChecker = new AnonymousIndividualForestBuilder();
         anonIndChecker.constructConceptsForAnonymousIndividuals(factory, anonymousIndividualAxioms);

@@ -264,6 +264,7 @@ public class OWLClausification {
         if (!axioms.m_rules.isEmpty())
             new NormalizedRuleClausifier(axioms.m_objectPropertiesOccurringInOWLAxioms, descriptionGraphs, dataRangeConverter, dlClauses).processRules(axioms.m_rules);
         // Create the DL ontology
+        System.out.println("DLOntology has " + dlClauses.size() + " DLClause");
         return new DLOntology(ontologyIRI, dlClauses, positiveFacts, negativeFacts, atomicConcepts, atomicObjectRoles, 
         		complexObjectRoles, atomicDataRoles, allUnknownDatatypeRestrictions, axioms.m_definedDatatypesIRIs, individuals, axiomsExpressivity.m_hasInverseRoles, axiomsExpressivity.m_hasAtMostRestrictions, axiomsExpressivity.m_hasNominals, axiomsExpressivity.m_hasDatatypes);
     }
