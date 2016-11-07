@@ -54,7 +54,7 @@ public class EntailmentChecking {
         // For this we don't need a factory.
         // The OWLReasoner interface is very similar though, it just has fewer methods
         Reasoner reasoner = new Reasoner(ontology);
-        
+        System.out.println("check");
         // Let us check whether the axiom is entailed:
         System.out.println("Do leopard is animal? " + reasoner.isEntailed(owlAxiom));
 //        System.out.println("Do margherita pizzas have a topping that is morzarella or goats cheese? " + reasoner.isEntailed(axiom));
@@ -69,19 +69,19 @@ public class EntailmentChecking {
         renderer.setPrefixesFromOntologyFormat(ontology, manager, true);
         ToStringRenderer.getInstance().setRenderer(renderer);
 
-        NodeSet<OWLClass> subs = reasoner.getSubClasses(animal, false);
-        System.out.println(subs.getNodes().size());
-        System.out.println("Subclasses of the complex class: ");
-        for (Node<OWLClass> equivalents : subs.getNodes()) {
+//        NodeSet<OWLClass> subs = reasoner.getSubClasses(animal, false);
+//        System.out.println(subs.getNodes().size());
+//        System.out.println("Subclasses of the complex class: ");
+//        for (Node<OWLClass> equivalents : subs.getNodes()) {
             // The node set contains several sets of classes
             // Each set contains classes that are equivalent to each other 
             // (if there are any otherwise it is a singleton set)
             // here only owl:Nothing, which is a subclass of every class
             // has some eqivalents (other unsatisfiable classes) 
-            for (OWLClass equivalent : equivalents) {
-                System.out.print(equivalent + " ");
-            }
-            System.out.println();
-        }
+//            for (OWLClass equivalent : equivalents) {
+//                System.out.print(equivalent + " ");
+//            }
+//            System.out.println();
+//        }
     }
 }

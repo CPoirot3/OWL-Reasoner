@@ -789,8 +789,7 @@ public class Reasoner implements OWLReasoner {
         if (m_isConsistent == null) {
             m_isConsistent = getTableau().isSatisfiable(true, true, null, null, null, null, null,
                     ReasoningTaskDescription.isABoxSatisfiable());
-        } else {
-		}
+        }
         return m_isConsistent;
     }
 
@@ -800,10 +799,12 @@ public class Reasoner implements OWLReasoner {
 
     public boolean isEntailed(OWLAxiom axiom) {
         checkPreConditions(axiom);
+//        System.out.println("mark");
         if (!isConsistent())
             return true;
-//        System.out.println("mark");
+         
         EntailmentChecker checker = new EntailmentChecker(this, getDataFactory());
+//        System.out.println("mark");
         return checker.entails(axiom);
     }
 
@@ -2525,7 +2526,7 @@ public class Reasoner implements OWLReasoner {
     protected void checkPreConditions(OWLObject... objects) {
         flushChangesIfRequired();
         if (objects != null && objects.length > 0) {
-//        	System.out.println("objects length " + objects.length);
+        	System.out.println("objects length " + objects.length);
             throwFreshEntityExceptionIfNecessary(objects);
         }
         throwInconsistentOntologyExceptionIfNecessary();
@@ -2547,7 +2548,6 @@ public class Reasoner implements OWLReasoner {
 
     protected void throwFreshEntityExceptionIfNecessary(OWLObject... objects) {
         if (m_configuration.freshEntityPolicy == FreshEntityPolicy.DISALLOW) {
-        	
             Set<OWLEntity> undeclaredEntities = new HashSet<OWLEntity>();
             for (OWLObject object : objects) {
                 if (!(object instanceof OWLEntity) || !((OWLEntity) object).isBuiltIn()) {

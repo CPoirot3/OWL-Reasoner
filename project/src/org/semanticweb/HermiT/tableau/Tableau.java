@@ -96,6 +96,7 @@ public final class Tableau implements Serializable {
     protected GroundDisjunction m_firstUnprocessedGroundDisjunction;
 
     public Tableau(InterruptFlag interruptFlag, TableauMonitor tableauMonitor, ExistentialExpansionStrategy existentialsExpansionStrategy, boolean useDisjunctionLearning, DLOntology permanentDLOntology, DLOntology additionalDLOntology, Map<String, Object> parameters) {
+    	System.out.println("Tableau constructed");
         if (additionalDLOntology != null && !additionalDLOntology.getAllDescriptionGraphs().isEmpty())
             throw new IllegalArgumentException("Additional ontology cannot contain description graphs.");
         m_interruptFlag = interruptFlag;
@@ -331,6 +332,7 @@ public final class Tableau implements Serializable {
         if (m_firstTableauNode == null)
             createNewNINode(m_dependencySetFactory.emptySet());
         boolean result = runCalculus();
+        System.out.println("mark");
         if (m_tableauMonitor != null)
             m_tableauMonitor.isSatisfiableFinished(reasoningTaskDescription, result);
         return result;
@@ -400,12 +402,20 @@ public final class Tableau implements Serializable {
             if (m_tableauMonitor != null)
                 m_tableauMonitor.saturateStarted();
             boolean hasMoreWork = true;
+            System.out.println("begin work");
+
             while (hasMoreWork) {
-                if (m_tableauMonitor != null)
+                System.out.println("a");
+                if (m_tableauMonitor != null) {
                     m_tableauMonitor.iterationStarted();
+//                    System.out.println("mid");
+                }
                 hasMoreWork = doIteration();
-                if (m_tableauMonitor != null)
+//                System.out.println("mid");
+                if (m_tableauMonitor != null) {
+//                    System.out.println("mid");
                     m_tableauMonitor.iterationFinished();
+                }
                 if (!existentialsAreExact && !hasMoreWork && !m_extensionManager.containsClash()) {
                     // no more work to do, but since we use a blocking strategy that does not necessarily
                     // establish only valid blocks (existentialsAreExact == false), we tell the blocking
@@ -417,6 +427,7 @@ public final class Tableau implements Serializable {
                     if (m_tableauMonitor != null)
                         m_tableauMonitor.iterationFinished();
                 }
+                System.out.println("b");
             }
             if (m_tableauMonitor != null)
                 m_tableauMonitor.saturateFinished(!m_extensionManager.containsClash());
@@ -449,12 +460,19 @@ public final class Tableau implements Serializable {
                     m_nominalIntroductionManager.processAnnotatedEqualities();
                 hasChange = true;
             }
+            
             if (hasChange)
                 return true;
         }
-        if (!m_extensionManager.containsClash())
-            if (m_existentialExpansionStrategy.expandExistentials(false))
+        System.out.println("doIteration mid");
+        if (!m_extensionManager.containsClash()) {
+        	
+            if (m_existentialExpansionStrategy.expandExistentials(false)) {
+            	System.out.println("mid");
                 return true;
+            }
+        }
+        
         if (!m_extensionManager.containsClash()) {
             while (m_firstUnprocessedGroundDisjunction != null) {
                 GroundDisjunction groundDisjunction = m_firstUnprocessedGroundDisjunction;
