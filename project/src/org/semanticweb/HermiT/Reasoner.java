@@ -243,7 +243,7 @@ public class Reasoner implements OWLReasoner {
 
     protected void loadOntology() {
     	
-    	System.out.println("clear state first");
+//    	System.out.println("clear state first");
         clearState();
         // Convert OWLOntology into DLOntology
         System.out.println("Convert OWLOntology into DLOntology :");
@@ -258,7 +258,9 @@ public class Reasoner implements OWLReasoner {
         System.out.println("Convert OWLOntology done");
         
         createPrefixes();
+        System.out.println("create Tableau");
         m_tableau = createTableau(m_interruptFlag, m_configuration, m_dlOntology, null, m_prefixes);
+        
         m_instanceManager = null;
     }
 
@@ -2275,6 +2277,8 @@ public class Reasoner implements OWLReasoner {
                 || (additionalDLOntology != null && additionalDLOntology.hasNominals()));
 
         TableauMonitor wellKnownTableauMonitor = null;
+        
+        System.out.println("configuration's tableauMonitorType " + configuration.tableauMonitorType);
         switch (configuration.tableauMonitorType) {
             case NONE:
                 wellKnownTableauMonitor = null;
@@ -2304,15 +2308,18 @@ public class Reasoner implements OWLReasoner {
             tableauMonitor = new TableauMonitorFork(wellKnownTableauMonitor, configuration.monitor);
 
         DirectBlockingChecker directBlockingChecker = null;
+        System.out.println("configuration.directBlockingType  " + configuration.directBlockingType);
         switch (configuration.directBlockingType) {
             case OPTIMAL:
                 if (configuration.blockingStrategyType == BlockingStrategyType.SIMPLE_CORE
-                        || configuration.blockingStrategyType == BlockingStrategyType.COMPLEX_CORE)
+                        || configuration.blockingStrategyType == BlockingStrategyType.COMPLEX_CORE) {
                     directBlockingChecker = new ValidatedSingleDirectBlockingChecker(hasInverseRoles);
-                else if (hasInverseRoles)
+                } else if (hasInverseRoles) {
                     directBlockingChecker = new PairWiseDirectBlockingChecker();
-                else
+                } else {
                     directBlockingChecker = new SingleDirectBlockingChecker();
+                    System.out.println("directBlockingChecker =");
+                }
                 break;
             case SINGLE:
                 if (configuration.blockingStrategyType == BlockingStrategyType.SIMPLE_CORE

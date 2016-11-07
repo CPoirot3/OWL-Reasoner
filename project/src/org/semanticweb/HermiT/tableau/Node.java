@@ -89,7 +89,7 @@ public final class Node implements Serializable {
     }
 
     protected void destroy() {
-        m_nodeID = -1;
+        m_nodeID = -1;  // 
         m_nodeState = null;
         m_parent = null;
         m_nodeType = null;

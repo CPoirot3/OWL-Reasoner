@@ -96,7 +96,7 @@ public final class Tableau implements Serializable {
     protected GroundDisjunction m_firstUnprocessedGroundDisjunction;
 
     public Tableau(InterruptFlag interruptFlag, TableauMonitor tableauMonitor, ExistentialExpansionStrategy existentialsExpansionStrategy, boolean useDisjunctionLearning, DLOntology permanentDLOntology, DLOntology additionalDLOntology, Map<String, Object> parameters) {
-    	System.out.println("Tableau constructed");
+    	
         if (additionalDLOntology != null && !additionalDLOntology.getAllDescriptionGraphs().isEmpty())
             throw new IllegalArgumentException("Additional ontology cannot contain description graphs.");
         m_interruptFlag = interruptFlag;
@@ -133,6 +133,8 @@ public final class Tableau implements Serializable {
         } finally {
             m_interruptFlag.endTask();
         }
+        
+        System.out.println("Tableau constructed");
     }
 
     public InterruptFlag getInterruptFlag() {

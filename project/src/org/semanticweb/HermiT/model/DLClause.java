@@ -35,7 +35,7 @@ public class DLClause implements Serializable {
     protected DLClause(Atom[] headAtoms, Atom[] bodyAtoms) {
         m_headAtoms = headAtoms;
         m_bodyAtoms = bodyAtoms;
-        System.out.println(toString());
+        System.out.println("DLClause : " + toString());
     }
 
     public int getHeadLength() {

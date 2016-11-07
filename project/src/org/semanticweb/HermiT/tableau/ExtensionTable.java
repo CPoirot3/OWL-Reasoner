@@ -44,9 +44,7 @@ import org.semanticweb.HermiT.monitor.TableauMonitor;
 public abstract class ExtensionTable implements Serializable {
     private static final long serialVersionUID = -5029938218056017193L;
 
-    public static enum View {EXTENSION_THIS, EXTENSION_OLD, DELTA_OLD, TOTAL}
-
-    ;
+    public static enum View {EXTENSION_THIS, EXTENSION_OLD, DELTA_OLD, TOTAL};
 
     protected final Tableau m_tableau;
     protected final TableauMonitor m_tableauMonitor;
