@@ -134,16 +134,21 @@ public class OWLClausification {
     }
 
     public Object[] preprocessAndClausify(OWLOntology rootOntology, Collection<DescriptionGraph> descriptionGraphs) {
-//    	System.out.println(X);
-//    	System.out.println(Y);
 //    	System.out.println(Z);
+    	
         OWLDataFactory factory = rootOntology.getOWLOntologyManager().getOWLDataFactory();
         String ontologyIRI = rootOntology.getOntologyID().getDefaultDocumentIRI() == null ? "urn:hermit:kb" : rootOntology.getOntologyID().getDefaultDocumentIRI().toString();
+        System.out.println("ontologyIRI : " + ontologyIRI);
         Collection<OWLOntology> importClosure = rootOntology.getImportsClosure();
+        System.out.println("importClosure : " + importClosure.size());
+        for (OWLOntology owlOntology: importClosure) {
+        	System.out.println(owlOntology);
+        }
+        
         OWLAxioms axioms = new OWLAxioms();
         OWLNormalization normalization = new OWLNormalization(factory, axioms, 0);
         for (OWLOntology ontology : importClosure)
-            normalization.processOntology(ontology);
+            normalization.processOntology(ontology);  // 添加到axioms里
         BuiltInPropertyManager builtInPropertyManager = new BuiltInPropertyManager(factory);
         builtInPropertyManager.axiomatizeBuiltInPropertiesAsNeeded(axioms);
         ObjectPropertyInclusionManager objectPropertyInclusionManager = new ObjectPropertyInclusionManager(axioms);

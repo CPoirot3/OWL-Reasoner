@@ -12,7 +12,15 @@
     <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
     <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
     <SubClassOf>
+        <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Alarm"/>
+        <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Warn"/>
+    </SubClassOf>
+    <SubClassOf>
         <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Animal"/>
+        <Class IRI="Thing"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Car"/>
         <Class IRI="Thing"/>
     </SubClassOf>
     <SubClassOf>
@@ -23,8 +31,20 @@
         <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Tiger"/>
         <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Animal"/>
     </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Warn"/>
+        <Class IRI="Thing"/>
+    </SubClassOf>
+    <DisjointClasses>
+        <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Alarm"/>
+        <Class IRI="Nothing"/>
+    </DisjointClasses>
     <DisjointClasses>
         <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Animal"/>
+        <Class IRI="Nothing"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Car"/>
         <Class IRI="Nothing"/>
     </DisjointClasses>
     <DisjointClasses>
@@ -33,6 +53,10 @@
     </DisjointClasses>
     <DisjointClasses>
         <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Tiger"/>
+        <Class IRI="Nothing"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://www.co-ode.org/ontologies/ont.owl#Warn"/>
         <Class IRI="Nothing"/>
     </DisjointClasses>
 </Ontology>

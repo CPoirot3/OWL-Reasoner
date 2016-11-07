@@ -35,7 +35,7 @@ public class ReasoningTaskDescription {
 
     public ReasoningTaskDescription(boolean flipSatisfiabilityResult, StandardTestType testType, Object... arguments) {
         this(flipSatisfiabilityResult, testType.messagePattern, arguments);
-//        System.out.println("debug");
+        System.out.println("ReasoningTaskDescription constructed : " + toString());
     }
 
     public ReasoningTaskDescription(boolean flipSatisfiabilityResult, String message, Object... arguments) {
@@ -50,9 +50,11 @@ public class ReasoningTaskDescription {
 
     public String getTaskDescription(Prefixes prefixes) {
         String result = m_messagePattern;
+        System.out.println(m_arguments.length);
         for (int argumentIndex = 0; argumentIndex < m_arguments.length; argumentIndex++) {
             Object argument = m_arguments[argumentIndex];
             String argumentString;
+            
             if (argument instanceof DLPredicate)
                 argumentString = ((DLPredicate) argument).toString(prefixes);
             else if (argument instanceof Role)
@@ -63,6 +65,7 @@ public class ReasoningTaskDescription {
                 argumentString = ((Term) argument).toString(prefixes);
             else
                 argumentString = argument.toString();
+            System.out.println(argumentString);
             result = result.replace("{" + argumentIndex + "}", argumentString);
         }
         return result;

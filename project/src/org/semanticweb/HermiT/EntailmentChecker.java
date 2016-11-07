@@ -101,6 +101,7 @@ public class EntailmentChecker implements OWLAxiomVisitorEx<Boolean> {
     public EntailmentChecker(Reasoner reasoner, OWLDataFactory factory) {
         this.reasoner = reasoner;
         this.factory = factory;
+        System.out.println("EntailmentChecker : " + toString() );
     }
 
     /**
@@ -126,9 +127,11 @@ public class EntailmentChecker implements OWLAxiomVisitorEx<Boolean> {
      * @return true if the loaded ontology entails the axiom and false otherwise
      */
     public boolean entails(OWLAxiom axiom) {
+    	
         if (!axiom.accept(this)) {
             return false;
         }
+        
         return checkAnonymousIndividuals();
     }
 
@@ -137,7 +140,7 @@ public class EntailmentChecker implements OWLAxiomVisitorEx<Boolean> {
      */
     protected boolean checkAnonymousIndividuals() {
         if (anonymousIndividualAxioms.isEmpty()) {
-        	System.out.println("Mark : " + anonymousIndividualAxioms.size());
+        	System.out.println("anonymousIndividualAxioms.size : " + anonymousIndividualAxioms.size());
             return true;
         }
         // go through the axioms and build the rolling-up concepts for them

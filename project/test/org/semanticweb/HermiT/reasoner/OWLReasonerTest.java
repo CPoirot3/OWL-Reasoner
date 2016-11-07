@@ -24,6 +24,8 @@ public class OWLReasonerTest extends AbstractReasonerTest {
         String axioms = "SubObjectPropertyOf(:r ObjectInverseOf(:s))"
                 + "SubObjectPropertyOf(:s ObjectInverseOf(:t))"
                 + "SubObjectPropertyOf(:t :r)";
+        
+        System.out.println(axioms);
         loadOntologyWithAxioms(axioms);
         createOWLReasoner();
         Node<OWLObjectPropertyExpression> r_inverses = m_reasoner.getInverseObjectProperties(OP(IRI("r")));
@@ -348,5 +350,11 @@ public class OWLReasonerTest extends AbstractReasonerTest {
                 + "FunctionalObjectProperty(:f) ";
         loadOntologyWithAxioms(axioms);
         createOWLReasoner(c);
+    }
+    
+    
+    public static void main(String[] args) throws Exception {
+    	OWLReasonerTest owlReasonerTest = new OWLReasonerTest("Poirot");
+    	owlReasonerTest.testgetInverseObjectPropertyExpressions();
     }
 }

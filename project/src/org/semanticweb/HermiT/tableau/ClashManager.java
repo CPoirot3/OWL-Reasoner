@@ -38,7 +38,6 @@ import org.semanticweb.HermiT.monitor.TableauMonitor;
  * ourselves unnecessary work.
  */
 public final class ClashManager implements Serializable {
-
     private static final long serialVersionUID = 3533809151139695892L;
 
     protected static final LiteralDataRange NOT_RDFS_LITERAL = InternalDatatype.RDFS_LITERAL.getNegation();

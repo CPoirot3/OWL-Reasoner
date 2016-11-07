@@ -24,7 +24,6 @@ import java.io.Serializable;
  */
 public class BranchingPoint implements Serializable {
     private static final long serialVersionUID = 7306881534568051692L;
-
     protected final int m_level;
     protected final Node m_lastTableauNode;
     protected final Node m_lastMergedOrPrunedNode;

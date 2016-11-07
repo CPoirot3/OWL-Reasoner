@@ -97,6 +97,7 @@ public final class TupleTable implements Serializable {
     }
 
     public void clear() {
+    	
         m_pages = new Page[10];
         m_numberOfPages = 1;
         m_pages[0] = new Page(m_arity);
@@ -107,8 +108,8 @@ public final class TupleTable implements Serializable {
     protected final static class Page implements Serializable {
         private static final long serialVersionUID = 2239482172592108644L;
 
-        public final int m_arity;
-        public Object[] m_objects;
+        public final int m_arity;  // 每一页的参数个数
+        public Object[] m_objects; // 参数数组
 
         public Page(int arity) {
             m_arity = arity;

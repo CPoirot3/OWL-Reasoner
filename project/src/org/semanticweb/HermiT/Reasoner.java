@@ -242,7 +242,6 @@ public class Reasoner implements OWLReasoner {
     // Life-cycle management methods
 
     protected void loadOntology() {
-    	
 //    	System.out.println("clear state first");
         clearState();
         // Convert OWLOntology into DLOntology
@@ -258,7 +257,11 @@ public class Reasoner implements OWLReasoner {
         System.out.println("Convert OWLOntology done");
         
         createPrefixes();
-        System.out.println("create Tableau");
+        System.out.println("Create Tableau");
+//        System.out.println("m_interruptFlag : " + m_interruptFlag);
+//        System.out.println("m_configuration : " + m_configuration);
+//        System.out.println("m_dlOntology : " + m_dlOntology);
+//        System.out.println("m_prefixes : " + m_prefixes);
         m_tableau = createTableau(m_interruptFlag, m_configuration, m_dlOntology, null, m_prefixes);
         
         m_instanceManager = null;
@@ -800,13 +803,18 @@ public class Reasoner implements OWLReasoner {
     }
 
     public boolean isEntailed(OWLAxiom axiom) {
+    	System.out.println("\nbegin checkPreConditions");
         checkPreConditions(axiom);
-//        System.out.println("mark");
-        if (!isConsistent())
+        System.out.println("end checkPreConditions\n");
+        
+        
+        boolean isConsistent = isConsistent();
+        if (!isConsistent) { // 本身就不一致，所以返回true
             return true;
-         
+        }
+        System.out.println("to check with EntailmentChecker"); 
+        
         EntailmentChecker checker = new EntailmentChecker(this, getDataFactory());
-//        System.out.println("mark");
         return checker.entails(axiom);
     }
 
@@ -2259,6 +2267,7 @@ public class Reasoner implements OWLReasoner {
         if (additionalAxioms == null || additionalAxioms.length == 0)
             return getTableau();
         else {
+        	// 创建增量 DLOntology 
             DLOntology deltaDLOntology = createDeltaDLOntology(m_configuration, m_dlOntology, additionalAxioms);
             if (m_tableau.supportsAdditionalDLOntology(deltaDLOntology)) {
                 m_tableau.setAdditionalDLOntology(deltaDLOntology);
@@ -2318,7 +2327,6 @@ public class Reasoner implements OWLReasoner {
                     directBlockingChecker = new PairWiseDirectBlockingChecker();
                 } else {
                     directBlockingChecker = new SingleDirectBlockingChecker();
-                    System.out.println("directBlockingChecker =");
                 }
                 break;
             case SINGLE:
@@ -2533,7 +2541,10 @@ public class Reasoner implements OWLReasoner {
     protected void checkPreConditions(OWLObject... objects) {
         flushChangesIfRequired();
         if (objects != null && objects.length > 0) {
-        	System.out.println("objects length " + objects.length);
+//        	System.out.println("objects length " + objects.length);
+        	for (Object object : objects) {
+        		System.out.println(object);
+        	}
             throwFreshEntityExceptionIfNecessary(objects);
         }
         throwInconsistentOntologyExceptionIfNecessary();
@@ -2572,8 +2583,10 @@ public class Reasoner implements OWLReasoner {
                             undeclaredEntities.add(owlClass);
                 }
             }
-            if (!undeclaredEntities.isEmpty())
+            if (!undeclaredEntities.isEmpty()) {
+            	System.out.println("undeclaredEntities : " + undeclaredEntities);
                 throw new FreshEntitiesException(undeclaredEntities);
+            }
         }
     }
 
