@@ -466,9 +466,7 @@ public final class Tableau implements Serializable {
         }
         System.out.println("doIteration mid");
         if (!m_extensionManager.containsClash()) {
-        	
             if (m_existentialExpansionStrategy.expandExistentials(false)) {
-            	System.out.println("mid");
                 return true;
             }
         }
