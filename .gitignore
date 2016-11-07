@@ -1,6 +1,7 @@
 *.class
 bin/
-project/.gradle/
+project/.gradle/*
+project/.idea/*
 .project/
 
 # Mobile Tools for Java (J2ME)
