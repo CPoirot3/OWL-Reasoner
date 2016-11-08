@@ -149,6 +149,7 @@ public class OWLClausification {
         OWLNormalization normalization = new OWLNormalization(factory, axioms, 0);
         for (OWLOntology ontology : importClosure)
             normalization.processOntology(ontology);  // 添加到axioms里
+        
         BuiltInPropertyManager builtInPropertyManager = new BuiltInPropertyManager(factory);
         builtInPropertyManager.axiomatizeBuiltInPropertiesAsNeeded(axioms);
         ObjectPropertyInclusionManager objectPropertyInclusionManager = new ObjectPropertyInclusionManager(axioms);
@@ -161,8 +162,9 @@ public class OWLClausification {
             descriptionGraphs = Collections.emptySet();
         OWLAxiomsExpressivity axiomsExpressivity = new OWLAxiomsExpressivity(axioms);
         
-//        System.out.println(Z);
+        System.out.println("construct DLOntology");
         DLOntology dlOntology = clausify(factory, ontologyIRI, axioms, axiomsExpressivity, descriptionGraphs);
+        System.out.println("construct DLOntology done \n");
         
         return new Object[]{objectPropertyInclusionManager, dlOntology};
     }
@@ -213,8 +215,8 @@ public class OWLClausification {
             Atom bodyAtom = Atom.create(AtomicRole.BOTTOM_DATA_ROLE, X, Y);
             dlClauses.add(DLClause.create(new Atom[]{}, new Atom[]{bodyAtom}));
         }
-        for (OWLDataPropertyExpression[] properties : axioms.m_disjointDataProperties)
-            for (int i = 0; i < properties.length; i++)
+        for (OWLDataPropertyExpression[] properties : axioms.m_disjointDataProperties) {
+            for (int i = 0; i < properties.length; i++) {
                 for (int j = i + 1; j < properties.length; j++) {
                     Atom atom_i = getRoleAtom(properties[i], X, Y);
                     Atom atom_j = getRoleAtom(properties[j], X, Z);
@@ -222,14 +224,20 @@ public class OWLClausification {
                     DLClause dlClause = DLClause.create(new Atom[]{atom_ij}, new Atom[]{atom_i, atom_j});
                     dlClauses.add(dlClause);
                 }
-        DataRangeConverter dataRangeConverter = new DataRangeConverter(m_configuration.warningMonitor, axioms.m_definedDatatypesIRIs, allUnknownDatatypeRestrictions, m_configuration.ignoreUnsupportedDatatypes);
+            }
+        }
+        DataRangeConverter dataRangeConverter = new DataRangeConverter(m_configuration.warningMonitor,
+        		axioms.m_definedDatatypesIRIs, allUnknownDatatypeRestrictions, m_configuration.ignoreUnsupportedDatatypes);
         NormalizedAxiomClausifier clausifier = new NormalizedAxiomClausifier(dataRangeConverter, positiveFacts, factory);
+        System.out.println("DLClause construct is here : OWLClausification");
         for (OWLClassExpression[] inclusion : axioms.m_conceptInclusions) {
             for (OWLClassExpression description : inclusion)
                 description.accept(clausifier);
             DLClause dlClause = clausifier.getDLClause();
             dlClauses.add(dlClause.getSafeVersion(AtomicConcept.THING));
         }
+        System.out.println("end\n");
+        
         NormalizedDataRangeAxiomClausifier normalizedDataRangeAxiomClausifier = new NormalizedDataRangeAxiomClausifier(dataRangeConverter, factory, axioms.m_definedDatatypesIRIs);
         for (OWLDataRange[] inclusion : axioms.m_dataRangeInclusions) {
             for (OWLDataRange description : inclusion)
@@ -242,6 +250,7 @@ public class OWLClausification {
         FactClausifier factClausifier = new FactClausifier(dataRangeConverter, positiveFacts, negativeFacts);
         for (OWLIndividualAxiom fact : axioms.m_facts)
             fact.accept(factClausifier);
+        
         for (DescriptionGraph descriptionGraph : descriptionGraphs)
             descriptionGraph.produceStartDLClauses(dlClauses);
         Set<AtomicConcept> atomicConcepts = new HashSet<AtomicConcept>();

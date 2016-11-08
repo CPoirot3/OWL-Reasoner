@@ -82,21 +82,27 @@ public final class HyperresolutionManager implements Serializable {
         Map<Integer, UnionDependencySet> unionDependencySetsBySize = new HashMap<Integer, UnionDependencySet>();
         ArrayList<Atom> guardingAtomicConceptAtoms1 = new ArrayList<Atom>();
         ArrayList<Atom> guardingAtomicConceptAtoms2 = new ArrayList<Atom>();
+        
         for (Map.Entry<DLClauseBodyKey, List<DLClause>> entry : dlClausesByBody.entrySet()) {
+
             DLClause bodyDLClause = entry.getKey().m_dlClause;
             BodyAtomsSwapper bodyAtomsSwapper = new BodyAtomsSwapper(bodyDLClause);
-            for (int bodyAtomIndex = 0; bodyAtomIndex < bodyDLClause.getBodyLength(); ++bodyAtomIndex)
+            for (int bodyAtomIndex = 0; bodyAtomIndex < bodyDLClause.getBodyLength(); ++bodyAtomIndex) {
                 if (isPredicateWithExtension(bodyDLClause.getBodyAtom(bodyAtomIndex).getDLPredicate())) {
-                    DLClause swappedDLClause = bodyAtomsSwapper.getSwappedDLClause(bodyAtomIndex);
+                	DLClause swappedDLClause = bodyAtomsSwapper.getSwappedDLClause(bodyAtomIndex);
                     Atom deltaAtom = swappedDLClause.getBodyAtom(0);
+                    
                     DLPredicate deltaDLPredicate = deltaAtom.getDLPredicate();
                     Integer arity = Integer.valueOf(deltaDLPredicate.getArity() + 1);
                     ExtensionTable.Retrieval firstTableRetrieval = retrievalsByArity.get(arity);
+                    
                     if (firstTableRetrieval == null) {
                         ExtensionTable extensionTable = m_extensionManager.getExtensionTable(arity.intValue());
                         firstTableRetrieval = extensionTable.createRetrieval(new boolean[extensionTable.getArity()], ExtensionTable.View.DELTA_OLD);
                         retrievalsByArity.put(arity, firstTableRetrieval);
                     }
+                    
+
                     DLClauseEvaluator evaluator = new DLClauseEvaluator(tableau, swappedDLClause, entry.getValue(), firstTableRetrieval, bufferSupply, valuesBufferManager, groundDisjunctionHeaderManager, unionDependencySetsBySize);
                     CompiledDLClauseInfo normalTupleConsumer = new CompiledDLClauseInfo(evaluator, m_tupleConsumersByDeltaPredicate.get(deltaDLPredicate));
                     m_tupleConsumersByDeltaPredicate.put(deltaDLPredicate, normalTupleConsumer);
@@ -135,7 +141,9 @@ public final class HyperresolutionManager implements Serializable {
                     bufferSupply.reuseBuffers();
                     interruptFlag.checkInterrupt();
                 }
+            }
         }
+        
         m_deltaOldRetrievals = new ExtensionTable.Retrieval[retrievalsByArity.size()];
         retrievalsByArity.values().toArray(m_deltaOldRetrievals);
         m_binaryTableRetrieval = m_extensionManager.getExtensionTable(2).createRetrieval(new boolean[]{false, true}, ExtensionTable.View.EXTENSION_THIS);

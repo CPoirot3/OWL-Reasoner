@@ -55,7 +55,6 @@ public class EntailmentChecking {
         // The OWLReasoner interface is very similar though, it just has fewer methods
         Reasoner reasoner = new Reasoner(ontology);
         
-        System.out.println();
         System.out.println("begin check");
         // Let us check whether the axiom is entailed:
         System.out.println("Do leopard is animal? " + reasoner.isEntailed(owlAxiom));

@@ -56,7 +56,7 @@ public class DLClauseEvaluator implements Serializable {
         compiler.m_workers.toArray(m_workers);
         m_bodyDLClause = bodyDLClause;
         m_headDLClauses = headDLClauses;
-        System.out.println("DLClauseEvaluator : " + toString());
+//        System.out.println("DLClauseEvaluator : " + toString());
     }
 
     public int getBodyLength() {

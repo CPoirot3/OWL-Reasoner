@@ -219,12 +219,14 @@ public class OWLNormalization {
 		RuleNormalizer ruleNormalizer = new RuleNormalizer(m_axioms.m_rules,
 				axiomVisitor.m_classExpressionInclusionsAsDisjunctions,
 				axiomVisitor.m_dataRangeInclusionsAsDisjunctions);
-		for (SWRLRule rule : axiomVisitor.m_rules)
+		System.out.println("Rules");
+		for (SWRLRule rule : axiomVisitor.m_rules) {
+			System.out.println("rules : " + rule);
 			ruleNormalizer.visit(rule);
+		}
 
 		// in normalization, we now simplify the disjuncts where possible
-		// (eliminate
-		// unnecessary conjuncts/disjuncts) and introduce fresh atomic concepts
+		// (eliminate unnecessary conjuncts/disjuncts) and introduce fresh atomic concepts
 		// for complex
 		// concepts m_axioms.m_conceptInclusions contains the normalized axioms
 		// after the normalization
@@ -308,9 +310,13 @@ public class OWLNormalization {
 		ClassExpressionNormalizer classExpressionNormalizer = new ClassExpressionNormalizer(inclusions,
 				dataRangeInclusions);
 		// normalize all class expression inclusions
+		System.out.println("\nnormalize all class expression inclusions");
 		while (!inclusions.isEmpty()) {
+			
 			OWLClassExpression simplifiedDescription = m_expressionManager.getNNF(m_expressionManager
 					.getSimplified(m_factory.getOWLObjectUnionOf(inclusions.remove(inclusions.size() - 1))));
+			
+			System.out.println("OWLClassExpression : " + simplifiedDescription);
 			if (!simplifiedDescription.isOWLThing()) {
 				if (simplifiedDescription instanceof OWLObjectUnionOf) {
 					OWLObjectUnionOf objectOr = (OWLObjectUnionOf) simplifiedDescription;
@@ -332,12 +338,17 @@ public class OWLNormalization {
 				}
 			}
 		}
+		System.out.println();
+		
+		
 		// normalize data range inclusions
+		System.out.println("normalize data range inclusions");
 		DataRangeNormalizer dataRangeNormalizer = new DataRangeNormalizer(dataRangeInclusions);
 		while (!dataRangeInclusions.isEmpty()) {
 			OWLDataRange simplifiedDescription = m_expressionManager
 					.getNNF(m_expressionManager.getSimplified(m_factory.getOWLDataUnionOf(dataRangeInclusions
 							.remove(classExpressionNormalizer.m_newDataRangeInclusions.size() - 1))));
+			System.out.println(simplifiedDescription);
 			if (!simplifiedDescription.isTopDatatype()) {
 				if (simplifiedDescription instanceof OWLDataUnionOf) {
 					OWLDataUnionOf dataOr = (OWLDataUnionOf) simplifiedDescription;
@@ -358,6 +369,7 @@ public class OWLNormalization {
 				}
 			}
 		}
+		System.out.println();
 	}
 
 	protected boolean distributeUnionOverAnd(OWLClassExpression[] descriptions, List<OWLClassExpression[]> inclusions) {

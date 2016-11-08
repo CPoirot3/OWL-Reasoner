@@ -49,6 +49,7 @@ public class ReasoningTaskDescription {
     }
 
     public String getTaskDescription(Prefixes prefixes) {
+    	System.out.println("getTaskDescription() : " );
         String result = m_messagePattern;
         System.out.println(m_arguments.length);
         for (int argumentIndex = 0; argumentIndex < m_arguments.length; argumentIndex++) {

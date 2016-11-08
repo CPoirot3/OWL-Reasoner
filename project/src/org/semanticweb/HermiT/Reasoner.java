@@ -254,7 +254,6 @@ public class Reasoner implements OWLReasoner {
         Object[] result = clausifier.preprocessAndClausify(m_rootOntology, m_descriptionGraphs);
         m_objectPropertyInclusionManager = (ObjectPropertyInclusionManager) result[0];
         m_dlOntology = (DLOntology) result[1];
-        System.out.println("Convert OWLOntology done");
         
         createPrefixes();
         System.out.println("Create Tableau");
@@ -263,7 +262,7 @@ public class Reasoner implements OWLReasoner {
 //        System.out.println("m_dlOntology : " + m_dlOntology);
 //        System.out.println("m_prefixes : " + m_prefixes);
         m_tableau = createTableau(m_interruptFlag, m_configuration, m_dlOntology, null, m_prefixes);
-        
+        System.out.println("Create Tableau down \n");
         m_instanceManager = null;
     }
 

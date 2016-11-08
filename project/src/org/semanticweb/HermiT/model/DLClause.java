@@ -104,6 +104,7 @@ public class DLClause implements Serializable {
             headAtoms = m_headAtoms;
         if (bodyAtoms == null)
             bodyAtoms = m_bodyAtoms;
+        System.out.println("getChangedDLClause :");
         return DLClause.create(headAtoms, bodyAtoms);
     }
 

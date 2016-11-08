@@ -103,6 +103,8 @@ public final class Tableau implements Serializable {
 			throw new IllegalArgumentException("Additional ontology cannot contain description graphs.");
 		m_interruptFlag = interruptFlag;
 		m_interruptFlag.startTask();
+		
+		System.out.println("\nTableau constructed func begin");
 		try {
 			m_parameters = parameters;
 			m_tableauMonitor = tableauMonitor;
@@ -112,12 +114,17 @@ public final class Tableau implements Serializable {
 			m_dependencySetFactory = new DependencySetFactory();
 			m_extensionManager = new ExtensionManager(this);
 			m_clashManager = new ClashManager(this);
+			
+			System.out.println("Applies the rules during the expansion of a tableau.");
 			m_permanentHyperresolutionManager = new HyperresolutionManager(this, m_permanentDLOntology.getDLClauses());
+
 			if (m_additionalDLOntology != null)
 				m_additionalHyperresolutionManager = new HyperresolutionManager(this,
 						m_additionalDLOntology.getDLClauses());
 			else
 				m_additionalHyperresolutionManager = null;
+			
+			
 			m_mergingManager = new MergingManager(this);
 			m_existentialExpasionManager = new ExistentialExpansionManager(this);
 			m_nominalIntroductionManager = new NominalIntroductionManager(this);
