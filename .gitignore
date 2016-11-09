@@ -3,6 +3,9 @@ bin/
 project/.gradle/*
 project/.idea/*
 .project/
+project/.classpath
+project/.project
+project/.settings
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
