@@ -37,8 +37,8 @@ public class EntailmentChecking {
         OWLOntology ontology = manager.loadOntologyFromOntologyDocument(inputOntologyFile);
 
         
-        OWLClass leopard = manager.getOWLDataFactory().getOWLClass(IRI.create("http://www.co-ode.org/ontologies/ont.owl#Leopard"));
-        OWLClass animal = manager.getOWLDataFactory().getOWLClass(IRI.create("http://www.co-ode.org/ontologies/ont.owl#Animal"));
+        OWLClass leopard = dataFactory.getOWLClass(IRI.create("http://www.co-ode.org/ontologies/ont.owl#Leopard"));
+        OWLClass animal = dataFactory.getOWLClass(IRI.create("http://www.co-ode.org/ontologies/ont.owl#Animal"));
         OWLAxiom owlAxiom = dataFactory.getOWLSubClassOfAxiom(leopard, animal);
         
         
