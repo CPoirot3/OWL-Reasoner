@@ -21,17 +21,13 @@ import com.clarkparsia.owlapi.explanation.HSTExplanationGenerator;
 public class Explanations {
 
 	public static void main(String[] args) throws Exception {
-		// First, we create an OWLOntologyManager object. The manager will load
-		// and
+		// First, we create an OWLOntologyManager object. The manager will load and
 		// save ontologies.
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		// We will create several things, so we save an instance of the data
-		// factory
+		// We will create several things, so we save an instance of the data factory
 		OWLDataFactory dataFactory = manager.getOWLDataFactory();
-		// Now, we create the file from which the ontology will be loaded.
-		// Here the ontology is stored in a file locally in the ontologies
-		// subfolder
-		// of the examples folder.
+		// Now, we create the file from which the ontology will be loaded. Here the ontology 
+		// is stored in a file locally in the ontologies subfolder of the examples folder.
 		File inputOntologyFile = new File("examples/ontologies/pizza.owl");
 		// We use the OWL API to load the ontology.
 		OWLOntology ontology = manager.loadOntologyFromOntologyDocument(inputOntologyFile);
