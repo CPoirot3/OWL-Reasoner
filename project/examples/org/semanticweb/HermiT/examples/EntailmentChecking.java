@@ -1,8 +1,11 @@
 package org.semanticweb.HermiT.examples;
 
 import java.io.File;
+import java.util.Set;
 
 import org.semanticweb.HermiT.Reasoner;
+import org.semanticweb.HermiT.model.DLClause;
+import org.semanticweb.HermiT.model.DLOntology;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.ToStringRenderer;
 import org.semanticweb.owlapi.model.IRI;
@@ -29,7 +32,7 @@ public class EntailmentChecking {
         // Here the ontology is stored in a file locally in the ontologies subfolder
         // of the examples folder.
 //        File inputOntologyFile = new File("examples/ontologies/pizza.owl");
-        File inputOntologyFile = new File("examples/ontologies/Animal.owl");
+        File inputOntologyFile = new File("examples/ontologies/owlDemoSchema.xml");
         // We use the OWL API to load the ontology. 
         OWLOntology ontology = manager.loadOntologyFromOntologyDocument(inputOntologyFile);
 
@@ -37,6 +40,8 @@ public class EntailmentChecking {
         OWLClass leopard = manager.getOWLDataFactory().getOWLClass(IRI.create("http://www.co-ode.org/ontologies/ont.owl#Leopard"));
         OWLClass animal = manager.getOWLDataFactory().getOWLClass(IRI.create("http://www.co-ode.org/ontologies/ont.owl#Animal"));
         OWLAxiom owlAxiom = dataFactory.getOWLSubClassOfAxiom(leopard, animal);
+        
+        
         
         System.out.println(owlAxiom);
         
@@ -84,5 +89,12 @@ public class EntailmentChecking {
 //            }
 //            System.out.println();
 //        }
+        
+        DLOntology dlOntology = reasoner.getDLOntology();
+        System.out.println(dlOntology.getDLClauses().size());
+        Set<DLClause> set = dlOntology.getDLClauses();
+        for (DLClause dlClause: set) {
+        	System.out.println(dlClause);
+        }
     }
 }

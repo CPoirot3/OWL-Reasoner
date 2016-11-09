@@ -2552,7 +2552,6 @@ public class Reasoner implements OWLReasoner {
 
     protected void flushChangesIfRequired() {
         if (!m_configuration.bufferChanges && !m_pendingChanges.isEmpty()) {
-//        	System.out.println("mark: flush");
             flush();
         }
     }
