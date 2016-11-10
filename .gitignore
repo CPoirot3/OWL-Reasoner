@@ -2,15 +2,15 @@
 bin/
 project/.gradle/*
 project/.idea/*
-.project/
-project/bin
-project/build
-project/.classpath
-project/.project
-project/.settings
-project\.classpath
-project\.project
-project\.settings
+.project/*
+./project/bin/*
+./project/build/*
+./project/.classpath/*
+./project/.project/*
+./project/.settings/*
+./project\.classpath
+./project\.project
+./project\.settings
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
